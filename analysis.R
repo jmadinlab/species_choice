@@ -1,4 +1,6 @@
 # Anyalsis
+library(tripack)
+source("R/functions.R")
 
 # points selection
 
@@ -8,8 +10,8 @@ dat <- data.frame(x=rnorm(n), y=rnorm(n))
 plot(y ~ x, dat, col="grey")
 
 # random
-points(y ~ x, dat[sample(1:n, s, replace=FALSE),], col="red")
+points(y ~ x, dat[sample(1:n, s, replace=FALSE),], col="red", pch=20, cex=0.6)
 
-# uniform
+# most evenly spread
+points(y ~ x, voronoiFilter(dat, s), col="blue", pch=20, cex=0.6)
 
-# evenly spaced
