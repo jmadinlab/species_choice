@@ -1,0 +1,928 @@
+library("ggplot2")#
+library("cowplot")#
+#
+setwd("~/Desktop/majordims/mike/traitdatabase")#
+# download: #
+###############################################################
+# go to https://coraltraits.org#
+# go to "data", "traits"#
+# use "subset by class", tick all boxes, click "download"#
+# for each class, create a seperate folder#
+###############################################################
+# merge all trait types#
+###############################################################
+# import each dataset#
+b<-read.csv("biomechanical/data_20200108.csv")#
+g<-read.csv("geographical/data_20200108.csv")#
+m<-read.csv("morphological/data_20200108.csv")#
+pl<-read.csv("phylogenetic/data_20200108.csv")#
+ps<-read.csv("physiological/data_20200108.csv")#
+r<-read.csv("reproductive/data_20200108.csv")#
+s<-read.csv("stoiciometric/data_20200108.csv")#
+#
+# merge into new dataset - "all"#
+colnames(b)==colnames(s)#
+all<-rbind(b, g, m, pl, ps, r, s)#
+nrow(all)#
+#
+# select relevant columns for "all"#
+colnames(all)#
+all<-all[,c("specie_name","specie_id", "location_name","trait_name", "trait_id", "standard_unit", "methodology_name","value","value_type")]#
+###############################################################
+# observations/species per trait#
+###############################################################
+# observations#
+obs<-aggregate(all$trait_name, by=c(trait=list(all$trait_name)), FUN=length)#
+obs<-subset(obs, trait!="Water depth")#
+obs<-subset(obs, trait!="Season")#
+obs<-subset(obs, trait!="Bleaching event")#
+obsplot<-ggplot(obs)+geom_bar(aes(x=reorder(trait, -x), x), stat="identity")+#
+theme(axis.text.x=element_text(angle=45, size=6, hjust=1))+#
+labs(y="N observations (log-scale)",x="trait")+scale_y_log10()#
+obsplot#
+#
+# species#
+sp<-aggregate(all$trait_name, by = all[c('trait_name','specie_name')], length)#
+spcount<-aggregate(sp$trait_name, by=c(trait=list(sp$trait_name)), FUN=length)#
+spplot<-ggplot(spcount)+geom_bar(aes(x=reorder(trait, -x), x), stat="identity")+#
+theme(axis.text.x=element_text(angle=45, size=6, hjust=1))+#
+labs(y="N species (log-scale)",x="trait")+scale_y_log10()#
+spplot#
+###############################################################
+# function: visualise methods/units#
+###############################################################
+t.hist<-function(dat, method, n, tf=c("none","log")){#
+	dat$value<-as.numeric(as.character(dat$value))#
+	if (tf=="none") {dat$value<-dat$value}#
+	if (tf=="log") {dat$value<-log(dat$value)}#
+	ggplot(dat)+#
+	geom_histogram(aes(value,fill=get(method)), bins=n)+#
+	theme(axis.title=element_text(size=9), axis.text=element_text(size=9))+#
+	theme(legend.title=element_blank())+ggtitle(paste(method))+#
+	xlab(paste(unique(dat$trait_name)))}#
+methods<-function(dat, n, tf){#
+	plot_grid(t.hist(dat, "value_type",  n, tf),#
+	t.hist(dat, "methodology_name",  n, tf),#
+	t.hist(dat, "standard_unit",  n, tf), ncol=1, align="v")}#
+###############################################################
+# function: find means/select category#
+###############################################################
+sp.means<-function(d, trait){#
+	new<-aggregate(as.numeric(as.character(d$value)),#
+	by=c(species=list(d$specie_name)), FUN=mean, na.rm=T)#
+	colnames(new)[2]<-trait#
+	new}#
+#
+sp.cat<-function(d, trait){#
+	new<-data.frame(species=d$specie_name, x<-as.character(d$value))#
+	colnames(new)[2]<-paste(trait)#
+	new } #
+###############################################################
+# Process each trait individually#
+###############################################################
+traitlist<-data.frame(trait=unique(all$trait_name), id=unique(all$trait_id))#
+traitlist
+library("ggplot2")#
+library("cowplot")#
+#
+setwd("~/Desktop/species_choice-master/data/traitsdatabase")
+library("ggplot2")#
+library("cowplot")#
+#
+setwd("~/Desktop/species_choice-master/data/traitdatabase")
+# download: #
+###############################################################
+# go to https://coraltraits.org#
+# go to "data", "traits"#
+# use "subset by class", tick all boxes, click "download"#
+# for each class, create a seperate folder#
+###############################################################
+# merge all trait types#
+###############################################################
+# import each dataset#
+b<-read.csv("biomechanical/data_20200108.csv")#
+g<-read.csv("geographical/data_20200108.csv")#
+m<-read.csv("morphological/data_20200108.csv")#
+pl<-read.csv("phylogenetic/data_20200108.csv")#
+ps<-read.csv("physiological/data_20200108.csv")#
+r<-read.csv("reproductive/data_20200108.csv")#
+s<-read.csv("stoiciometric/data_20200108.csv")#
+#
+# merge into new dataset - "all"#
+colnames(b)==colnames(s)#
+all<-rbind(b, g, m, pl, ps, r, s)#
+nrow(all)#
+#
+# select relevant columns for "all"#
+colnames(all)#
+all<-all[,c("specie_name","specie_id", "location_name","trait_name", "trait_id", "standard_unit", "methodology_name","value","value_type")]
+# observations/species per trait#
+###############################################################
+# observations#
+obs<-aggregate(all$trait_name, by=c(trait=list(all$trait_name)), FUN=length)#
+obs<-subset(obs, trait!="Water depth")#
+obs<-subset(obs, trait!="Season")#
+obs<-subset(obs, trait!="Bleaching event")#
+obsplot<-ggplot(obs)+geom_bar(aes(x=reorder(trait, -x), x), stat="identity")+#
+theme(axis.text.x=element_text(angle=45, size=6, hjust=1))+#
+labs(y="N observations (log-scale)",x="trait")+scale_y_log10()#
+obsplot#
+#
+# species#
+sp<-aggregate(all$trait_name, by = all[c('trait_name','specie_name')], length)#
+spcount<-aggregate(sp$trait_name, by=c(trait=list(sp$trait_name)), FUN=length)#
+spplot<-ggplot(spcount)+geom_bar(aes(x=reorder(trait, -x), x), stat="identity")+#
+theme(axis.text.x=element_text(angle=45, size=6, hjust=1))+#
+labs(y="N species (log-scale)",x="trait")+scale_y_log10()#
+spplot
+# observations/species per trait#
+###############################################################
+# observations#
+obs<-aggregate(all$trait_name, by=c(trait=list(all$trait_name)), FUN=length)#
+obs<-subset(obs, trait!="Water depth")#
+obs<-subset(obs, trait!="Season")#
+obs<-subset(obs, trait!="Bleaching event")#
+obsplot<-ggplot(obs)+geom_bar(aes(x=reorder(trait, -x), x), stat="identity")+#
+theme(axis.text.x=element_text(angle=45, size=6, hjust=1))+#
+labs(y="N observations (log-scale)",x="trait")+scale_y_log10()#
+obsplot#
+#
+# species#
+sp<-aggregate(all$trait_name, by = all[c('trait_name','specie_name')], length)#
+spcount<-aggregate(sp$trait_name, by=c(trait=list(sp$trait_name)), FUN=length)#
+spplot<-ggplot(spcount)+geom_bar(aes(x=reorder(trait, -x), x), stat="identity")+#
+theme(axis.text.x=element_text(angle=45, size=6, hjust=1))+#
+labs(y="N species (log-scale)",x="trait")+scale_y_log10()#
+spplot#
+###############################################################
+# function: visualise methods/units#
+###############################################################
+t.hist<-function(dat, method, n, tf=c("none","log")){#
+	dat$value<-as.numeric(as.character(dat$value))#
+	if (tf=="none") {dat$value<-dat$value}#
+	if (tf=="log") {dat$value<-log(dat$value)}#
+	ggplot(dat)+#
+	geom_histogram(aes(value,fill=get(method)), bins=n)+#
+	theme(axis.title=element_text(size=9), axis.text=element_text(size=9))+#
+	theme(legend.title=element_blank())+ggtitle(paste(method))+#
+	xlab(paste(unique(dat$trait_name)))}#
+methods<-function(dat, n, tf){#
+	plot_grid(t.hist(dat, "value_type",  n, tf),#
+	t.hist(dat, "methodology_name",  n, tf),#
+	t.hist(dat, "standard_unit",  n, tf), ncol=1, align="v")}#
+###############################################################
+# function: find means/select category#
+###############################################################
+sp.means<-function(d, trait){#
+	new<-aggregate(as.numeric(as.character(d$value)),#
+	by=c(species=list(d$specie_name)), FUN=mean, na.rm=T)#
+	colnames(new)[2]<-trait#
+	new}#
+#
+sp.cat<-function(d, trait){#
+	new<-data.frame(species=d$specie_name, x<-as.character(d$value))#
+	colnames(new)[2]<-paste(trait)#
+	new } #
+###############################################################
+# Process each trait individually#
+###############################################################
+traitlist<-data.frame(trait=unique(all$trait_name), id=unique(all$trait_id))#
+traitlist#
+# g1 - "Ocean basin"#
+g1<-subset(all, trait_name=="Ocean basin")#
+unique(g1$methodology_name)#
+g1<-sp.cat(g1, "Ocean basin")#
+head(g1)#
+# 1 - "Zooxanthellate"#
+d1<-subset(all, trait_name=="Zooxanthellate")#
+unique(d1$methodology_name)#
+t1<-sp.cat(d1, "Zooxanthellate")#
+head(t1)#
+#
+# 2 - "Growth.form.typical"#
+d2<-subset(all, trait_name=="Growth form typical")#
+unique(d2$methodology_name)#
+t2<-sp.cat(d2, "Growth form typical")#
+head(t2)#
+#
+# 3 - substrate attachment#
+d3<-subset(all, trait_name=="Substrate attachment")#
+unique(d3$methodology_name)#
+t3<-sp.cat(d3, "Substrate attachment")#
+t3 <- unique( t3 )#
+head(t3)#
+#
+# 4 - Coloniality#
+d4<-subset(all, trait_name=="Coloniality")#
+unique(d4$methodology_name)#
+t4<-sp.cat(d4, "Coloniality")#
+t4 <- unique( t4 )#
+head(t4)#
+#
+# 5 - "Corallite.width.maximum"#
+d5<-subset(all, trait_name=="Corallite width maximum")#
+# methods(d5, 10, "none")#
+t5<-sp.means(d5, "Corallite width maximum")#
+head(t5)#
+#
+# 6 - Mode of larval development#
+d6<-subset(all, trait_name=="Mode of larval development")#
+unique(d6$methodology_name)#
+t6<-sp.cat(d6, "Mode of larval development")#
+head(t6)#
+#
+# 7 - Sexual system#
+d7<-subset(all, trait_name=="Sexual system")#
+unique(d7$methodology_name)#
+t7<-sp.cat(d7, "Sexual system")#
+head(t7)#
+#
+# 8 - "Colony.maximum.diameter"#
+d8<-subset(all, trait_name=="Colony maximum diameter")#
+ methods(d8, 10, "log")#
+d8$value<-as.numeric(as.character(d8$value))#
+d8$value<-ifelse(d8$standard_unit=="m", (d8$value*100), d8$value)#
+subset(d8, standard_unit=="mm")#
+# methods(d8, 10, "log")#
+t8<-sp.means(d8, "Colony maximum diameter")	#
+head(t8)#
+#
+# 9 - Growth rate #
+d9<-subset(all, trait_name=="Growth rate")#
+# methods(d9, 10, "log") # MANY UNITS#
+d9$value<-as.numeric(as.character(d9$value))#
+d9$value<-ifelse(d9$standard_unit=="mm month^-1", (d9$value*12),#
+ifelse(d9$standard_unit=="mm per 3 months^-1", (d9$value*4),#
+ifelse(d9$standard_unit=="mm per 4 months^-1", (d9$value*3),#
+ifelse(d9$standard_unit=="mm per 6 months^-1", (d9$value*2),#
+ifelse(d9$standard_unit=="mm per 7 months^-1", (d9$value*1.7),#
+ifelse(d9$standard_unit=="mm per 8 months^-1", (d9$value*1.5), d9$value))))))#
+d9<-subset(d9, standard_unit!="mm d^-1")#
+# methods(d9, 10, "log") #
+t9<-sp.means(d9, "Growth rate")#
+head(t9)#
+#
+# 10 - Symbiodinium sp. in propagules#
+d10<-subset(all, trait_name=="Symbiodinium sp. in propagules")#
+unique(d10$methodology_name)#
+t10<-sp.cat(d10, "Symbiodinium sp. in propagules")#
+head(t10)#
+#
+# 11 - Oocyte.size.at.maturity#
+d11<-subset(all, trait_name=="Oocyte size at maturity")#
+# methods(d11, 5, "none") #
+t11<-sp.means(d11, "Oocyte size at maturity")#
+head(t10)#
+#
+# 12 - Skeletal density#
+d12<-subset(all, trait_name=="Skeletal density")#
+# methods(d12, 10, "none") # check#
+t12<-sp.means(d12, "Skeletal density")#
+head(t12)#
+#
+# 13 - Symbiodinium density#
+d13<-subset(all, trait_name=="Symbiodinium density")#
+# methods(d13, 10, "log") # check#
+t13<-sp.means(d13, "Symbiodinium density")#
+head(t13)#
+#
+# 14 - Calcification rate #
+d14<-subset(all, trait_name=="Calcification rate")#
+# methods(d14, 10,"log")#
+d14<-subset(d14, standard_unit=="g cm ^-2 yr^-1" | standard_unit=="g month^-1")#
+d14$value<-as.numeric(as.character(d14$value))#
+d14$value<-ifelse(d14$standard_unit=="g month^-1", (d14$value*12),d14$value)#
+# methods(d14, 10,"log")#
+t14<-sp.means(d14, "Calcification rate")#
+head(t14)#
+#
+# 15 - Phosphorus concentration#
+d15<-subset(all, trait_name=="Phosphorus concentration")#
+# methods(d15, 10, "none") #
+t15<-sp.means(d15, "Phosphorus concentration")	#
+head(t15)#
+#
+# 16 - Nitrogen concentration#
+d16<-subset(all, trait_name=="Nitrogen concentration")#
+# methods(d16, 10, "none") #
+t16<-sp.means(d16, "Nitrogen concentration")	#
+head(t16)#
+#
+# 17 - "Polyps.per.area" #
+d17<-subset(all, trait_name=="Polyps per area")#
+# methods(d17, 10, "none") #
+t17<-sp.means(d17, "Polyps per area")	#
+head(t17)#
+#
+# 18 - RNA:DNA ratio#
+d18<-subset(all, trait_name=="RNA:DNA ratio")#
+# methods(d18, 10, "none") #
+t18<-sp.means(d18, "RNA:DNA ratio")	#
+head(t18)#
+#
+# 19 - "Chlorophyll.a"#
+d19<-subset(all, trait_name=="Chlorophyll a")#
+#methods(d19, 10, "none") #
+ d19$value<-as.numeric(as.character(d19$value))#
+d19$value<-ifelse(d19$standard_unit=="mg m^-2", (d19$value*10), d19$value)#
+methods(d19, 10, "none") #
+t19<-sp.means(d19, "Chlorophyll a")	#
+head(t19)#
+#
+# 20- "Total.biomass"#
+d20<-subset(all, trait_name=="Total biomass")#
+# methods(d20, 10, "none") #
+t20<-sp.means(d20, "Total biomass")	#
+head(t20)#
+#
+# 21- "Protein.biomass"#
+d21<-subset(all, trait_name=="Protein biomass")#
+# methods(d21, 10, "none") #
+t21<-sp.means(d21, "Protein biomass")	#
+head(t21)#
+#
+# 22- "Dark respiration" - per cm2 tissue#
+d22<-subset(all, trait_name=="Dark respiration")#
+# methods(d22, 10, "none") #
+t22<-sp.means(d22, "Dark respiration")	#
+head(t22)#
+#
+# 23 - Polyp fecundity#
+d23<-subset(all, trait_name=="Polyp fecundity")#
+# methods(d23, 10, "none")#
+t23<-sp.means(d23, "Polyp fecundity")	#
+head(t23)#
+#
+# 24 - "Gross.photosynthesis" - per cm2 tissue#
+d24<-subset(all, trait_name=="Gross photosynthesis")#
+# methods(d24, 10, "none") #
+t24<-sp.means(d24, "Gross photosynthesis")	#
+head(t24)#
+#
+# 25 - "Colony area"#
+d25<-subset(all, trait_name=="Colony area")#
+# methods(d25, 10, "none") #
+t25<-sp.means(d25, "Colony area")	#
+head(t25)#
+#
+# 26- Lipid content#
+d26<-subset(all, trait_name=="Lipid content")#
+# methods(d26, 10, "none") #
+t26<-sp.means(d26, "Lipid content")	#
+head(t26)#
+#
+# 27- Size at maturity#
+d27<-subset(all, trait_name=="Size at maturity")#
+# methods(d27, 10, "none") #
+d27$value<-as.numeric(as.character(d27$value))#
+d27$value<-ifelse(d27$standard_unit=="cm", pi*((d27$value/2)^2), d27$value)#
+# methods(d27, 10, "none") #
+t27<-sp.means(d27, "Size at maturity")	#
+head(t27)#
+#
+# 27 - "Colony shape factor"#
+d28<-subset(all, trait_name=="Colony shape factor")#
+# methods(d28, 10, "none") #
+t28<-sp.means(d28, "Colony shape factor")	#
+head(t28)#
+#
+# 29 - "Generation time"#
+d29<-subset(all, trait_name=="Generation time")#
+# methods(d29, 10, "none") #
+t29<-sp.means(d29, "Generation time")	#
+head(t29)#
+#
+# 30 - "Age.at.maturity"#
+d30<-subset(all, trait_name=="Age at maturity")#
+# methods(d30, 10, "none")#
+t30<-sp.means(d30, "Age at maturity")	#
+head(t30)#
+#
+# 31 - "Propagule size on release"#
+d31<-subset(all, trait_name=="Propagule size on release")#
+# methods(d31, 10, "none")#
+t31<-sp.means(d31, "Propagule size on release")	#
+head(t31)#
+#
+# 32 - "Eggs per area"#
+d32<-subset(all, trait_name=="Eggs per area")#
+# methods(d32, 10, "none")#
+t32<-sp.means(d32, "Eggs per area")	#
+head(t32)#
+#
+# 33 - "Mature egg diameter"#
+d33<-subset(all, trait_name=="Mature egg diameter")#
+# methods(d33, 10, "none")#
+t33<-sp.means(d33, "Mature egg diameter")	#
+head(t33)#
+#
+# 34 - "Egg size"#
+d34<-subset(all, trait_name=="Egg size")#
+# methods(d34, 10, "none")#
+t34<-sp.means(d34, "Egg size")	#
+head(t34)#
+#
+# 35 - Ratio of female to male gonads#
+d35<-subset(all, trait_name=="Ratio of female to male gonads")#
+# methods(d35, 10, "none")#
+t35<-sp.means(d35, "Ratio of female to male gonads")	#
+head(t35)
+###############################################################
+# merge#
+combine<-Reduce(function(x, y) merge(x, y, all=TRUE), list(g1, t1,t2, t3,t4, t5, t6, t7,t8, t9,t10,t11,t12,t13,t14,t15,t16,t17,t18, t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30, t31, t32, t33, t34, t35))#
+head(combine)
+# export#
+write.csv(combine, file = "output.csv")
+library("ggplot2")#
+library("cowplot")#
+#
+setwd("~/Desktop/species_choice-master/data/traitdatabase")#
+# download: #
+###############################################################
+# go to https://coraltraits.org#
+# go to "data", "traits"#
+# use "subset by class", tick all boxes, click "download"#
+# for each class, create a seperate folder#
+###############################################################
+# merge all trait types#
+###############################################################
+# import each dataset#
+b<-read.csv("biomechanical/data_20200108.csv")#
+g<-read.csv("geographical/data_20200108.csv")#
+m<-read.csv("morphological/data_20200108.csv")#
+pl<-read.csv("phylogenetic/data_20200108.csv")#
+ps<-read.csv("physiological/data_20200108.csv")#
+r<-read.csv("reproductive/data_20200108.csv")#
+s<-read.csv("stoiciometric/data_20200108.csv")#
+#
+# merge into new dataset - "all"#
+colnames(b)==colnames(s)#
+all<-rbind(b, g, m, pl, ps, r, s)#
+nrow(all)#
+#
+# select relevant columns for "all"#
+colnames(all)#
+all<-all[,c("specie_name","specie_id", "location_name","trait_name", "trait_id", "standard_unit", "methodology_name","value","value_type")]
+# observations/species per trait#
+###############################################################
+# observations#
+obs<-aggregate(all$trait_name, by=c(trait=list(all$trait_name)), FUN=length)#
+obs<-subset(obs, trait!="Water depth")#
+obs<-subset(obs, trait!="Season")#
+obs<-subset(obs, trait!="Bleaching event")#
+obsplot<-ggplot(obs)+geom_bar(aes(x=reorder(trait, -x), x), stat="identity")+#
+theme(axis.text.x=element_text(angle=45, size=6, hjust=1))+#
+labs(y="N observations (log-scale)",x="trait")+scale_y_log10()#
+obsplot
+# species#
+sp<-aggregate(all$trait_name, by = all[c('trait_name','specie_name')], length)#
+spcount<-aggregate(sp$trait_name, by=c(trait=list(sp$trait_name)), FUN=length)#
+spplot<-ggplot(spcount)+geom_bar(aes(x=reorder(trait, -x), x), stat="identity")+#
+theme(axis.text.x=element_text(angle=45, size=6, hjust=1))+#
+labs(y="N species (log-scale)",x="trait")+scale_y_log10()#
+spplot
+# merge all trait types#
+###############################################################
+# import each dataset#
+b<-read.csv("biomechanical/data_20200108.csv")#
+g<-read.csv("geographical/data_20200108.csv")#
+m<-read.csv("morphological/data_20200108.csv")#
+pl<-read.csv("phylogenetic/data_20200108.csv")#
+ps<-read.csv("physiological/data_20200108.csv")#
+r<-read.csv("reproductive/data_20200108.csv")#
+s<-read.csv("stoiciometric/data_20200108.csv")#
+e<-read.csv("ecological/data_20200908.csv")
+# merge into new dataset - "all"#
+colnames(b)==colnames(s)#
+all<-rbind(b, g, m, pl, ps, r, s)#
+nrow(all)
+# select relevant columns for "all"#
+colnames(all)#
+all<-all[,c("specie_name","specie_id", "location_name","trait_name", "trait_id", "standard_unit", "methodology_name","value","value_type")]
+# observations/species per trait#
+###############################################################
+# observations#
+obs<-aggregate(all$trait_name, by=c(trait=list(all$trait_name)), FUN=length)#
+obs<-subset(obs, trait!="Water depth")#
+obs<-subset(obs, trait!="Season")#
+obs<-subset(obs, trait!="Bleaching event")#
+obsplot<-ggplot(obs)+geom_bar(aes(x=reorder(trait, -x), x), stat="identity")+#
+theme(axis.text.x=element_text(angle=45, size=6, hjust=1))+#
+labs(y="N observations (log-scale)",x="trait")+scale_y_log10()#
+obsplot
+# species#
+sp<-aggregate(all$trait_name, by = all[c('trait_name','specie_name')], length)#
+spcount<-aggregate(sp$trait_name, by=c(trait=list(sp$trait_name)), FUN=length)#
+spplot<-ggplot(spcount)+geom_bar(aes(x=reorder(trait, -x), x), stat="identity")+#
+theme(axis.text.x=element_text(angle=45, size=6, hjust=1))+#
+labs(y="N species (log-scale)",x="trait")+scale_y_log10()#
+spplot
+# merge into new dataset - "all"#
+colnames(b)==colnames(s)#
+all<-rbind(b, g, m, pl, ps, r, s, e)#
+nrow(all)
+# select relevant columns for "all"#
+colnames(all)#
+all<-all[,c("specie_name","specie_id", "location_name","trait_name", "trait_id", "standard_unit", "methodology_name","value","value_type")]
+# observations/species per trait#
+###############################################################
+# observations#
+obs<-aggregate(all$trait_name, by=c(trait=list(all$trait_name)), FUN=length)#
+obs<-subset(obs, trait!="Water depth")#
+obs<-subset(obs, trait!="Season")#
+obs<-subset(obs, trait!="Bleaching event")#
+obsplot<-ggplot(obs)+geom_bar(aes(x=reorder(trait, -x), x), stat="identity")+#
+theme(axis.text.x=element_text(angle=45, size=6, hjust=1))+#
+labs(y="N observations (log-scale)",x="trait")+scale_y_log10()#
+obsplot#
+#
+# species#
+sp<-aggregate(all$trait_name, by = all[c('trait_name','specie_name')], length)#
+spcount<-aggregate(sp$trait_name, by=c(trait=list(sp$trait_name)), FUN=length)#
+spplot<-ggplot(spcount)+geom_bar(aes(x=reorder(trait, -x), x), stat="identity")+#
+theme(axis.text.x=element_text(angle=45, size=6, hjust=1))+#
+labs(y="N species (log-scale)",x="trait")+scale_y_log10()#
+spplot
+# function: visualise methods/units#
+###############################################################
+t.hist<-function(dat, method, n, tf=c("none","log")){#
+	dat$value<-as.numeric(as.character(dat$value))#
+	if (tf=="none") {dat$value<-dat$value}#
+	if (tf=="log") {dat$value<-log(dat$value)}#
+	ggplot(dat)+#
+	geom_histogram(aes(value,fill=get(method)), bins=n)+#
+	theme(axis.title=element_text(size=9), axis.text=element_text(size=9))+#
+	theme(legend.title=element_blank())+ggtitle(paste(method))+#
+	xlab(paste(unique(dat$trait_name)))}#
+methods<-function(dat, n, tf){#
+	plot_grid(t.hist(dat, "value_type",  n, tf),#
+	t.hist(dat, "methodology_name",  n, tf),#
+	t.hist(dat, "standard_unit",  n, tf), ncol=1, align="v")}
+# function: find means/select category#
+###############################################################
+sp.means<-function(d, trait){#
+	new<-aggregate(as.numeric(as.character(d$value)),#
+	by=c(species=list(d$specie_name)), FUN=mean, na.rm=T)#
+	colnames(new)[2]<-trait#
+	new}#
+#
+sp.cat<-function(d, trait){#
+	new<-data.frame(species=d$specie_name, x<-as.character(d$value))#
+	colnames(new)[2]<-paste(trait)#
+	new }
+# Process each trait individually#
+###############################################################
+traitlist<-data.frame(trait=unique(all$trait_name), id=unique(all$trait_id))#
+traitlist
+# g1 - "Ocean basin"#
+g1<-subset(all, trait_name=="Ocean basin")#
+unique(g1$methodology_name)#
+g1<-sp.cat(g1, "Ocean basin")#
+head(g1)
+# 1 - "Zooxanthellate"#
+d1<-subset(all, trait_name=="Zooxanthellate")#
+unique(d1$methodology_name)#
+t1<-sp.cat(d1, "Zooxanthellate")#
+head(t1)#
+#
+# 2 - "Growth.form.typical"
+# 2 - "Growth.form.typical"#
+d2<-subset(all, trait_name=="Growth form typical")#
+unique(d2$methodology_name)#
+t2<-sp.cat(d2, "Growth form typical")#
+head(t2)
+# 3 - substrate attachment#
+d3<-subset(all, trait_name=="Substrate attachment")#
+unique(d3$methodology_name)#
+t3<-sp.cat(d3, "Substrate attachment")#
+t3 <- unique( t3 )#
+head(t3)
+# 4 - Coloniality#
+d4<-subset(all, trait_name=="Coloniality")#
+unique(d4$methodology_name)#
+t4<-sp.cat(d4, "Coloniality")#
+t4 <- unique( t4 )#
+head(t4)
+# 5 - "Corallite.width.maximum"#
+d5<-subset(all, trait_name=="Corallite width maximum")#
+# methods(d5, 10, "none")#
+t5<-sp.means(d5, "Corallite width maximum")#
+head(t5)
+# 6 - Mode of larval development#
+d6<-subset(all, trait_name=="Mode of larval development")#
+unique(d6$methodology_name)#
+t6<-sp.cat(d6, "Mode of larval development")#
+head(t6)#
+#
+# 7 - Sexual system#
+d7<-subset(all, trait_name=="Sexual system")#
+unique(d7$methodology_name)#
+t7<-sp.cat(d7, "Sexual system")#
+head(t7)#
+#
+# 8 - "Colony.maximum.diameter"#
+d8<-subset(all, trait_name=="Colony maximum diameter")#
+ methods(d8, 10, "log")#
+d8$value<-as.numeric(as.character(d8$value))#
+d8$value<-ifelse(d8$standard_unit=="m", (d8$value*100), d8$value)#
+subset(d8, standard_unit=="mm")#
+# methods(d8, 10, "log")#
+t8<-sp.means(d8, "Colony maximum diameter")	#
+head(t8)#
+#
+# 9 - Growth rate #
+d9<-subset(all, trait_name=="Growth rate")#
+# methods(d9, 10, "log") # MANY UNITS#
+d9$value<-as.numeric(as.character(d9$value))#
+d9$value<-ifelse(d9$standard_unit=="mm month^-1", (d9$value*12),#
+ifelse(d9$standard_unit=="mm per 3 months^-1", (d9$value*4),#
+ifelse(d9$standard_unit=="mm per 4 months^-1", (d9$value*3),#
+ifelse(d9$standard_unit=="mm per 6 months^-1", (d9$value*2),#
+ifelse(d9$standard_unit=="mm per 7 months^-1", (d9$value*1.7),#
+ifelse(d9$standard_unit=="mm per 8 months^-1", (d9$value*1.5), d9$value))))))#
+d9<-subset(d9, standard_unit!="mm d^-1")#
+# methods(d9, 10, "log") #
+t9<-sp.means(d9, "Growth rate")#
+head(t9)#
+#
+# 10 - Symbiodinium sp. in propagules#
+d10<-subset(all, trait_name=="Symbiodinium sp. in propagules")#
+unique(d10$methodology_name)#
+t10<-sp.cat(d10, "Symbiodinium sp. in propagules")#
+head(t10)#
+#
+# 11 - Oocyte.size.at.maturity#
+d11<-subset(all, trait_name=="Oocyte size at maturity")#
+# methods(d11, 5, "none") #
+t11<-sp.means(d11, "Oocyte size at maturity")#
+head(t10)#
+#
+# 12 - Skeletal density#
+d12<-subset(all, trait_name=="Skeletal density")#
+# methods(d12, 10, "none") # check#
+t12<-sp.means(d12, "Skeletal density")#
+head(t12)#
+#
+# 13 - Symbiodinium density#
+d13<-subset(all, trait_name=="Symbiodinium density")#
+# methods(d13, 10, "log") # check#
+t13<-sp.means(d13, "Symbiodinium density")#
+head(t13)#
+#
+# 14 - Calcification rate #
+d14<-subset(all, trait_name=="Calcification rate")#
+# methods(d14, 10,"log")#
+d14<-subset(d14, standard_unit=="g cm ^-2 yr^-1" | standard_unit=="g month^-1")#
+d14$value<-as.numeric(as.character(d14$value))#
+d14$value<-ifelse(d14$standard_unit=="g month^-1", (d14$value*12),d14$value)#
+# methods(d14, 10,"log")#
+t14<-sp.means(d14, "Calcification rate")#
+head(t14)#
+#
+# 15 - Phosphorus concentration#
+d15<-subset(all, trait_name=="Phosphorus concentration")#
+# methods(d15, 10, "none") #
+t15<-sp.means(d15, "Phosphorus concentration")	#
+head(t15)#
+#
+# 16 - Nitrogen concentration#
+d16<-subset(all, trait_name=="Nitrogen concentration")#
+# methods(d16, 10, "none") #
+t16<-sp.means(d16, "Nitrogen concentration")	#
+head(t16)#
+#
+# 17 - "Polyps.per.area" #
+d17<-subset(all, trait_name=="Polyps per area")#
+# methods(d17, 10, "none") #
+t17<-sp.means(d17, "Polyps per area")	#
+head(t17)#
+#
+# 18 - RNA:DNA ratio#
+d18<-subset(all, trait_name=="RNA:DNA ratio")#
+# methods(d18, 10, "none") #
+t18<-sp.means(d18, "RNA:DNA ratio")	#
+head(t18)#
+#
+# 19 - "Chlorophyll.a"#
+d19<-subset(all, trait_name=="Chlorophyll a")#
+#methods(d19, 10, "none") #
+ d19$value<-as.numeric(as.character(d19$value))#
+d19$value<-ifelse(d19$standard_unit=="mg m^-2", (d19$value*10), d19$value)#
+methods(d19, 10, "none") #
+t19<-sp.means(d19, "Chlorophyll a")	#
+head(t19)#
+#
+# 20- "Total.biomass"#
+d20<-subset(all, trait_name=="Total biomass")#
+# methods(d20, 10, "none") #
+t20<-sp.means(d20, "Total biomass")	#
+head(t20)#
+#
+# 21- "Protein.biomass"#
+d21<-subset(all, trait_name=="Protein biomass")#
+# methods(d21, 10, "none") #
+t21<-sp.means(d21, "Protein biomass")	#
+head(t21)#
+#
+# 22- "Dark respiration" - per cm2 tissue#
+d22<-subset(all, trait_name=="Dark respiration")#
+# methods(d22, 10, "none") #
+t22<-sp.means(d22, "Dark respiration")	#
+head(t22)#
+#
+# 23 - Polyp fecundity#
+d23<-subset(all, trait_name=="Polyp fecundity")#
+# methods(d23, 10, "none")#
+t23<-sp.means(d23, "Polyp fecundity")	#
+head(t23)#
+#
+# 24 - "Gross.photosynthesis" - per cm2 tissue#
+d24<-subset(all, trait_name=="Gross photosynthesis")#
+# methods(d24, 10, "none") #
+t24<-sp.means(d24, "Gross photosynthesis")	#
+head(t24)#
+#
+# 25 - "Colony area"#
+d25<-subset(all, trait_name=="Colony area")#
+# methods(d25, 10, "none") #
+t25<-sp.means(d25, "Colony area")	#
+head(t25)#
+#
+# 26- Lipid content#
+d26<-subset(all, trait_name=="Lipid content")#
+# methods(d26, 10, "none") #
+t26<-sp.means(d26, "Lipid content")	#
+head(t26)#
+#
+# 27- Size at maturity#
+d27<-subset(all, trait_name=="Size at maturity")#
+# methods(d27, 10, "none") #
+d27$value<-as.numeric(as.character(d27$value))#
+d27$value<-ifelse(d27$standard_unit=="cm", pi*((d27$value/2)^2), d27$value)#
+# methods(d27, 10, "none") #
+t27<-sp.means(d27, "Size at maturity")	#
+head(t27)#
+#
+# 27 - "Colony shape factor"#
+d28<-subset(all, trait_name=="Colony shape factor")#
+# methods(d28, 10, "none") #
+t28<-sp.means(d28, "Colony shape factor")	#
+head(t28)#
+#
+# 29 - "Generation time"#
+d29<-subset(all, trait_name=="Generation time")#
+# methods(d29, 10, "none") #
+t29<-sp.means(d29, "Generation time")	#
+head(t29)#
+#
+# 30 - "Age.at.maturity"#
+d30<-subset(all, trait_name=="Age at maturity")#
+# methods(d30, 10, "none")#
+t30<-sp.means(d30, "Age at maturity")	#
+head(t30)#
+#
+# 31 - "Propagule size on release"#
+d31<-subset(all, trait_name=="Propagule size on release")#
+# methods(d31, 10, "none")#
+t31<-sp.means(d31, "Propagule size on release")	#
+head(t31)#
+#
+# 32 - "Eggs per area"#
+d32<-subset(all, trait_name=="Eggs per area")#
+# methods(d32, 10, "none")#
+t32<-sp.means(d32, "Eggs per area")	#
+head(t32)#
+#
+# 33 - "Mature egg diameter"#
+d33<-subset(all, trait_name=="Mature egg diameter")#
+# methods(d33, 10, "none")#
+t33<-sp.means(d33, "Mature egg diameter")	#
+head(t33)#
+#
+# 34 - "Egg size"#
+d34<-subset(all, trait_name=="Egg size")#
+# methods(d34, 10, "none")#
+t34<-sp.means(d34, "Egg size")	#
+head(t34)#
+#
+# 35 - Ratio of female to male gonads#
+d35<-subset(all, trait_name=="Ratio of female to male gonads")#
+# methods(d35, 10, "none")#
+t35<-sp.means(d35, "Ratio of female to male gonads")	#
+head(t35)
+d36<-subset(all, trait_name=="Abundance_GBR")#
+methods(d36, 10, "none")
+d36<-subset(all, trait_name=="Abundance_GBR")#
+d36<-sp.means(d36, "Abundance_GBR")
+# Process each trait individually#
+###############################################################
+traitlist<-data.frame(trait=unique(all$trait_name), id=unique(all$trait_id))#
+traitlist
+# Process each trait individually#
+###############################################################
+traitlist<-data.frame(trait=unique(all$trait_name), id=unique(all$trait_id))#
+traitlist
+# Process each trait individually#
+###############################################################
+traitlist<-data.frame(trait=unique(all$trait_name), id=unique(all$trait_id))#
+traitlist#
+# g1 - "Ocean basin"#
+g1<-subset(all, trait_name=="Ocean basin")#
+unique(g1$methodology_name)#
+g1<-sp.cat(g1, "Ocean basin")#
+head(g1)
+# 1 - "Zooxanthellate"#
+d1<-subset(all, trait_name=="Zooxanthellate")#
+unique(d1$methodology_name)#
+t1<-sp.cat(d1, "Zooxanthellate")#
+head(t1)
+# 2 - "Growth.form.typical"#
+d2<-subset(all, trait_name=="Growth form typical")#
+unique(d2$methodology_name)#
+t2<-sp.cat(d2, "Growth form typical")#
+head(t2)
+#  - Abundance GBR#
+d36<-subset(all, trait_name=="Abundance_GBR")#
+unique(d36$methodology_name)#
+d36<-sp.cat(d7, "Sexual system")#
+head(36)
+#  - Abundance GBR#
+d36<-subset(all, trait_name=="Abundance_GBR")#
+unique(d36$Abundance_GBR)#
+d36<-sp.cat(d36, "Abundance_GBR")#
+head(d36)
+unique(all$trait_id)
+nique(all$trait_name)
+unique(all$trait_name)
+unique(all$trait_name)
+#  - Abundance GBR#
+d36<-subset(all, trait_name=="Abundance GBR")#
+#unique(d36$Abundance_GBR)#
+d36<-sp.cat(d36, "Abundance GBR")#
+head(d36)
+d36
+unique(all$trait_name)
+#  - Water clarity preference#
+d37<-subset(all, trait_name=="Water clarity preference")#
+#unique(d37$Water clarity preference)#
+d37<-sp.cat(d37, "Water clarity preference")#
+head(d37)
+d39<-subset(all, trait_name=="Genus fossil age")#
+#unique(d39$Genus.fossil.age)#
+d39<-sp.cat(d39, "Genus fossil age")#
+head(d39)
+#  - Species age phylogeny#
+d38<-subset(all, trait_name=="Species age phylogeny")#
+#unique(d38$Species.age.phylogeny)#
+d38<-sp.cat(d38, "Species age phylogeny")#
+head(d38)
+#  - Genus fossil age#
+d39<-subset(all, trait_name=="Genus fossil age")#
+#unique(d39$Genus.fossil.age)#
+d39<-sp.cat(d39, "Genus fossil age")#
+head(d39)
+unique(all$trait_name)
+###############################################################
+# merge#
+combine<-Reduce(function(x, y) merge(x, y, all=TRUE), list(g1, t1,t2, t3,t4, t5, t6, t7,t8, t9,t10,t11,t12,t13,t14,t15,t16,t17,t18, t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30, t31, t32, t33, t34, t35, t36, t37, t38, t39))#
+head(combine)
+#  - Abundance GBR#
+d36<-subset(all, trait_name=="Abundance GBR")#
+#unique(d36$Abundance.GBR)#
+t36<-sp.cat(d36, "Abundance GBR")#
+head(t36)
+###############################################################
+unique(all$trait_name)#
+#
+# ECOLOGICAL#
+#
+#  - Abundance GBR#
+d36<-subset(all, trait_name=="Abundance GBR")#
+#unique(d36$Abundance.GBR)#
+t36<-sp.cat(d36, "Abundance GBR")#
+head(t36)#
+#
+#  - Water clarity preference#
+d37<-subset(all, trait_name=="Water clarity preference")#
+#unique(d37$Water.clarity.preference)#
+t37<-sp.cat(d37, "Water clarity preference")#
+head(t37)#
+#
+#  - Species age phylogeny#
+d38<-subset(all, trait_name=="Species age phylogeny")#
+#unique(d38$Species.age.phylogeny)#
+t38<-sp.cat(d38, "Species age phylogeny")#
+head(t38)#
+#  - Genus fossil age#
+d39<-subset(all, trait_name=="Genus fossil age")#
+#unique(d39$Genus.fossil.age)#
+t39<-sp.cat(d39, "Genus fossil age")#
+head(t39)#
+#
+###############################################################
+###############################################################
+# merge#
+combine<-Reduce(function(x, y) merge(x, y, all=TRUE), list(g1, t1,t2, t3,t4, t5, t6, t7,t8, t9,t10,t11,t12,t13,t14,t15,t16,t17,t18, t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30, t31, t32, t33, t34, t35, t36, t37, t38, t39))#
+head(combine)
+# export#
+write.csv(combine, file = "output.csv")

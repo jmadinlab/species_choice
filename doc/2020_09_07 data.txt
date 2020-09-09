@@ -1,0 +1,31 @@
+
+
+Good data (100s of species)
+
+Growth rate 
+Morphological groups
+Range size (outdated)
+Brooder/spawner
+Hermaphrodite
+Bleaching sensitivity index
+Corallite width
+Taxonomy (outdated)
+
+Ok data (10s of species - more with infilling)
+
+Maximum colony size
+Morphological values: fractal dimension/height
+Fecundity
+Egg size
+Skeletal density
+
+Unsure: 
+
+Restorability
+Lineage survival through extinction
+Abundance - loads of data but how to measure? 
+General index of sensitivity
+Genetic diversity
+
+
+

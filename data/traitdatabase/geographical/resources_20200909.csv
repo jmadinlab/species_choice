@@ -1,0 +1,6 @@
+resource_id,primary_secondary,author,year,title,resource_type,resource_ISBN,resource_journal,resource_volume_pages,resource_notes
+10,primary,"Veron, J. E. N.",2000,Corals of the World,book,"",Australian Institute of Marine Science and CCR Qld Pty Ltd.,"",Includes corals of the world CD ROM
+281,primary,"Keith, S. A., Baird, A. H., Hughes, T. P., Madin, J. S., Connolly, S. R.",2013,"Faunal breaks and species composition of Indo-Pacific corals: the role of plate tectonics, environment and habitat distribution",paper,10.1098/rspb.2013.0818,Proceedings of the Royal Society B: Biological Sciences,"280, 20130818-20130818",""
+605,primary,"Hughes, T. P., Connolly, S. R., Keith, S. A.",2013,Geographic ranges of reef corals (Cnidaria: Anthozoa: Scleractinia) in the Indo-Pacific,paper,10.1890/13-0361.1,Ecology,"94, 1659",""
+40,primary,"Cairns, S. D.",1999,Species richness of recent Scleractinia,paper,10.5479/si.00775630.459.1,Atoll Research Bulletin,"459, 1-46",Link to paper [PDF](http://www.sil.si.edu/digitalcollections/atollresearchbulletin/issues/00459.pdf)
+48,secondary,"Baird, A. H., Guest, J. R., Willis, B. L.",2009,Systematic and Biogeographical Patterns in the Reproductive Biology of Scleractinian Corals,paper,10.1146/annurev.ecolsys.110308.120220,Annu. Rev. Ecol. Evol. Syst.,"40, 551-571",""
