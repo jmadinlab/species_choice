@@ -177,13 +177,8 @@ head(points)
   #writeWebGL()
 plot3d(points$x, points$y, points$z, group=points$group, type="s",   
 xlab="PC1", ylab="PC2", zlab="PC3", col=points$cols, size=0.5, box=FALSE, axes=F, col.panel = "black",)
- # rgl.texts(points$x, points$y, points$z, points$labs, cex=0.25,col="red", adj=c(1.1, 1.1))
 axes3d(c("x", "y", "z"), col="white")
 segments3d(x=as.vector(t(seg[,c("x","xend")])),y=as.vector(t(seg[,c("y","yend")])), z=as.vector(t(seg[,c("z","zend")])), col='red', alpha=0.1)
-           bg3d("slategrey")
-           identify3d(points$x, points$y, points$z, labels = points$labs, n=length(points$x), 
-	plot = TRUE, adj = c(-0.1, 0.5), tolerance = 20, 
-	buttons = c("right", "middle"))
-
-  text3d(points$x, points$y, points$z, texts=points$labs, cex=0.25,col="red", adj=c(1.1, 1.1))
+           bg3d("slategrey") 
+  #text3d(points$x, points$y, points$z, texts=points$labs, cex=0.25,col="red", adj=c(1.1, 1.1))
            
