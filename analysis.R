@@ -1,27 +1,40 @@
 
-# -- mike wd -- #
+# -- mike wd -- # You really got to stop doing this! 
 #setwd("/Users/mikemcwilliam/Documents/PostDoc/species_choice")
-
 
 source("data_prep.R")
 
-
 # Anyalsis
 library(tripack)
+library(rgl)
+
 source("R/functions.R")
 
 # points selection
 
-#n <- 100 # total species
-#s <- 20  # species selected
-#dat <- data.frame(x=rnorm(n), y=rnorm(n))
-#plot(y ~ x, dat, col="grey")
+n <- 100 # total species
+s <- 20  # species selected
+dat <- data.frame(x=rnorm(n), y=rnorm(n), z=rnorm(n))
+plot(y ~ x, dat, col="grey")
+
+dat2D <- voronoiFilter(dat, s)
+dat3D <- voronoiFilter3D(dat, s)
+
+points(y ~ x, dat2D, col="blue", pch=20, cex=0.6)
+points(y ~ x, dat3D, col="red", pch=3)
+
+pp <- scatterplot3d(dat, angle=55, phi=20)
+pp$points3d(dat2D, col="blue", pch=20, cex=0.6)
+pp$points3d(dat3D, col="red", pch=3)
+
+plot3d( x = dat, type="s", radius=0.1, col=rgb(0,0,0,0.1))
+spheres3d(x = dat2D, col = "red", radius = 0.2, alpha=0.3)
+spheres3d(x = dat3D, col = "blue", radius = 0.2, alpha=0.3)
 
 # random
 #points(y ~ x, dat[sample(1:n, s, replace=FALSE),], col="red", pch=20, cex=0.6)
 
 # most evenly spread
-#points(y ~ x, voronoiFilter(dat, s), col="blue", pch=20, cex=0.6)
 
 
 
