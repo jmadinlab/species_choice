@@ -12,23 +12,59 @@ source("data_prep.R")
 source("R/functions.R")
 library("FD")
 
-# points selection
+# poin
+dat<-read.csv("data/data.csv")
+dat$Abundance.GBR <- factor(dat$Abundance.GBR, levels=c("rare","uncommon", "common"))
 
-n <- 150 # total species
-s <- 20  # species selected
-dat <- data.frame(x=rnorm(n), y=rnorm(n), z=rnorm(n))
-dat$abund <- rlnorm(n, log(10), log(2.5))
-dat$abund <- dat$abund / max(dat$abund)
+cats<-c("cat_growthrate", "cat_corallitesize", "cat_colonydiameter" , "cat_skeletaldensity", "cat_colonyheight","cat_SA_vol", "cat_spacesize")
+pcoa <- pcoa(gowdis(dat[,cats]))
 
-plot(y ~ x, dat, col="grey", cex=1 + dat$abund*5)
+space <- data.frame(x=jitter(pcoa$vectors[,1], amount=0.01), y=jitter(pcoa$vectors[,2], amount=0.01), z=jitter(pcoa$vectors[,3], amount=0.01))
+dat <- cbind(dat, space)
+
+s <- 20
+
+
+# Range size
+hist(dat$Range.size)
+dat$Range.size <- dat$Range.size / max(dat$Range.size)
+
+# Abundance
+dat$abund <- NA
+dat$abund[dat$Abundance.GBR=="common"] <- 1
+dat$abund[dat$Abundance.GBR=="uncommon"] <- 0.25
+dat$abund[dat$Abundance.GBR=="rare"] <- 0.1
+
+# Bleaching Index
+# miz <- read.csv("data/mizerek/338_2018_1702_MOESM1_ESM.csv", as.is=TRUE)
+# miz <- miz[c("Revised.species.name", "BI")]
+# names(miz) <- c("species", "BI")
+# dat <- merge(dat, miz, all.x=TRUE)
+# hist(miz$BI)
+dat$BI <- runif(nrow(dat))
+
+# Genus age
+dat$Genus.fossil.age[is.na(dat$Genus.fossil.age)] <- mean(dat$Genus.fossil.age, na.rm=TRUE)
+dat$genus_age <- dat$Genus.fossil.age / max(dat$Genus.fossil.age, na.rm=TRUE)
+sum(is.na(dat$Genus.fossil.age))
+hist(dat$genus_age)
+
+###
 
 dat2D <- voronoiFilter(dat, s)
-# dat3D <- voronoiFilter3D(dat, s)
-dat2Da <- voronoiFilterAb(dat, s)
+# dat2D_Di <- voronoiFilterDi(dat, s)
+dat3D <- voronoiFilter3D(dat, s)
 
+
+plot(y ~ x, dat, col="grey", cex=(dat$abund)*3, xlab="PC1", ylab="PC2")
 points(y ~ x, dat2D, col="blue", pch=20, cex=0.6)
-# points(y ~ x, dat3D, col="red", pch=3)
-points(y ~ x, dat2Da, col="red", pch=3)
+points(y ~ x, dat3D, col="red", pch=3)
+
+dat3D$species
+
+points(y ~ x, dat2D_Di, col="green", pch=5, cex=1.2)
+
+
 legend("topleft", pch=c(0, 20, 3), col=c("grey", "blue", "red"), bty="n", legend=c("species and abundance", "even spread alone", "even spread acct. abundance"), cex=0.6)
 
 

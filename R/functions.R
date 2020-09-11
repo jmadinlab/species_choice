@@ -34,6 +34,12 @@ voronoiFilter3D <- function(dat, s) {
     
     areas <- apply(cbind(areas1, areas2, areas3), 1, min, na.rm=TRUE)
     
+    # Incorporating relative abundance (b/w 0 and 1) simply by multiplying with area
+    areas <- areas * subset$Range.size
+    areas <- areas * subset$abund
+    areas <- areas * subset$BI
+    areas <- areas * subset$genus_age
+    
     smallest <- which(areas == min(areas, na.rm=TRUE))
     dropped <- c(dropped, which(paste(dat[,'x'], dat[,'y'], dat[,'z'], sep='_') == paste(subset[smallest,'x'], subset[smallest,'y'], subset[smallest,'z'], sep='_')))
     subset <- subset[-smallest,]
@@ -41,13 +47,29 @@ voronoiFilter3D <- function(dat, s) {
   return(dat[-dropped,])
 }
 
+voronoiFilterDi <- function(dat, s) {
+  subset <- dat
+  dropped <- vector()
+  for (i in 1:(nrow(dat)-s)) {
+    v <- voronoi.mosaic(x=subset[,'x'], y=subset[,'y'], duplicate='error')
+    info <- cells(v)
+    areas <- unlist(lapply(info, function(x) x$area))
+    
+    # Incorporating relative abundance (b/w 0 and 1) simply by multiplying with area
+    areas <- areas * subset$Range.size
+    areas <- areas * subset$abund
+    
+    # Find smallest value, no longer just the voronoi area
+    smallest <- which(areas == min(areas, na.rm=TRUE))
+    dropped <- c(dropped, which(paste(dat[,'x'], dat[,'y'], sep='_') == paste(subset[smallest,'x'], subset[smallest,'y'], sep='_')))
+    subset <- subset[-smallest,]
+  }
+  return(dat[-dropped,])
+}
+
+
+
 # 
-
-<<<<<<< HEAD
-
-
-
-
 
 
 diaz<-function(ll, pc12){
@@ -82,23 +104,4 @@ plot(fit, cex=0.90, col=1, labels=list(vectors = c("GR","CW","MCS","SD","CH","SA
 segments(0,0, fit2[,1], fit2[,2], col=1, lty=2, lwd=1)
 mtext("PC1", cex=0.75, side=1, line=0.5, adj=1)
 mtext("PC2", cex=0.75, side=2, line=0.5, at=5.3) #, las=2)
-=======
-voronoiFilterAb <- function(dat, s) {
-  subset <- dat
-  dropped <- vector()
-  for (i in 1:(nrow(dat)-s)) {
-    v <- voronoi.mosaic(x=subset[,'x'], y=subset[,'y'], duplicate='error')
-    info <- cells(v)
-    areas <- unlist(lapply(info, function(x) x$area))
-    
-    # Incorporating relative abundance (b/w 0 and 1) simply by multiplying with area
-    areas <- areas * subset$abund
-    
-    # Find smallest value, no longer just the voronoi area
-    smallest <- which(areas == min(areas, na.rm=TRUE))
-    dropped <- c(dropped, which(paste(dat[,'x'], dat[,'y'], sep='_') == paste(subset[smallest,'x'], subset[smallest,'y'], sep='_')))
-    subset <- subset[-smallest,]
-  }
-  return(dat[-dropped,])
->>>>>>> 8c242c5076b173c2b5683a5483a5896beee0aef0
-}
+

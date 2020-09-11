@@ -1,0 +1,102 @@
+﻿Revised species name,Original Species Name,Study,Warming Year,BI,Number of colonies,Coral Family,Growth form,Depth range (logged),Species maximum colony size (logged),Corallite size (logged),clade_A,clade_B,clade_C,clade_D,Symbiodinium diversity
+Acropora eurystoma,Acropora eurystoma,Obura,1998,0.84,25,Acroporidae,digitate,3.22,3.68 1,0.69,0,0,0,0,NA
+Isopora palifera,Acropora palifera,Marsh_Baird,1998,0.5,8,Acroporidae,branching,3.66,4.61 6,0.34,0,0,1,1,2
+Agaricia agaricites,Agaricia agaricites,Charpentier10,2010,0.15,619,Agariciidae,laminar,4.31,5.02,1.7,0,1,1,0,2
+Agaricia agaricites,Agaricia agaricites,Charpentier05,2005,0.29,413,Agariciidae,laminar,4.31,5.02,1.7,0,1,1,0,2
+Agaricia humilis,Agaricia humilis,Charpentier10,2010,0.34,80,Agariciidae,encrusting,2.71,2.48,1.79,0,1,1,1,3
+Agaricia humilis,Agaricia humilis,Charpentier05,2005,0.45,37,Agariciidae,encrusting,2.71,2.48,1.79,0,1,1,1,3
+Agaricia lamarcki,Agaricia lamarcki,Charpentier10,2010,0.06,49,Agariciidae,laminar,4.19,2.42,2.07,0,0,1,0,1
+Agaricia lamarcki,Agaricia lamarcki,Charpentier05,2005,0.1,22,Agariciidae,laminar,4.19,2.42,2.07,0,0,1,0,1
+Colpophyllia natans,Colpophyllia amaranthus,Oxenford,2005,1,1,Mussidae,massive,4.01,4.9,2.56,0,1,1,1,3
+Colpophyllia natans,Colpophyllia natans,Oxenford,2005,0.08,63,Mussidae,massive,4.01,4.9,2.56,0,1,1,1,3
+Cyphastrea ocellina,Cyphastrea ocellina,Neilson,2014,0.13,47,Merulinidae,massive,2.71,2.71 2,0.92,0,0,1,0,1
+Dendrogyra cylindrus,Dendrogyra cylindricus,Oxenford,2005,1,15,Meandrinidae,massive,3.18,5.3,1.44,0,1,0,0,1
+Dichocoenia stokesi,Dicocoenia stokesii,Oxenford,2005,0.3,10,Meandrinidae,massive,4.25,3.54,2.42,0,1,1,0,2
+Pseudodiploria clivosa,Diploria clivosa,Oxenford,2005,0.8,5,Mussidae,massive,3.66,3.56 25,1.76,0,1,0,1,2
+Diploria labyrinthiformis,Diploria labyrinthiformis,Oxenford,2005,0.51,75,Mussidae,massive,3.76,4.79,1.76,0,1,1,1,3
+Pseudodiploria strigosa,Diploria strigosa,Oxenford,2005,0.82,277,Mussidae,massive,3.66,4.25 26,2.31,0,1,1,0,2
+Echinopora gemmacea,Echinopora gemmacea,Obura,1998,0.37,25,Merulinidae,laminar,3.91,4.38 3,1.44,0,0,1,1,2
+Eusmilia fastigiata,Eusmilia fastigiata,Oxenford,2005,0.17,12,Meandrinidae,massive,4.16,4.87,3.04,0,1,1,0,2
+Dipsastraea favus,Favia favus,Obura,1998,0.43,26,Merulinidae,massive,3.91,3.61,2.3,0,0,1,0,1
+Favia fragum,Favia fragum,Oxenford,2005,0.91,11,Mussidae,massive,3.39,1.43,1.76,0,1,1,0,2
+Favites pentagona,Favites pentagona,Obura,1998,0.25,20,Merulinidae,massive,3.87,4.61,2.14,0,0,1,1,2
+Cycloseris curvata,Fungia (cycloseris) curvata,Jimenez,1997,0.49,35,Fungiidae,massive,4.25,2.2,4.39,0,0,0,0,NA
+Lobactis scutaria,Fungia scutaria,Neilson,2014,0.3,97,Fungiidae,massive,3.22,2.83,5.13,0,0,1,0,1
+Galaxea astreata,Galaxea astreata,Obura,1998,0.85,21,Euphylliidae,massive,3.95,5.12,1.31,0,0,1,1,2
+Galaxea fascicularis,Galaxea fascicularis,Obura,1998,0.26,117,Euphylliidae,massive,3.04,6.21,2.37,0,0,1,1,2
+Gardineroseris planulata,Gardineroseris planulata,Jimenez,1997,0.03,92,Agariciidae,massive,3.64,5.30 4,1.61,0,0,1,1,2
+Coelastrea aspera,Goniastrea aspera,Stimson,1998,0.17,102,Merulinidae,massive,2.71,6.21,2.44,0,0,1,1,2
+Heliofungia actiniformis,Heliofungia actiniformis,Bruno,1998,0,11,Fungiidae,massive,3.18,3,4.96,0,0,1,0,1
+Helioseris cucullata,Helioseris cucullata,Charpentier10,2010,0.19,57,Agariciidae,laminar,3.4,3.18,1.06,0,0,1,0,1
+Helioseris cucullata,Helioseris cucullata,Charpentier05,2005,0.27,43,Agariciidae,laminar,3.4,3.18,1.06,0,0,1,0,1
+Hydnophora exesa,Hydnophora exesa,Obura,1998,0.37,13,Merulinidae,massive,3.22,4.61,1.5,0,0,1,0,1
+Isophyllia rigida,Isophyllastrea rigida,Oxenford,2005,1,1,Mussidae,massive,2.94,1.75,2.9,0,1,1,0,2
+Leptastrea purpurea,Leptastrea purpurea,Neilson,2014,0,1,Fungiidae,encrusting,3.69,4.61,2.3,0,0,1,0,1
+Helioseris cucullata,Leptoseris cucullata,Oxenford,2005,1,1,Agariciidae,laminar,3.4,3.18,1.06,0,0,1,0,1
+Madracis decactis,Madracis decactis,Oxenford,2005,0.08,59,Pocilloporidae,digitate,2.94,2.2,0.79,0,1,0,0,1
+Madracis decactis,Madracis decactis,Charpentier10,2010,0.01,3,Pocilloporidae,digitate,2.94,2.2,0.79,0,1,0,0,1
+Madracis decactis,Madracis decactis,Charpentier05,2005,0.02,3,Pocilloporidae,digitate,2.94,2.2,0.79,0,1,0,0,1
+Madracis mirabilis,Madracis mirabilis,Charpentier05,2005,0.02,2,Pocilloporidae,branching,4.077537 9,2.69,0.41,0,1,0,0,1
+Madracis mirabilis,Madracis mirabilis,Charpentier10,2010,0.02,3,Pocilloporidae,branching,4.077537 9,2.69,0.41,0,1,0,0,1
+Madracis mirabilis,Madracis mirabilis,Oxenford,2005,0.2,55,Pocilloporidae,branching,4.077537 9,2.69,0.41,0,1,0,0,1
+Meandrina meandrites,Meandrina meandrites,Oxenford,2005,0.41,92,Meandrinidae,massive,4.38,2.79,2.6,1,1,1,0,3
+Montastraea cavernosa,Montastrea cavernosa,Oxenford,2005,0.64,238,Montastraeidae,massive,4.73,5,2.3,0,0,1,1,2
+Montastrea complex,Montastrea complex,Oxenford,2005,0.73,489,Merulinidae,massive,4.4,6.91,1.34,1,1,1,1,4
+Orbicella annularis,Montastreae annularis,Charpentier10,2010,0.51,337,Merulinidae,massive,4.41,6.02,1.34,1,1,1,1,4
+Orbicella annularis,Montastreae annularis,Charpentier05,2005,0.63,256,Merulinidae,massive,4.41,6.02,1.34,1,1,1,1,4
+Orbicella faveolata,Montastreae faveolata,Charpentier05,2005,0.58,32,Merulinidae,massive,3.68,5.83,1.335001 11,1,1,1,1,4
+Orbicella faveolata,Montastreae faveolata,Charpentier10,2010,0.46,49,Merulinidae,massive,3.68,5.83,1.34,1,1,1,1,4
+Montipora capitata,Montipora capitata,Neilson,2014,0.39,1039,Acroporidae,encrusting,4.25,5.30 8,0,1,0,1,1,3
+Montipora flabellata,Montipora flabellata,Neilson,2014,0.34,171,Acroporidae,laminar,2.2,3.91,-1.61,0,0,1,0,1
+Montipora patula,Montipora patula,Neilson,2014,0.42,264,Acroporidae,laminar,2.2,5.3,-0.36,0,0,1,1,2
+Montipora tuberculosa,Montipora tuberculosa,Obura,1998,0.88,17,Acroporidae,massive,3.69,4.32 10,0,0,0,1,1,2
+Mussa angulosa,Mussa angulosa,Oxenford,2005,1,2,Mussidae,massive,4.05,3.47,4.09,0,0,1,0,1
+Mycetophyllia ferox,Mycetophyllia ferox,Oxenford,2005,0,2,Mussidae,laminar,3.22,2.84,2.4,0,0,1,0,1
+Pachyseris speciosa,Pachyseris speciosa,Bruno,1998,0.71,12,Pachyseridae,laminar,4.29,0.69,1.53,0,0,1,1,2
+Pavona clavus,Pavona clavus,Jimenez,1997,0.33,549,Agariciidae,massive,3.64,7.6,1.22,0,0,1,0,1
+Pavona gigantea,Pavona gigantea,Jimenez,1997,0.2,307,Agariciidae,massive,3.37,4.61 13,1.74,0,0,1,0,1
+Pavona varians,Pavona varians,Obura,1998,0.53,11,Agariciidae,encrusting,4.38,4.61 13,2.23,0,0,1,1,2
+Pavona varians,Pavona varians,Neilson,2014,0.21,38,Agariciidae,encrusting,4.38,4.61 13,2.23,0,0,1,1,2
+Pavona varians,Pavona varians,Jimenez,1997,0.4,42,Agariciidae,encrusting,4.38,4.61 13,2.23,0,0,1,1,2
+Pectinia paeonia,Pectinia paeonia,Bruno,1998,0.68,17,Merulinidae,laminar,3.09,4.61,3.56,0,0,1,0,1
+Physogyra lichtensteini,Physogyra lichtensteini,Bruno,1998,0.86,7,Plesiastreidae,massive,2.94,4.61,3,0,0,1,1,2
+Platygyra daedalea,Platygyra daedalea,Obura,1998,0.21,27,Merulinidae,massive,3.69,2.30 14,2.3,0,0,1,1,2
+Platygyra ryukyuensis,Platygyra ryukyuensis,Stimson,1998,1,4,Merulinidae,massive,3.33,4.61 15,1.19,0,0,1,0,1
+Pocillopora damicornis,Pocillopora damicornis,Obura,1998,0.76,33,Pocilloporidae,branching,3.99,5.3,0,0,1,1,1,3
+Pocillopora damicornis,Pocillopora damicornis,Jimenez,1997,0.38,1922,Pocilloporidae,branching,3.99,5.3,0,0,1,1,1,3
+Pocillopora damicornis,Pocillopora damicornis,Neilson,2014,0.61,501,Pocilloporidae,branching,3.99,5.3,0,0,1,1,1,3
+Pocillopora damicornis,Pocillopora damicornis,Marsh_Baird,1998,0.6,31,Pocilloporidae,branching,3.99,5.3,0,0,1,1,1,3
+Pocillopora elegans,Pocillopora elegans,Jimenez,1997,0.33,826,Pocilloporidae,branching,3.4,3.22 16,0,0,0,1,0,1
+Pocillopora eydouxi,Pocillopora eydouxi,Jimenez,1997,0.24,132,Pocilloporidae,branching,2.89,4.61,0,1,0,1,1,3
+Pocillopora inflata,Pocillopora inflata,Jimenez,1997,0.96,24,Pocilloporidae,branching,2.2,2.30 17,0,0,0,1 18,0,1
+Pocillopora meandrina,Pocillopora meandrina,Neilson,2014,0.36,318,Pocilloporidae,branching,3.26,4.61,-0.36,1,0,1,1,3
+Pocillopora meandrina,Pocillopora meandrina,Jimenez,1997,0.48,47,Pocilloporidae,branching,3.26,4.61,-0.36,1,0,1,1,3
+Pocillopora verrucosa,Pocillopora verrucosa,Obura,1998,0.45,9,Pocilloporidae,branching,3.99,3.91,-0.36,0,0,1,1,2
+Porites astreoides,Porites astreoides,Oxenford,2005,0.07,1084,Poritidae,massive,4.25,3.49,0.47,1,1,1,0,3
+Porites astreoides,Porites astreoides,Charpentier10,2010,0.02,37,Poritidae,massive,4.25,3.49,0.47,1,1,1,0,3
+Porites astreoides,Porites astreoides,Charpentier05,2005,0.01,5,Poritidae,massive,4.25,3.49,0.47,1,1,1,0,3
+Porites compressa,Porites compressa,Neilson,2014,0.3,1063,Poritidae,encrusting,3.4,4.81,0.47,0,0,1,0,1
+Porites cylindrica,Porites cylindrica,Stimson,1998,1,4,Poritidae,massive 19,2.94,6.91,0.1,0,0,1,0,1
+Porites evermanni,Porites evermanni,Neilson,2014,0.38,178,Poritidae,massive,3.37,4.79,0,0,0,1,0,1
+Porites hawaiiensis,Porites hawaiiensis,Neilson,2014,0.03,2,Poritidae,encrusting 20,3.99,2.30 20,-0.2231436 20,0,0,0,0,NA
+Porites lobata,Porites lobata,Jimenez,1997,0.38,102,Poritidae,massive,4.2,6.3,0.1,0,0,1,0,1
+Porites lobata,Porites lobata,Neilson,2014,0.18,397,Poritidae,massive,4.2,6.3,0.1,0,0,1,0,1
+Porites lutea,Porites lutea,Stimson,1998,0,12,Poritidae,massive,4.25,5.99,0.26,0,1,1,0,2
+Porites lutea,Porites lutea,Obura,1998,0.41,45,Poritidae,massive,4.25,5.99,0.26,0,1,1,0,2
+Porites nigrescens,Porites nigrescens,Obura,1998,0.76,142,Poritidae,branching,2.97,4.09 21,0.47,0,0,1,0,1
+Porites panamensis,Porites panamensis,Jimenez,1997,0.31,207,Poritidae,encrusting 23,3.58,2.30 22,-0.11,0,0,1,0,1
+Porites porites,Porites porites,Charpentier05,2005,0.2,20,Poritidae,branching,3.54,2.99,0.92,1,0,1,0,2
+Porites porites,Porites porites,Charpentier10,2010,0.21,37,Poritidae,branching,3.54,2.99,0.92,1,0,1,0,2
+Porites porites,Porites porites,Oxenford,2005,0.73,250,Poritidae,branching,3.54,2.99,0.92,1,0,1,0,2
+Porites rus,Porites rus,Neilson,2014,0,4,Poritidae,digitate,2.94,6.21,-0.22,0,0,1,0,1
+Psammocora contigua,Psammocora contigua,Bruno,1998,1,25,Psammocoridae,massive,3.56,3.91,0.41,0,0,1,1,2
+Psammocora stellata,Psammocora stellata,Neilson,2014,0.35,6,Psammocoridae,massive,4.25,2.30 24,0.92,0,0,1,0,1
+Seriatopora hystrix,Seriatopora hystrix,Marsh_Baird,1998,0.73,9,Pocilloporidae,branching,3.99,2.08 27,-0.22,0,0,1,1,2
+Siderastrea radians,Siderastrea radians,Oxenford,2005,0.7,20,Siderastreidae,massive,3.5,2.84,1.1,1,1,1,1,4
+Siderastrea siderea,Siderastrea siderea,Charpentier10,2010,0.17,63,Siderastreidae,massive,4.25,4.4,1.5,1,1,1,1,4
+Siderastrea siderea,Siderastrea siderea,Charpentier05,2005,0.1,20,Siderastreidae,massive,4.25,4.4,1.5,1,1,1,1,4
+Siderastrea siderea,Siderastrea siderea,Oxenford,2005,0.66,318,Siderastreidae,massive,4.25,4.4,1.5,1,1,1,1,4
+Stephanocoenia intersepta,Stephanocoenia intersepta,Oxenford,2005,0.39,18,Astrocoeniidae,massive,4.6,3.64,0.99,1,0,1,0,2
+Stephanocoenia intersepta,Stephanocoenia intersepta,Charpentier10,2010,0.03,5,Astrocoeniidae,massive,4.6,3.64,0.99,1,0,1,0,2
+Stephanocoenia intersepta,Stephanocoenia intersepta,Charpentier05,2005,0.04,1,Astrocoeniidae,massive,4.6,3.64,0.99,1,0,1,0,2
+Stylophora pistillata,Stylophora pistillata,Marsh_Baird,1998,0.7,13,Pocilloporidae,branching,4.16,3.40 28,0.34,1,0,1,0,2
