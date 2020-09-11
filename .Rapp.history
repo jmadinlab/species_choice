@@ -1,1219 +1,77 @@
-point_avgs
+# pcoa#
+pcoa<-pcoa(gowdis(dat[,cats]))#
+space<-data.frame(x=jitter(pcoa$vectors[,1], amount=0.005), y=jitter(pcoa$vectors[,2], amount=0.005), z=jitter(pcoa$vectors[,3], amount=0.05))#
+# 2D spread....#
+points<-cbind(space, abun=dat$Abundance.GBR, species=dat$species)#
+#
+use<-points[,c("x","y")]#
+#use<-points[points$abun=="common",c("x","y")] # only common species#
+#
+n <- nrow(use) # total species#
+s <- 30  # species selected#
+spread<-voronoiFilter(use, s)#
+spread$species<-points$species[as.numeric(rownames(spread))]#
+#
 ggplot()+#
-geom_point(data=points, aes(x=NMDS1, y=NMDS2, colour=time))+#
-geom_point(data=point_avgs, aes(x=NMDS1, y=NMDS2, colour=time))
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_text(data=spread, aes(x,y, label=species), size=2, position=position_nudge(x=diff(range(spread$x))*0.07, y=diff(range(spread$y))*0.01))+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
 ggplot()+#
-geom_point(data=points, aes(x=NMDS1, y=NMDS2, colour=time))+#
-geom_point(data=point_avgs, aes(x=NMDS1, y=NMDS2, colour=Group.1), size=3)
-library("grid")
-vectorplot<-ggplot()+#
-geom_line(data=vectors, aes(x=MDS1, y=MDS2, colour=time))
-# plot#
-#library("ggplot2")#
-pointplot<-ggplot()+#
-geom_point(data=points, aes(x=NMDS1, y=NMDS2, colour=time))+#
-geom_point(data=point_avgs, aes(x=NMDS1, y=NMDS2, colour=Group.1), size=3)#
-#
-vectorplot<-ggplot()+#
-geom_segment(data=vectors, aes(x=0, xend=MDS1, y=0, yend=MDS2))#
-library("grid")#
-plot_grid(pointplot, pointplot)
-# extract points and vectors#
-points<-data.frame(scores(mds))#
-vectors<-data.frame(mds$species)
-# reintroduce time#
-points$time<-tikus$time#
-#
-#find avgs#
-point_avgs<-aggregate(points[,c("NMDS1", "NMDS2")], by=list(points$time), FUN=mean)#
-#
-# plot#
-#library("ggplot2")#
-pointplot<-ggplot()+#
-geom_point(data=points, aes(x=NMDS1, y=NMDS2, colour=time))+#
-geom_point(data=point_avgs, aes(x=NMDS1, y=NMDS2, colour=Group.1), size=3)#
-#
-vectorplot<-ggplot()+#
-geom_segment(data=vectors, aes(x=0, xend=MDS1, y=0, yend=MDS2))
-library("grid")#
-plot_grid(pointplot, pointplot)
-library("gridExtra")#
-plot_grid(pointplot, pointplot)
-library("cowplot")#
-plot_grid(pointplot, pointplot)
-# plot#
-#library("ggplot2")#
-#library("cowplot")#
-pointplot<-ggplot()+#
-geom_point(data=points, aes(x=NMDS1, y=NMDS2, colour=time))+#
-geom_point(data=point_avgs, aes(x=NMDS1, y=NMDS2, colour=Group.1), size=3)#
-#
-vectorplot<-ggplot()+#
-geom_segment(data=vectors, aes(x=0, xend=MDS1, y=0, yend=MDS2))#
-#
-plot_grid(pointplot, vectorplot)
-point_avgs<-aggregate(points[,c("NMDS1", "NMDS2")], by=list(points$time), FUN=mean)#
-points$avgs1<-rep(points_avgs$NMDS1, each=10)
-point_avgs<-aggregate(points[,c("NMDS1", "NMDS2")], by=list(points$time), FUN=mean)#
-points$avgs1<-rep(point_avgs$NMDS1, each=10)#
-points$avgs2<-rep(point_avgs$NMDS2, each=10)
-points$avgs2
-pointplot<-ggplot()+#
-geom_point(data=points, aes(x=NMDS1, y=NMDS2, colour=time))+#
-geom_point(data=point_avgs, aes(x=NMDS1, y=NMDS2, colour=Group.1), size=3)#
-#
-vectorplot<-ggplot()+#
-geom_segment(data=vectors, aes(x=0, xend=MDS1, y=0, yend=MDS2))#
-#
-plot_grid(pointplot, vectorplot)
-pointplot<-ggplot()+#
-geom_point(data=points, aes(x=NMDS1, y=NMDS2, colour=time))+#
-#geom_point(data=point_avgs, aes(x=NMDS1, y=NMDS2, colour=Group.1), size=3)#
-geom_segment(data=points, aes(x=avgs1, xend=NMDS1, yy=avgs2, yend=NMDS2, colour=time))#
-vectorplot<-ggplot()+#
-geom_segment(data=vectors, aes(x=0, xend=MDS1, y=0, yend=MDS2))#
-#
-plot_grid(pointplot, vectorplot)
-pointplot<-ggplot()+#
-geom_point(data=points, aes(x=NMDS1, y=NMDS2, colour=time))+#
-#geom_point(data=point_avgs, aes(x=NMDS1, y=NMDS2, colour=Group.1), size=3)#
-geom_segment(data=points, aes(x=avgs1, xend=NMDS1, y=avgs2, yend=NMDS2, colour=time))#
-vectorplot<-ggplot()+#
-geom_segment(data=vectors, aes(x=0, xend=MDS1, y=0, yend=MDS2))#
-#
-plot_grid(pointplot, vectorplot)
-##### plot#
-#library("ggplot2")#
-#library("cowplot")#
-#
-pointplot<-ggplot()+#
-geom_point(data=points, aes(x=NMDS1, y=NMDS2, colour=time))+#
-#geom_point(data=point_avgs, aes(x=NMDS1, y=NMDS2, colour=Group.1), size=3)#
-geom_segment(data=points, aes(x=avgs1, xend=NMDS1, y=avgs2, yend=NMDS2, colour=time))#
-vectorplot<-ggplot()+#
-geom_segment(data=vectors, aes(x=0, xend=MDS1, y=0, yend=MDS2), na.rm=T)#
-#
-plot_grid(pointplot, vectorplot)
-pointplot<-ggplot()+#
-geom_point(data=points, aes(x=NMDS1, y=NMDS2, colour=time))+#
-geom_segment(data=points, aes(x=avgs1, xend=NMDS1, y=avgs2, yend=NMDS2, colour=time))#
-#
-vectorplot<-ggplot()+#
-geom_segment(data=vectors, aes(x=0, xend=MDS1, y=0, yend=MDS2), na.rm=T)#
-#
-plot_grid(pointplot, vectorplot)
-vectors
-vectorplot<-ggplot()+#
-geom_segment(data=vectors, aes(x=0, xend=MDS1, y=0, yend=MDS2), na.rm=T)+#
-geom_text(data=vectors, aes(x=MDS1, y=MDS2))#
-#
-plot_grid(pointplot, vectorplot)
-##### import data#
-rm(list=ls())#
-load(url("http://www.flutterbys.com.au/stats/downloads/data/manipulationDatasets.RData"))#
-ls()#
-#
-##### check data#
-head(tikus)#
-colnames(tikus)#
-#
-##### remove columns that aren't species abundances#
-mdsdata<-subset(tikus, select=-c(time, rep))#
-#
-##### run nMDS analysis with sqrt-transformed data#
-#library("vegan")#
-mds<-metaMDS(sqrt(mdsdata), distance="bray", autotransform=FALSE)#
-#
-##### extract points and vectors#
-points<-data.frame(scores(mds))#
-vectors<-data.frame(mds$species)#
-#
-##### reintroduce time#
-points$time<-tikus$time#
-#
-##### find avgs#
-point_avgs<-aggregate(points[,c("NMDS1", "NMDS2")], by=list(points$time), FUN=mean)#
-points$avgs1<-rep(point_avgs$NMDS1, each=10)#
-points$avgs2<-rep(point_avgs$NMDS2, each=10)#
-#
-##### plot#
-#library("ggplot2")#
-#library("cowplot")#
-#
-pointplot<-ggplot()+#
-geom_point(data=points, aes(x=NMDS1, y=NMDS2, colour=time))+#
-geom_segment(data=points, aes(x=avgs1, xend=NMDS1, y=avgs2, yend=NMDS2, colour=time))#
-#
-vectorplot<-ggplot()+#
-geom_segment(data=vectors, aes(x=0, xend=MDS1, y=0, yend=MDS2), na.rm=T)+#
-geom_text(data=vectors, aes(x=MDS1, y=MDS2, label=))#
-#
-plot_grid(pointplot, vectorplot)
-##### import data#
-rm(list=ls())#
-load(url("http://www.flutterbys.com.au/stats/downloads/data/manipulationDatasets.RData"))#
-ls()#
-#
-##### check data#
-head(tikus)#
-colnames(tikus)#
-#
-##### remove columns that aren't species abundances#
-mdsdata<-subset(tikus, select=-c(time, rep))#
-#
-##### run nMDS analysis with sqrt-transformed data#
-#library("vegan")#
-mds<-metaMDS(sqrt(mdsdata), distance="bray", autotransform=FALSE)#
-#
-##### extract points and vectors#
-points<-data.frame(scores(mds))#
-vectors<-data.frame(mds$species)#
-#
-##### reintroduce time#
-points$time<-tikus$time#
-#
-##### find avgs#
-point_avgs<-aggregate(points[,c("NMDS1", "NMDS2")], by=list(points$time), FUN=mean)#
-points$avgs1<-rep(point_avgs$NMDS1, each=10)#
-points$avgs2<-rep(point_avgs$NMDS2, each=10)#
-#
-##### plot#
-#library("ggplot2")#
-#library("cowplot")#
-#
-pointplot<-ggplot()+#
-geom_point(data=points, aes(x=NMDS1, y=NMDS2, colour=time))+#
-geom_segment(data=points, aes(x=avgs1, xend=NMDS1, y=avgs2, yend=NMDS2, colour=time))#
-#
-vectorplot<-ggplot()+#
-geom_segment(data=vectors, aes(x=0, xend=MDS1, y=0, yend=MDS2), na.rm=T)+#
-geom_text(data=vectors, aes(x=MDS1, y=MDS2, label=rownames(vectors)))#
-#
-plot_grid(pointplot, vectorplot)
-plot_grid(pointplot, vectorplot)
-vectorplot<-ggplot()+#
-geom_segment(data=vectors, aes(x=0, xend=MDS1, y=0, yend=MDS2), na.rm=T, colour="red")+#
-geom_text(data=vectors, aes(x=MDS1, y=MDS2, label=rownames(vectors)))#
-#
-plot_grid(pointplot, vectorplot)
-vectorplot<-ggplot()+#
-geom_segment(data=vectors, aes(x=0, xend=MDS1, y=0, yend=MDS2), na.rm=T)+#
-geom_text(data=vectors, aes(x=MDS1, y=MDS2, label=rownames(vectors)), size=1)#
-#
-plot_grid(pointplot, vectorplot)
-vectorplot<-ggplot()+#
-geom_segment(data=vectors, aes(x=0, xend=MDS1, y=0, yend=MDS2), na.rm=T)+#
-geom_text(data=vectors, aes(x=MDS1, y=MDS2, label=rownames(vectors)), size=2)#
-#
-plot_grid(pointplot, vectorplot)
-vectorplot<-ggplot()+#
-geom_segment(data=vectors, aes(x=0, xend=MDS1, y=0, yend=MDS2), na.rm=T)+#
-geom_text(data=vectors, aes(x=MDS1, y=MDS2, label=rownames(vectors)), size=2)+#
-geom_line(data=point_avgs, aes(x=NMDS1, y=NMDS2))#
-#
-plot_grid(pointplot, vectorplot)
-##### plot#
-#library("ggplot2")#
-#library("cowplot")#
-#
-pointplot<-ggplot()+#
-geom_point(data=points, aes(x=NMDS1, y=NMDS2, colour=time))+#
-geom_segment(data=points, aes(x=avgs1, xend=NMDS1, y=avgs2, yend=NMDS2, colour=time))#
-#
-vectorplot<-ggplot()+#
-geom_segment(data=vectors, aes(x=0, xend=MDS1, y=0, yend=MDS2), na.rm=T)+#
-geom_text(data=vectors, aes(x=MDS1, y=MDS2, label=rownames(vectors)), size=2, na.rm=T)+#
-geom_line(data=point_avgs, aes(x=NMDS1, y=NMDS2))#
-#
-plot_grid(pointplot, vectorplot)
-vectorplot<-ggplot()+#
-geom_segment(data=vectors, aes(x=0, xend=MDS1, y=0, yend=MDS2), na.rm=T)+#
-geom_text(data=vectors, aes(x=MDS1, y=MDS2, label=rownames(vectors)), size=2, na.rm=T)+#
-geom_line(data=point_avgs, aes(x=NMDS1, y=NMDS2), colour="red")#
-#
-plot_grid(pointplot, vectorplot)
-vectorplot<-ggplot()+#
-geom_segment(data=vectors, aes(x=0, xend=MDS1, y=0, yend=MDS2), na.rm=T)+#
-geom_text(data=vectors, aes(x=MDS1, y=MDS2, label=rownames(vectors)), size=2, na.rm=T)+#
-geom_path(data=point_avgs, aes(x=NMDS1, y=NMDS2), colour="red")#
-#
-plot_grid(pointplot, vectorplot)
-vectorplot<-ggplot()+#
-geom_segment(data=vectors, aes(x=0, xend=MDS1, y=0, yend=MDS2), na.rm=T)+#
-geom_text(data=vectors, aes(x=MDS1, y=MDS2, label=rownames(vectors)), size=2, na.rm=T)+#
-geom_path(data=point_avgs, aes(x=NMDS1, y=NMDS2), colour="red", arrow=arrow())#
-#
-plot_grid(pointplot, vectorplot)
-pointplot<-ggplot()+#
-geom_point(data=points, aes(x=NMDS1, y=NMDS2, colour=time))+#
-geom_segment(data=points, aes(x=avgs1, xend=NMDS1, y=avgs2, yend=NMDS2, colour=time))#
-#
-vectorplot<-ggplot()+#
-geom_segment(data=vectors, aes(x=0, xend=MDS1, y=0, yend=MDS2), na.rm=T)+#
-geom_text(data=vectors, aes(x=MDS1, y=MDS2, label=rownames(vectors)), size=2, na.rm=T)+#
-geom_path(data=point_avgs, aes(x=NMDS1, y=NMDS2), colour="red", arrow=arrow(type="closed", length=unit(2,"mm")))#
-#
-plot_grid(pointplot, vectorplot)
-# https://cran.r-project.org/web/packages/TPD/vignettes/TPD.html #
-#
-data("trees")#
-trees<-as.data.frame(as.matrix(trees))#
-head(trees)#
-str(trees)#
-#
-# density function for tree height#
-#
-kde_height <- density(trees$Height)#
-plot(kde_height, main = "TPD height")#
-# integrates to 1, how to calculate this area? first split up...#
-# e.g.50 intervals#
-#
-grid <- seq(from = 50, to = 100, length.out = 50)#
-edge_length <- grid[2] - grid[1] #
-#Each interval has this size (in trait units):#
-edge_length#
-#> [1] 1.020408#
-#
-# plot each point in the grid...#
-#
-kde_height <- density(trees$Height, from = 50, to = 100, n = 50)#
-plot(kde_height, main = "TPD height")#
-points(kde_height$x, kde_height$y, pch = 16, col = 2 , cex=0.6)#
-abline(v = grid, col = "grey50", lwd = 0.3)#
-#
-edge_length*kde_height$y#
-sum(edge_length*kde_height$y)#
-#
-# NOW LOOK AT TPD FUNCTION#
-#
-data("iris")#
-iris<-as.data.frame(as.matrix(iris))#
-head(iris)#
-str(iris)#
-#
-# load function
-install.packages("TPDs")
-install.packages("TPD")
-library("TPD")#
-#
-# #
-#
-traits_iris <- iris[, c("Sepal.Length", "Sepal.Width")]
-library("ggplot2")
-traits_iris <- iris[, c("Sepal.Length", "Sepal.Width")]#
-sp_iris <- iris$Species
-sp_iris
-TPDs_iris <- TPDs(species = sp_iris, traits_iris)
-traits_iris
-data("trees")#
-trees<-as.data.frame(as.matrix(trees))#
-head(trees)#
-str(trees)#
-#
-# density function for tree height#
-#
-kde_height <- density(trees$Height)#
-plot(kde_height, main = "TPD height")
-# NOW LOOK AT TPD FUNCTION#
-library("TPD")#
-data("iris")#
-iris<-as.data.frame(as.matrix(iris))#
-head(iris)#
-str(iris)#
-#
-traits_iris <- iris[, c("Sepal.Length", "Sepal.Width")]#
-sp_iris <- iris$Species#
-TPDs_iris <- TPDs(species = sp_iris, traits_iris)
-head(iris)
-?TPDs
-traits_iris
-sp_iris
-TPDs(species = sp_iris, traits_iris)
-str(iris)
-data("iris")#
-head(iris)#
-str(iris)
-# trees data#
-data("trees")#
-head(trees)#
-str(trees)
-japan<-data.frame(choice=c("Nissiko", "Siga Kogen"))#
-japan
-sample(gapan, 1)
-sample(japan, 1)
-sample(japan, n=1)
-sample(japan$choice, n=1)
-sample(japan$choice, 1)
-density<-read.csv("~/Desktop/density")
-density<-read.csv("~/Desktop/density/skeletal.csv")#
-density
-library(ggplot2)
-ggplot(data=density)+#
-geom_boxplot(aes(x=P, y=Family))
-ggplot(data=density)+#
-geom_boxplot(aes(x=Family, y=P))
-library(Grid)
-library(ggplot2)#
-library(grid)#
-library(gridExtra)#
-#
-density<-read.csv("~/Desktop/density/skeletal.csv")#
-density#
-ggplot(data=density)+#
-geom_boxplot(aes(x=Family, y=P))
-plot_grid(#
-ggplot(data=density)+#
-geom_boxplot(aes(x=Family, y=P)),#
-ggplot(data=density)+#
-geom_boxplot(aes(x=Morphology, y=P)))
-library(ggplot2)#
-library(grid)#
-library(gridExtra)#
-library(cowplot)#
-#
-density<-read.csv("~/Desktop/density/skeletal.csv")#
-density#
-plot_grid(#
-ggplot(data=density)+#
-geom_boxplot(aes(x=Family, y=P)),#
-ggplot(data=density)+#
-geom_boxplot(aes(x=Morphology, y=P)))
-library(ggplot2)#
-library(cowplot)#
-#
-density<-read.csv("~/Desktop/density/skeletal.csv")#
-density#
-plot_grid(#
-ggplot(data=density)+#
-geom_boxplot(aes(x=Family, y=P)),#
-ggplot(data=density)+#
-geom_boxplot(aes(x=Morphology, y=P)))
-plot_grid(#
-ggplot(data=density)+#
-geom_boxplot(aes(x=Family, y=P))+theme(axis.text.x=element_text(angle=45, hjust=1)),#
-ggplot(data=density)+#
-geom_boxplot(aes(x=Morphology, y=P))+theme(axis.text.x=element_text(angle=45, hjust=1))#
-)
-df1<-data.frame(x=c(1:100))#
-df1$y<-(df1$x)^2#
-plot(x, y, df)
-plot(df, x, y)
-?plot
-plot(df$x, df$y)
-df1<-data.frame(x=c(1:100))#
-df1$y<-(df1$x)^2#
-plot(df$x, df$y)
-df1<-data.frame(x=c(1:100))#
-df1$y<-(df1$x)^2#
-plot(df1$x, df1$y)
-df1<-data.frame(x=c(1:100))#
-df1$y<-(df1$x)^3#
-plot(df1$x, df1$y)
-df1<-data.frame(x=c(1:100))#
-df1$y<-(df1$x)^4#
-plot(df1$x, df1$y)
-df1<-data.frame(x=c(1:100))#
-df1$y<-(df1$x)^5#
-plot(df1$x, df1$y)
-# exponential curves always the same shape#
-#
-df1<-data.frame(x=c(1:100))#
-df1$y_2<-(df1$x)^2#
-df1$y_3<-(df1$x)^3#
-plot(df1$x, df1$y_2)#
-line(df1$x, df1$y_3)
-df1$y_2<-(df1$x)^2#
-df1$y_3<-(df1$x)^3#
-plot(df1$x, df1$y_2)#
-line(df1$x, df1$y_3, add=T)
-plot(df1$x, df1$y_2)#
-lines(df1$x, df1$y_3, add=T)
-df1<-data.frame(x=c(1:100))#
-df1$y_2<-(df1$x)^2#
-df1$y_3<-(df1$x)^3#
-plot(df1$x, df1$y_2)#
-points(df1$x, df1$y_3, add=T, col='red')
-df1<-data.frame(x=c(1:100))#
-df1$y_2<-(df1$x)^2#
-df1$y_3<-(df1$x)^3#
-plot(df1$x, df1$y_2)#
-points(df1$x, df1$y_3,col='red')
-plot(df1$x, df1$y_2, col="green")#
-points(df1$x, df1$y_3,col='red')
-df1<-data.frame(x=c(1:100))#
-df1$y_2<-(df1$x)^2#
-df1$y_3<-(df1$x)^3#
-df1$y_4<-(df1$x)^4#
-plot(df1$x, df1$y_2, col="green")#
-points(df1$x, df1$y_3,col='red')#
-points(df1$x, df1$y_4,col='blue')
-# DEMOGRAPHY#
-################################
-# exponential growth#
-# exponential curve shape (different exponent)#
-# (different to quandratic and cubic)#
-################################
-df1<-data.frame(x=c(1:1000))#
-df1$y_2<-(df1$x)^2#
-df1$y_3<-(df1$x)^3#
-df1$y_4<-(df1$x)^4#
-plot(df1$x, df1$y_2, col="green")#
-points(df1$x, df1$y_3,col='red')#
-points(df1$x, df1$y_4,col='blue')
-# DEMOGRAPHY#
-################################
-# exponential growth#
-# exponential curve shape (different exponent)#
-# (different to quandratic and cubic)#
-################################
-df1<-data.frame(x=c(1:100))#
-df1$y_2<-(df1$x)^2#
-df1$y_3<-(df1$x)^3#
-df1$y_4<-(df1$x)^4#
-plot(df1$x, df1$y_2, col="green")#
-points(df1$x, df1$y_3,col='red')#
-points(df1$x, df1$y_4,col='blue')
-df1$y<-df1$x*3#
-plot(df1$x, df1$y, col="green")
-?plot
-df1<-data.frame(x=c(1:100))#
-df1$y_2<-(df1$x)^2#
-df1$y_3<-(df1$x)^3#
-df1$y_4<-(df1$x)^4#
-plot(df1$x, df1$y_2, col="green", xlab="Time",ylab="N")#
-points(df1$x, df1$y_3,col='red')#
-points(df1$x, df1$y_4,col='blue')
-# DEMOGRAPHY#
-################################
-# exponential growth#
-# exponential curve shape (different exponent)#
-# (different to quandratic and cubic)#
-################################
-df1<-data.frame(x=c(1:100))#
-df1$y_2<-(df1$x)^2#
-df1$y_3<-(df1$x)^3#
-df1$y_4<-(df1$x)^4#
-plot(df1$x, df1$y_2, col="green", xlab="Time (years)",ylab="N")#
-points(df1$x, df1$y_3,col='red')#
-points(df1$x, df1$y_4,col='blue')
-# DEMOGRAPHY#
-################################
-# exponential growth#
-# exponential curve shape (different exponent)#
-# (different to quandratic and cubic)#
-################################
-df1<-data.frame(x=c(1:100))#
-df1$y_2<-(df1$x)^2#
-df1$y_3<-(df1$x)^3#
-df1$y_4<-(df1$x)^4#
-plot(df1$x, df1$y_2, col="green", xlab="Time (years)",ylab="Pop.N")#
-points(df1$x, df1$y_3,col='red')#
-points(df1$x, df1$y_4,col='blue')#
-################################
-# exponential growth#
-df1<-data.frame(x=c(1:100))#
-df1$y<-df1$x*3#
-plot(df1$x, df1$y, col="green")
-# DEMOGRAPHY#
-################################
-# exponential growth#
-# exponential curve shape (different exponent)#
-# (different to quandratic and cubic)#
-################################
-df1<-data.frame(x=c(1:100))#
-df1$y_2<-(df1$x)^2#
-df1$y_3<-(df1$x)^3#
-df1$y_4<-(df1$x)^4#
-plot(df1$x, df1$y_2, col="green", xlab="Time (years)",ylab="Pop.N")#
-points(df1$x, df1$y_3,col='red')#
-points(df1$x, df1$y_4,col='blue')
-df1<-data.frame(x=c(1:100))#
-R = 3 #
-df1$y<-df1$x*R#
-plot(df1$x, df1$y, col="green")
-df1<-data.frame(x=c(1:100))#
-R = 3 #
-df1$y<-df1$x*R#
-plot(df1$x, df1$y, col="green", xlab="pop size at time t")
-plot(df1$x, df1$y, col="green", xlab="pop size at time t", ylab="pop growth")
-df1$y<-df1$x*#
-plot(df1$x, df1$y, col="green", xlab="pop size at time t", ylab="pop growth", main="dN = R Nt")
-df1<-data.frame(x=c(1:100))#
-exponent = 2#
-df1$y<-df1$x*#
-plot(df1$x, df1$y, col="green", xlab="pop size at time t", ylab="pop growth", main="dN = R Nt")
-# exponential growth#
-# exponential curve shape (different exponent)#
-# (different to quandratic and cubic)#
-df1<-data.frame(t=c(1:100))#
-df1$y_2<-(df1$t)^2#
-df1$y_3<-(df1$t)^3#
-df1$y_4<-(df1$t)^4#
-plot(df1$t, df1$y_2, col="green", xlab="Time (years)",ylab="Pop.N")#
-points(df1$t, df1$y_3,col='red')#
-points(df1$t, df1$y_4,col='blue')
-# exponential growth#
-df1<-data.frame(t=c(1:100))
-################################
-# exponential growth#
-# exponential curve shape (different exponent)#
-# (different to quandratic and cubic)#
-df1<-data.frame(t=c(1:100))#
-df1$y_2<-(df1$t)^2#
-df1$y_3<-(df1$t)^3#
-df1$y_4<-(df1$t)^4#
-plot(df1$t, df1$y_2, col="green", xlab="Time (years)",ylab="Pop.N")#
-points(df1$t, df1$y_3,col='red')#
-points(df1$t, df1$y_4,col='blue')
-################################
-# exponential growth#
-df1<-data.frame(t=c(1:100))#
-R = 2#
-df1$y<-df1$x*R#
-plot(df1$x, df1$y, col="green", xlab="pop size at time t", ylab="pop growth", main="dN = R Nt")
-################################
-# exponential growth#
-# exponential curve shape (different exponent)#
-# (different to quandratic and cubic)#
-df<-data.frame(t=c(1:100))#
-df$N2<-(df$t)^2#
-df$N3<-(df$t)^3#
-df$N4<-(df$t)^4#
-plot(df$t, df$N2, col="green", xlab="Time (years)",ylab="Pop.N")#
-points(df$t, df$N3,col='red')#
-points(df$t, df$N4,col='blue')
-df$N2<-2^(df$t)#
-#
-plot(df$t, df$N2, col="green", xlab="Time (years)",ylab="Pop.N")
-################################
-# exponential growth (N=R^t)#
-# exponential curve shape (different exponent)#
-df<-data.frame(t=c(1:10))#
-#
-df$N2<-2^(df$t)
-plot(df$t, df$N2, col="green", xlab="Time (years)",ylab="Pop.N")
-df<-data.frame(t=c(1:100))#
-#
-df$N2<-2^(df$t)#
-#
-plot(df$t, df$N2, col="green", xlab="Time (years)",ylab="Pop.N")
-df<-data.frame(t=c(1:10))#
-#
-df$N2<-2^(df$t)#
-#
-plot(df$t, df$N2, col="green", xlab="Time (years)",ylab="Pop.N")
-df<-data.frame(t=c(1:10))#
-df$Nexp<-2^(df$t) # exponential 2^x#
-df$Nquad<-2^(df$t) # quadratic x^2#
-df$Ncub<-2^(df$t) # cubic x^3
-plot(df$t, df$Nexp, col="green", xlab="Time (years)",ylab="Pop.N")#
-points(df$t, df$Nquad,col='red')#
-points(df$t, df$Ncub,col='blue')
-################################
-# exponential growth (N=R^t)#
-# exponential curve shape (different exponent)#
-df<-data.frame(t=c(1:10))#
-df$Nexp<-2^(df$t) # exponential 2^x#
-df$Nquad<-(df$t)^2 # quadratic x^2#
-df$Ncub<-(df$t)^3 # cubic x^3#
-#
-plot(df$t, df$Nexp, col="green", xlab="Time (years)",ylab="Pop.N")#
-points(df$t, df$Nquad,col='red')#
-points(df$t, df$Ncub,col='blue')
-################################
-# exponential growth (N=R^t)#
-# exponential curve shape (different exponent)#
-df<-data.frame(t=c(1:12))#
-df$Nexp<-2^(df$t) # exponential 2^x#
-df$Nquad<-(df$t)^2 # quadratic x^2#
-df$Ncub<-(df$t)^3 # cubic x^3#
-#
-plot(df$t, df$Nexp, col="green", xlab="Time (years)",ylab="Pop.N")#
-points(df$t, df$Nquad,col='red')#
-points(df$t, df$Ncub,col='blue')
-################################
-# exponential growth (N=R^t)#
-# exponential curve shape (different exponent)#
-df<-data.frame(t=c(1:20))#
-df$Nexp<-2^(df$t) # exponential 2^x#
-df$Nquad<-(df$t)^2 # quadratic x^2#
-df$Ncub<-(df$t)^3 # cubic x^3#
-#
-plot(df$t, df$Nexp, col="green", xlab="Time (years)",ylab="Pop.N")#
-points(df$t, df$Nquad,col='red')#
-points(df$t, df$Ncub,col='blue')
-################################
-# exponential growth (N=R^t)#
-# exponential curve shape (different exponent)#
-df<-data.frame(t=c(1:15))#
-df$Nexp<-2^(df$t) # exponential 2^x#
-df$Nquad<-(df$t)^2 # quadratic x^2#
-df$Ncub<-(df$t)^3 # cubic x^3#
-#
-plot(df$t, df$Nexp, col="green", xlab="Time (years)",ylab="Pop.N")#
-points(df$t, df$Nquad,col='red')#
-points(df$t, df$Ncub,col='blue')
-################################
-# exponential growth (N=R^t)#
-# exponential curve shape (different exponent)#
-df<-data.frame(t=c(1:12))#
-df$Nexp<-2^(df$t) # exponential 2^x#
-df$Nquad<-(df$t)^2 # quadratic x^2#
-df$Ncub<-(df$t)^3 # cubic x^3#
-#
-plot(df$t, df$Nexp, col="green", xlab="Time (years)",ylab="Pop.N")#
-points(df$t, df$Nquad,col='red')#
-points(df$t, df$Ncub,col='blue')
-df
-################################
-# exponential growth (N=R^t)#
-# exponential curve shape (different exponent)#
-df<-data.frame(t=c(1:12))#
-df$Nexp2<-2^(df$t) # exponential 2^x#
-df$Nexp3<-2^(df$t) # exponential 2^x#
-df$Nquad<-(df$t)^2 # quadratic x^2#
-df$Ncub<-(df$t)^3 # cubic x^3#
-plot(df$t, df$Nexp2, col="black", xlab="Time (intervals)",ylab="Pop.N")#
-points(df$t, df$Nexp3,col='green')#
-points(df$t, df$Nquad,col='red')#
-points(df$t, df$Ncub,col='blue')
-################################
-# exponential growth (N=R^t)#
-# exponential curve shape (different exponent)#
-df<-data.frame(t=c(1:12))#
-df$Nexp2<-2^(df$t) # exponential 2^x#
-df$Nexp3<-3^(df$t) # exponential 2^x#
-df$Nquad<-(df$t)^2 # quadratic x^2#
-df$Ncub<-(df$t)^3 # cubic x^3#
-plot(df$t, df$Nexp2, col="black", xlab="Time (intervals)",ylab="Pop.N")#
-points(df$t, df$Nexp3,col='green')#
-points(df$t, df$Nquad,col='red')#
-points(df$t, df$Ncub,col='blue')
-################################
-# exponential growth (N=R^t)#
-# exponential curve shape (different exponent)#
-df<-data.frame(t=c(1:12))#
-df$Nexp2<-2^(df$t) # exponential 2^x#
-df$Nexp3<-3^(df$t) # exponential 2^x#
-df$Nquad<-(df$t)^2 # quadratic x^2#
-df$Ncub<-(df$t)^3 # cubic x^3#
-plot(df$t, df$Nexp2, col="black", xlab="Time (intervals)",ylab="Pop.N")#
-line(df$t, df$Nexp3,col='green')#
-line(df$t, df$Nquad,col='red')#
-line(df$t, df$Ncub,col='blue')
-# exponential growth (N=R^t)#
-# exponential curve shape (different exponent)#
-df<-data.frame(t=c(1:12))#
-df$Nexp2<-2^(df$t) # exponential 2^x#
-df$Nexp3<-3^(df$t) # exponential 2^x#
-df$Nquad<-(df$t)^2 # quadratic x^2#
-df$Ncub<-(df$t)^3 # cubic x^3#
-plot(df$t, df$Nexp2, col="black", xlab="Time (intervals)",ylab="Pop.N")#
-lines(df$t, df$Nexp3,col='green')#
-lines(df$t, df$Nquad,col='red')#
-lines(df$t, df$Ncub,col='blue')
-# DEMOGRAPHY#
-#
-################################
-# exponential growth (N=R^t)#
-# exponential curve shape (different exponent)#
-df<-data.frame(t=c(1:12))#
-df$Nexp2<-2^(df$t) # exponential 2^x#
-df$Nexp3<-3^(df$t) # exponential 2^x#
-df$Nquad<-(df$t)^2 # quadratic x^2#
-df$Ncub<-(df$t)^3 # cubic x^3#
-plot(df$t, df$Nexp2, col="black", xlab="Time (intervals)",ylab="Pop.N", type="line")#
-lines(df$t, df$Nexp3,col='green')#
-lines(df$t, df$Nquad,col='red')#
-lines(df$t, df$Ncub,col='blue')
-?plot
-plot(df$t, df$Nexp2, col="black", xlab="Time (intervals)",ylab="Pop.N", type="l")
-plot(df$t, df$Nexp2, col="black", xlab="Time (intervals)",ylab="Pop.N", type="l")#
-lines(df$t, df$Nexp3,col='green')#
-lines(df$t, df$Nquad,col='red')#
-lines(df$t, df$Ncub,col='blue')
-################################
-# exponential growth (N=R^t)#
-# exponential curve shape (different exponent)#
-df<-data.frame(t=c(1:12))#
-df$Nexp2<-2^(df$t) # exponential 2^x#
-df$Nexp3<-3^(df$t) # exponential 2^x#
-df$Nquad<-(df$t)^2 # quadratic x^2#
-df$Ncub<-(df$t)^3 # cubic x^3#
-plot(df$t, df$Nexp2, col="black", xlab="Time (intervals)",ylab="Pop.N", type="l")#
-lines(df$t, df$Nexp3,col='green')#
-lines(df$t, df$Nquad,col='red')#
-lines(df$t, df$Ncub,col='blue')
-plot(df$t, df$Nexp2, xlab="Time (intervals)",ylab="Pop.N", type="l")#
-lines(df$t, df$Nexp3,col='green')#
-lines(df$t, df$Nquad,col='red')#
-lines(df$t, df$Ncub,col='blue')
-df
-# exponential growth (N=R^t)#
-# R is number of babies#
-# t is number of reproductions#
-df<-data.frame(t=c(1:12))#
-df$Nexp2<-2^(df$t) # exponential 2^x#
-df$Nexp3<-3^(df$t) # exponential 2^x#
-df$Nquad<-(df$t)^2 # quadratic x^2#
-df$Ncub<-(df$t)^3 # cubic x^3#
-df#
-plot(df$t, df$Nexp2, xlab="Time (intervals)",ylab="Pop.N", type="l")#
-lines(df$t, df$Nexp3,col='green')#
-lines(df$t, df$Nquad,col='red')#
-lines(df$t, df$Ncub,col='blue')
-################################
-# exponential growth (N=R^t)#
-# R is number of babies#
-# t is number of reproductions#
-df<-data.frame(t=c(1:12))#
-df$Nexp2<-1^(df$t) # exponential 2^x#
-df$Nexp3<-3^(df$t) # exponential 2^x#
-df$Nquad<-(df$t)^2 # quadratic x^2#
-df$Ncub<-(df$t)^3 # cubic x^3#
-df#
-plot(df$t, df$Nexp2, xlab="Time (intervals)",ylab="Pop.N", type="l")#
-lines(df$t, df$Nexp3,col='green')#
-lines(df$t, df$Nquad,col='red')#
-lines(df$t, df$Ncub,col='blue')
-################################
-# exponential growth (N=R^t)#
-# R is number of babies#
-# t is number of reproductions#
-df<-data.frame(t=c(1:12))#
-df$Nexp2<-2^(df$t) # exponential 2^x#
-df$Nexp3<-3^(df$t) # exponential 2^x#
-df$Nquad<-(df$t)^2 # quadratic x^2#
-df$Ncub<-(df$t)^3 # cubic x^3#
-df#
-plot(df$t, df$Nexp2, xlab="Time (intervals)",ylab="Pop.N", type="l")#
-lines(df$t, df$Nexp3,col='green')#
-lines(df$t, df$Nquad,col='red')#
-lines(df$t, df$Ncub,col='blue')
-lag(df-1)
-lag(df,-1)
-diff(df)
-lag(df)
-lag(df$t)
-lag(df$t, -1)
-lag(df$Nexp, -1)
-lag(df$Nexp2, -1)
-lag(df$Nexp2, 1)
-lag(df$Nexp2, -1)-1
-diff(as.matrix(df))
-c(NA, diff(as.matrix(df))$Nexp2)
-diff(as.matrix(df))$Nexp2
-diff(as.matrix(df))[,"Nexp2"]
-c(NA, diff(as.matrix(df))[,"Nexp2"])
-df$diff1<-c(NA, diff(as.matrix(df))[,"Nexp2"])
-plot(df$Nexp2, df$diff1, col="green", xlab="pop size at time t", ylab="pop growth", main="dN = R Nt")
-df$diff2<-c(NA, diff(as.matrix(df))[,"Nexp2"])#
-df$diff3<-c(NA, diff(as.matrix(df))[,"Nexp3"])
-plot(df$Nexp2, df$diff2, col="green", xlab="pop size at time t", ylab="pop growth", main="dN = R Nt")
-# exponential growth (dN/dt=R dt)#
-df$diff2<-c(NA, diff(as.matrix(df))[,"Nexp2"])#
-df$diff3<-c(NA, diff(as.matrix(df))[,"Nexp3"])#
-plot(df$Nexp2, df$diff2,  xlab="N at time t", ylab="N growth", main="dN = R Nt")#
-lines(f$Nexp3, df$diff2,col="green")
-# exponential growth (dN/dt=R dt)#
-df$diff2<-c(NA, diff(as.matrix(df))[,"Nexp2"])#
-df$diff3<-c(NA, diff(as.matrix(df))[,"Nexp3"])#
-plot(df$Nexp2, df$diff2,  xlab="N at time t", ylab="N growth", main="dN = R Nt")#
-lines(df$Nexp3, df$diff2,col="green")
-# exponential growth (dN/dt=R dt)#
-df$diff2<-c(NA, diff(as.matrix(df))[,"Nexp2"])#
-df$diff3<-c(NA, diff(as.matrix(df))[,"Nexp3"])#
-plot(df$Nexp2, df$diff2,  xlab="N at time t", ylab="N growth", main="dN = R Nt")#
-points(df$Nexp3, df$diff2,col="green")
-################################
-# exponential growth (dN/dt=R dt)#
-df$diff2<-c(NA, diff(as.matrix(df))[,"Nexp2"])#
-df$diff3<-c(NA, diff(as.matrix(df))[,"Nexp3"])#
-plot(df$Nexp2, df$diff2,  xlab="N at time t", ylab="N growth", main="dN = R Nt")#
-points(df$Nexp3, df$diff3,col="green")
-################################
-# exponential growth (dN/dt=R dt)#
-df$diff2<-c(NA, diff(as.matrix(df))[,"Nexp2"])#
-df$diff3<-c(NA, diff(as.matrix(df))[,"Nexp3"])#
-df$diffQ<-c(NA, diff(as.matrix(df))[,"Nquad"])#
-plot(df$Nexp2, df$diff2,  xlab="N at time t", ylab="N growth", main="dN = R Nt")#
-points(df$Nexp3, df$diff3,col="green")#
-points(df$Nquad, df$diff3,col="red")
-# exponential growth (dN/dt=R dt)#
-df$diff2<-c(NA, diff(as.matrix(df))[,"Nexp2"])#
-df$diff3<-c(NA, diff(as.matrix(df))[,"Nexp3"])#
-df$diffQ<-c(NA, diff(as.matrix(df))[,"Nquad"])#
-plot(df$Nexp2, df$diff2,  xlab="N at time t", ylab="N growth", main="dN = R Nt")#
-points(df$Nexp3, df$diff3,col="green")#
-points(df$Nquad, df$diffQ,col="red")
-plot(df$Nquad, df$diffQ,col="red")
-plot(df$Nquad, df$diffQ,col="red",  xlab="N at time t", ylab="N growth", main="dN = R Nt")
-df$diffC<-c(NA, diff(as.matrix(df))[,"Nquad"])#
-plot(df$Nexp2, df$diff2,  xlab="N at time t", ylab="N growth", main="dN = R Nt")points(df$Nexp3, df$diff3,col="green")#
-#
-# q
-plot(df$Nexp2, df$diff2,  xlab="N at time t", ylab="N growth", main="dN = R Nt")points(df$Nexp3, df$diff3,col="green")
-plot(df$Nexp2, df$diff2,  xlab="N at time t", ylab="N growth", main="dN = R Nt")#
-points(df$Nexp3, df$diff3,col="green")
-plot(df$Nexp2, df$diff2,  xlab="N at time t", ylab="N growth", main="dN = R Nt")#
-lines(df$Nexp3, df$diff3,col="green")
-# change as a function of N#
-df$diff2<-c(NA, diff(as.matrix(df))[,"Nexp2"])#
-df$diff3<-c(NA, diff(as.matrix(df))[,"Nexp3"])#
-df$diffQ<-c(NA, diff(as.matrix(df))[,"Nquad"])#
-df$diffC<-c(NA, diff(as.matrix(df))[,"Nquad"])#
-plot(df$Nexp2, df$diff2,  xlab="N at time t", ylab="N growth", main="dN = R Nt")#
-lines(df$Nexp2, df$diff2)#
-lines(df$Nexp3, df$diff3,col="green")
-plot(df$Nexp2, df$diff2,  xlab="N at time t", ylab="N growth", main="dN = R Nt")#
-lines(df$Nexp2, df$diff2)#
-points(df$Nexp3, df$diff3,col="green")#
-lines(df$Nexp3, df$diff3,col="green")
-plot(df$Nquad, df$diffQ,col="red",  xlab="N at time t", ylab="N growth", main="dN = R Nt")
-# quadratic growth (change as function of N)#
-plot(df$Nquad, df$diffQ,col="red",  xlab="N at time t", ylab="N growth", main="dN = R Nt")
-plot(df$Nquad, df$diffQ,col="red",  xlab="N at time t", ylab="N growth", main="dN = R Nt")
-lines(df$Nexp3, df$diff3,col="green")#
-#
-# quadratic growth (change as function of N)#
-plot(df$Nquad, df$diffQ,col="red",  xlab="N at time t", ylab="N growth", main="dN = R Nt")#
-points(df$Ncub, df$diffC)
-plot(df$Nquad, df$diffQ,col="red",  xlab="N at time t", ylab="N growth", main="dN = R Nt")#
-points(df$Ncub, df$diffC, col="blue")
-?rlnorm
-rlnorm(meanlog=log(50), sdlog=log(100))
-size.sp1<-rlnorm(meanlog=log(50), sdlog=log(100), n=100)
-hist(size.sp1)
-size.sp1<-rlnorm(meanlog=log(50), sdlog=log(100), n=100)#
-hist(size.sp1)
-hist(log(size.sp1))
-size.sp1<-rlnorm(meanlog=50, sdlog=100, n=100)#
-hist(log(size.sp1))
-size.sp1<-rlnorm(meanlog=50, sdlog=100, n=100)#
-hist(size.sp1)
-size.sp1<-rlnorm(meanlog=50, sdlog=10, n=100)#
-hist(size.sp1)
-size.sp1<-rlnorm(meanlog=50, sdlog=10, n=100)#
-par(mfrow=c(2,1))#
-hist(size.sp1)#
-hist(log(size.sp1))
-size.sp1<-rlnorm(meanlog=log(50), sdlog=log(10), n=100)#
-par(mfrow=c(2,1))#
-hist(size.sp1)#
-hist(log(size.sp1))
-size.sp1<-rlnorm(meanlog=log(50), sdlog=log(5), n=100)#
-par(mfrow=c(2,1))#
-hist(size.sp1)#
-hist(log(size.sp1))
-size.sp1<-rlnorm(meanlog=50, sdlog=log(5), n=100)#
-par(mfrow=c(2,1))#
-hist(size.sp1)#
-hist(log(size.sp1))
-size.sp1<-rlnorm(meanlog=log(50), sdlog=log(5), n=100)#
-par(mfrow=c(2,1))#
-hist(size.sp1)#
-hist(log(size.sp1))
-size.sp1<-rlnorm(meanlog=log(50), sdlog=log(2), n=100)#
-par(mfrow=c(2,1))#
-hist(size.sp1)#
-hist(log(size.sp1))
-size.sp1
-sp1<-data.frame(planar=rlnorm(meanlog=log(50), sdlog=log(2), n=100))#
-par(mfrow=c(2,1))#
-hist(size.sp1)#
-hist(log(size.sp1))
-sp1
-# sp 1 : branching, grows 20cm per year#
-# mean planar area = 50cm#
-#
-sp1<-data.frame(planar=rlnorm(meanlog=log(50), sdlog=log(2), n=100))#
-par(mfrow=c(2,1))#
-hist(sp1$planar)#
-hist(log(sp1$planar))
-sum(sp1$planar)
-rnorm(1, 2, 100)
-?rnorm
-sp1$growth<-rnorm(mean=20, sd=2, n=100)
-sp1$growth<-rnorm(mean=20, sd=2, n=100)#
-hist(sp1$growth)
-sp1<-data.frame(planar=rlnorm(meanlog=log(50), sdlog=log(2), n=100))#
-sp1$growth<-rnorm(mean=20, sd=2, n=100)#
-par(mfrow=c(2,1))#
-hist(sp1$planar)#
-hist(sp1$growth)
-sp1<-data.frame(planar=rlnorm(meanlog=log(50), sdlog=log(3), n=100))#
-sp1$growth<-rnorm(mean=20, sd=2, n=100)#
-par(mfrow=c(2,1))#
-hist(sp1$planar)#
-hist(sp1$growth)
-sp1<-data.frame(planar=rlnorm(meanlog=log(50), sdlog=log(2.5), n=100))#
-sp1$growth<-rnorm(mean=20, sd=2, n=100)#
-par(mfrow=c(2,1))#
-hist(sp1$planar)#
-hist(sp1$growth)
-# reef 1 #
-# sp 1 : branching, grows 20cm per year#
-# mean planar area = 50cm#
-#
-sp1<-data.frame(planar=rlnorm(meanlog=log(50), sdlog=log(2.5), n=100))#
-sp1$growth<-rnorm(mean=20, sd=2, n=100)#
-#
-par(mfrow=c(2,1))#
-hist(sp1$planar)#
-hist(sp1$growth)
-sum(planar)
-sum(sp1$planar)
-sp1<-data.frame(planar=rlnorm(meanlog=log(50), sdlog=log(2.5), n=100))#
-sp1$growth<-rnorm(mean=20, sd=2, n=100)
-par(mfrow=c(2,1))#
-hist(sp1$planar)#
-hist(sp1$growth)
-sp1<-data.frame(planar=rlnorm(meanlog=log(50), sdlog=log(2.5), n=100))#
-sp1$growth<-rnorm(mean=20, sd=5, n=100)#
-#
-par(mfrow=c(2,1))#
-hist(sp1$planar)#
-hist(sp1$growth)
-sum(sp1$planar)
-sp1<-data.frame(diams=rlnorm(meanlog=log(50), sdlog=log(2.5), n=100))#
-sp1$planar<-((sp1$diams/2)^2)*pi#
-sp1$growth<-rnorm(mean=20, sd=5, n=100)
-sp1<-data.frame(diams=rlnorm(meanlog=log(50), sdlog=log(2.5), n=100))#
-sp1$planar_m2<-(((sp1$diams/2)^2)*pi)/10000#
-sp1$growth<-rnorm(mean=20, sd=5, n=100)
-par(mfrow=c(3,1))#
-hist(sp1$diams)#
-hist(sp1$planar_m2)#
-hist(sp1$growth)
-sum(sp1$planar_m2)
-sp1<-data.frame(diams=rlnorm(meanlog=log(50), sdlog=log(2.5), n=50))#
-sp1$planar_m2<-(((sp1$diams/2)^2)*pi)/10000#
-sp1$growth<-rnorm(mean=20, sd=5, n=100)#
-#
-par(mfrow=c(3,1))#
-hist(sp1$diams)#
-hist(sp1$planar_m2)#
-hist(sp1$growth)#
-#
-sum(sp1$planar_m2)
-sp1<-data.frame(diams=rlnorm(meanlog=log(50), sdlog=log(2.5), n=50))#
-sp1$planar_m2<-(((sp1$diams/2)^2)*pi)/10000#
-sp1$growth<-rnorm(mean=20, sd=5, n=50)#
-#
-par(mfrow=c(3,1))#
-hist(sp1$diams)#
-hist(sp1$planar_m2)#
-hist(sp1$growth)#
-#
-sum(sp1$planar_m2)
-sp1<-data.frame(diams=rlnorm(meanlog=log(50), sdlog=log(1.5), n=50))#
-sp1$planar_m2<-(((sp1$diams/2)^2)*pi)/10000#
-sp1$growth<-rnorm(mean=20, sd=5, n=50)
-sp1<-data.frame(diams=rlnorm(meanlog=log(20), sdlog=log(2), n=50))#
-sp1$planar_m2<-(((sp1$diams/2)^2)*pi)/10000#
-sp1$growth<-rnorm(mean=20, sd=5, n=50)
-par(mfrow=c(3,1))#
-hist(sp1$diams)#
-hist(sp1$planar_m2)#
-hist(sp1$growth)
-sp1<-data.frame(diams=rlnorm(meanlog=log(20), sdlog=log(5), n=50))#
-sp1$planar_m2<-(((sp1$diams/2)^2)*pi)/10000#
-sp1$growth<-rnorm(mean=20, sd=5, n=50)#
-#
-par(mfrow=c(3,1))#
-hist(sp1$diams)#
-hist(sp1$planar_m2)#
-hist(sp1$growth)
-sp1<-data.frame(diams=rlnorm(meanlog=log(20), sdlog=log(3), n=50))#
-sp1$planar_m2<-(((sp1$diams/2)^2)*pi)/10000#
-sp1$growth<-rnorm(mean=20, sd=5, n=50)#
-#
-par(mfrow=c(3,1))#
-hist(sp1$diams)#
-hist(sp1$planar_m2)#
-hist(sp1$growth)#
-#
-sum(sp1$planar_m2)
-sp1<-data.frame(diams=rlnorm(meanlog=log(25), sdlog=log(3), n=50))#
-sp1$planar_m2<-(((sp1$diams/2)^2)*pi)/10000#
-sp1$growth<-rnorm(mean=20, sd=5, n=50)#
-#
-par(mfrow=c(3,1))#
-hist(sp1$diams)#
-hist(sp1$planar_m2)#
-hist(sp1$growth)#
-#
-sum(sp1$planar_m2)
-# 10m by 10m reef patch (100 m2)#
-# coral cover 40 percent (40m2)#
-# sp 1 : branching, linear extension 20cm per year#
-# mean diameter = 50cm, all circular#
-# total planar area in m2#
-#
-cov<- 40#
-n <- 50#
-sp1<-data.frame(diams=rlnorm(meanlog=log(), sdlog=log(3), n=50))#
-sp1$planar_m2<-(((sp1$diams/2)^2)*pi)/10000#
-sp1$growth<-rnorm(mean=20, sd=5, n=50)
-# 10m by 10m reef patch (100 m2)#
-# coral cover 40 percent (40m2)#
-# sp 1 : branching, linear extension 20cm per year#
-# mean diameter = 50cm, all circular#
-# total planar area in m2#
-#
-cov<- 40#
-n <- 50#
-sp1<-data.frame(diams=rlnorm(meanlog=log(20), sdlog=log(3), n=50))#
-sp1$planar_m2<-(((sp1$diams/2)^2)*pi)/10000#
-sp1$growth<-rnorm(mean=20, sd=5, n=50)
-?rnorm
-library("ggplo2")
-library("ggplot2")
-rm(list = ls())#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)#
+# Find 5 nearest neighbours in each node...#
+library("FNN")#
 library("reshape2")#
-library("ggplot2")#
-library("ggrepel")#
-library("cowplot")
-install.packages("reshape2")#
-install.packages("ggplot2")#
-install.packages("ggrepel")#
-install.packages("cowplot")#
 #
-install.packages("MASS") #
-install.packages("reshape2")#
-install.packages("ggplot2")#
-install.packages("cowplot")#
-install.packages("viridis")#
-install.packages("png")#
-#
-install.packages("reshape2") # plot#
-install.packages("ggplot2")#
-install.packages("ggrepel")#
-install.packages("cowplot")#
-install.packages("viridis")#
-install.packages("wesanderson")#
-install.packages("png")#
-install.packages("maptools") # map#
-install.packages("raster")#
-install.packages("rgdal")#
-#
-install.packages("ggplot2")#
-install.packages("cowplot")#
-install.packages("mapdata")#
-install.packages("maps")#
-install.packages("sp")#
-install.packages("jpeg")#
-install.packages("grid")#
-install.packages("FD")#
-install.packages("plyr")#
-install.packages("dplyr")#
-install.packages("reshape")#
-install.packages("reshape2")#
-install.packages("viridis")#
-install.packages("RColorBrewer")#
-install.packages("mclust")#
-install.packages("FNN")#
-install.packages("e1071")  #
-#
-install.packages("plot3D")
-# -- mike wd -- ##
-#setwd("/Users/mikemcwilliam/Documents/PostDoc/species_choice")#
-source("data_prep.R")#
-# Anyalsis#
-library(tripack)#
-source("R/functions.R")#
-#
-# points selection#
-#
-#n <- 100 # total species#
-#s <- 20  # species selected#
-#dat <- data.frame(x=rnorm(n), y=rnorm(n))#
-#plot(y ~ x, dat, col="grey")#
-#
-# random#
-#points(y ~ x, dat[sample(1:n, s, replace=FALSE),], col="red", pch=20, cex=0.6)#
-#
-# most evenly spread#
-#points(y ~ x, voronoiFilter(dat, s), col="blue", pch=20, cex=0.6)#
-dat<-read.csv("data/data.csv")#
-dat$Abundance.GBR<-factor(dat$Abundance.GBR, levels=c("rare","uncommon", "common"))#
-# pnas traits#
-cats<-c("cat_growthrate", "cat_corallitesize", "cat_colonydiameter" , "cat_skeletaldensity", "cat_colonyheight","cat_SA_vol", "cat_spacesize")#
-pca<-prcomp(dat[,cats], center=T, scale=T)#
-points<-data.frame(species=dat$species, pc1=pca$x[,1],pc2=pca$x[,2],pc3=pca$x[,3],pc4=pca$x[,4])#
-#biplot(pca)#
-# DIAZ PLOT#
-library("vegan")#
-library("ks")#
-#
-prin<-princomp((dat[,cats]), cor = TRUE, scores = TRUE)#
-pc12<-prin$scores[,1:2]#
-ll<-prin$loadings#
-#
-################ KERNEL DENSITY ESTIMATION ###############################
-H <- Hpi(x=pc12)      # optimal bandwidth estimation#
-est<- kde(x=pc12, H=H, compute.cont=TRUE)    # kernel density estimation#
-#
-# set contour probabilities for drawing contour levels#
-cl<-contourLevels(est, prob=c(0.5, 0.05, 0.001), approx=TRUE)#
-#
-fit<-envfit(pc12, dat[,cats]) # use envfit for drawing arrows#
-fit2<-fit$vectors$arrows*-1 # drawing line segments opposite arrows#
-fit2[1,]<-fit2[1,]*3 # leafarea#
-fit2[2,]<-fit2[2,]*3 # leaf N#
-fit2[3,]<-fit2[3,]*3 # LMA#
-fit2[4,]<-fit2[4,]*3 # height#
-fit2[5,]<-fit2[5,]*3 # seed mass#
- fit2[6,]<-fit2[6,]*3 # stem density#
- fit2[7,]<-fit2[7,]*3 # stem density#
-#
-par(mar=c(4,4,2,2))#
-plot(est, cont=seq(1,100,by=1), display="filled.contour2", add=FALSE, ylab="", xlab="", cex.axis=0.75, ylim=c(-3, 3.5), xlim=c(-4, 5),las=1) #
-plot(est,abs.cont=cl[1], labels=c(0.5),labcex=0.75, add=TRUE, lwd=0.75, col="grey30")#
-plot(est,abs.cont=cl[2], labels=c(0.95),labcex=0.75, add=TRUE, lwd=0.5, col="grey60")#
-plot(est,abs.cont=cl[3], labels=c(0.99),labcex=0.75, add=TRUE, lwd=0.5, col="grey60")#
-points( pc12[,], pch=16, cex=0.25, col="black") #
-plot(fit, cex=0.90, col=1, labels=list(vectors = c("GR","CW","MCS","SD","CH","SAV","IS")))#
-segments(0,0, fit2[,1], fit2[,2], col=1, lty=2, lwd=1)#
-mtext("PC1", cex=0.75, side=1, line=0.5, adj=1)#
-mtext("PC2", cex=0.75, side=2, line=0.5, at=5.3) #, las=2)#
-# All species#
-#
-points<-data.frame(x=jitter(prin$scores[,1], amount=0.25), y=jitter(prin$scores[,2], amount=0.25))#
-#
-n <- nrow(points) # total species#
-s <- 20  # species selected#
-spread<-voronoiFilter(points, s)#
-#
-spread$species<-dat$species[as.numeric(rownames(spread))]#
-spread$abundance<-dat$Abundance.GBR[as.numeric(rownames(spread))]#
-#
+n=4#
+gower<-gowdis(dat[,cats])#
+knn<-get.knn(gower,k=n)$nn.index#
+near<-NULL#
+for(x in 1:n){#
+col<-dat$species[knn[,x]]#
+near<-cbind(near, x=col)}#
+colnames(near)<-paste("n", seq(1:n), sep="")#
+near<-as.data.frame(near)#
+near$species <- dat$species#
+near<-near[near$species %in% spread$species,]#
+near$group<-c(1:nrow(near))#
+near<-melt(near, id.var=c("group", "species"), value.name="near")#
+near[,c("x1","y1")]<-points[match(near$species, points$species),c("x","y")]#
+near[,c("x2","y2")]<-points[match(near$near, points$species), c("x","y")]#
+head(near)#
 ggplot()+#
-#geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.15)+#
 geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
-geom_point(data=spread, aes(x,y, col=abundance))+#
-geom_text(data=spread, aes(x,y, label=species), size=2, position=position_nudge(x=0.7, y=0.1))+#
-scale_colour_manual(values=c("red","orange","green"))+#
-theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))#
-# Only common species#
+geom_point(data=spread, aes(x,y))+#
+geom_segment(data=near, aes(x=x1, y=y1, xend=x2, yend=y2), size=0.1)+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)
+# pcoa#
+pcoa<-pcoa(gowdis(dat[,cats]))#
+space<-data.frame(x=jitter(pcoa$vectors[,1], amount=0.01), y=jitter(pcoa$vectors[,2], amount=0.01), z=jitter(pcoa$vectors[,3], amount=0.01))#
+# 2D spread....#
+points<-cbind(space, abun=dat$Abundance.GBR, species=dat$species)#
 #
-points<-data.frame(x=jitter(prin$scores[,1], amount=0.25), y=jitter(prin$scores[,2], amount=0.25))#
+use<-points[,c("x","y")]#
+#use<-points[points$abun=="common",c("x","y")] # only common species#
 #
-abuns<-cbind(points, abun=dat$Abundance.GBR, species=dat$species)#
-comm<-abuns[abuns$abun=="common",c("x","y")]#
-head(comm)#
-#
-nrow(comm)#
-n <- nrow(comm) # total species#
+n <- nrow(use) # total species#
 s <- 30  # species selected#
-spread<-voronoiFilter(comm, s)#
-spread$species<-abuns$species[as.numeric(rownames(spread))]#
+spread<-voronoiFilter(use, s)#
+spread$species<-points$species[as.numeric(rownames(spread))]#
 #
 ggplot()+#
 geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
 geom_point(data=spread, aes(x,y))+#
-geom_text(data=spread, aes(x,y, label=species), size=2, position=position_nudge(x=0.7, y=0.1))+#
-scale_colour_manual(values=c("red","orange","green"))+#
+geom_text(data=spread, aes(x,y, label=species), size=2, position=position_nudge(x=diff(range(spread$x))*0.07, y=diff(range(spread$y))*0.01))+#
 theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
 annotation_custom(ggplotGrob(#
 ggplot()+#
@@ -1221,137 +79,142 @@ geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
 geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
 geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
 xmin = 3, xmax = 5, ymin = 2, ymax = 3)#
-# Clipperton species#
+# Find 5 nearest neighbours in each node...#
+library("FNN")#
+library("reshape2")#
 #
-clipp<-cbind(points, clipp=dat$clipperton, species=dat$species)#
-head(clipp)#
+n=4#
+gower<-gowdis(dat[,cats])#
+knn<-get.knn(gower,k=n)$nn.index#
+near<-NULL#
+for(x in 1:n){#
+col<-dat$species[knn[,x]]#
+near<-cbind(near, x=col)}#
+colnames(near)<-paste("n", seq(1:n), sep="")#
+near<-as.data.frame(near)#
+near$species <- dat$species#
+near<-near[near$species %in% spread$species,]#
+near$group<-c(1:nrow(near))#
+near<-melt(near, id.var=c("group", "species"), value.name="near")#
+near[,c("x1","y1")]<-points[match(near$species, points$species),c("x","y")]#
+near[,c("x2","y2")]<-points[match(near$near, points$species), c("x","y")]#
+head(near)#
 ggplot()+#
 geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
-geom_point(data=clipp[clipp$clipp==1,],aes(x,y))+#
-geom_text(data=clipp[clipp$clipp==1,], aes(x,y, label=species), size=2, position=position_nudge(x=0.7, y=0.1))+#
-scale_colour_manual(values=c("red","orange","green"))+#
+geom_point(data=spread, aes(x,y))+#
+geom_segment(data=near, aes(x=x1, y=y1, xend=x2, yend=y2), size=0.1)+#
 theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
-ggtitle("Clipperton atoll")#
-# 3D interactive plots#
-#
-library("car")#
-library("rgl")#
-points<-data.frame(x=jitter(prin$scores[,1], amount=0.15), y=jitter(prin$scores[,2], amount=0.15), z=jitter(prin$scores[,3], amount=0.15), species=dat$species)#
-points$cols<-as.factor(ifelse(points$species %in% spread$species, "red","white"))#
-points$labs<-ifelse(points$cols=="red",points$species, "")#
-sub<-points[points$cols=="red",]#
-seg<-cbind(sub, data.frame(xend=rep(0,nrow(sub)),yend=rep(0,nrow(sub)),zend=rep(0,nrow(sub))))#
-head(points)#
-#
-  #writeWebGL()#
-plot3d(points$x, points$y, points$z, group=points$group, type="s",   #
-xlab="PC1", ylab="PC2", zlab="PC3", col=points$cols, size=0.5, box=FALSE, axes=F, col.panel = "black",)#
- # rgl.texts(points$x, points$y, points$z, points$labs, cex=0.25,col="red", adj=c(1.1, 1.1))#
-axes3d(c("x", "y", "z"), col="white")#
-segments3d(x=as.vector(t(seg[,c("x","xend")])),y=as.vector(t(seg[,c("y","yend")])), z=as.vector(t(seg[,c("z","zend")])), col='red', alpha=0.1)#
-           bg3d("slategrey")#
-           identify3d(points$x, points$y, points$z, labels = points$labs, n=length(points$x), #
-	plot = TRUE, adj = c(-0.1, 0.5), tolerance = 20, #
-	buttons = c("right", "middle"))#
-#
-  text3d(points$x, points$y, points$z, texts=points$labs, cex=0.25,col="red", adj=c(1.1, 1.1))
-setwd("/Users/mikemcwilliam/Documents/PostDoc/species_choice")
-source("data_prep.R")#
-# Anyalsis#
-library(tripack)#
-source("R/functions.R")#
-#
-# points selection#
-#
-#n <- 100 # total species#
-#s <- 20  # species selected#
-#dat <- data.frame(x=rnorm(n), y=rnorm(n))#
-#plot(y ~ x, dat, col="grey")#
-#
-# random#
-#points(y ~ x, dat[sample(1:n, s, replace=FALSE),], col="red", pch=20, cex=0.6)#
-#
-# most evenly spread#
-#points(y ~ x, voronoiFilter(dat, s), col="blue", pch=20, cex=0.6)#
-dat<-read.csv("data/data.csv")#
-dat$Abundance.GBR<-factor(dat$Abundance.GBR, levels=c("rare","uncommon", "common"))#
-# pnas traits#
-cats<-c("cat_growthrate", "cat_corallitesize", "cat_colonydiameter" , "cat_skeletaldensity", "cat_colonyheight","cat_SA_vol", "cat_spacesize")#
-pca<-prcomp(dat[,cats], center=T, scale=T)#
-points<-data.frame(species=dat$species, pc1=pca$x[,1],pc2=pca$x[,2],pc3=pca$x[,3],pc4=pca$x[,4])#
-#biplot(pca)#
-# DIAZ PLOT#
-library("vegan")#
-library("ks")#
-#
-prin<-princomp((dat[,cats]), cor = TRUE, scores = TRUE)#
-pc12<-prin$scores[,1:2]#
-ll<-prin$loadings#
-#
-################ KERNEL DENSITY ESTIMATION ###############################
-H <- Hpi(x=pc12)      # optimal bandwidth estimation#
-est<- kde(x=pc12, H=H, compute.cont=TRUE)    # kernel density estimation#
-#
-# set contour probabilities for drawing contour levels#
-cl<-contourLevels(est, prob=c(0.5, 0.05, 0.001), approx=TRUE)#
-#
-fit<-envfit(pc12, dat[,cats]) # use envfit for drawing arrows#
-fit2<-fit$vectors$arrows*-1 # drawing line segments opposite arrows#
-fit2[1,]<-fit2[1,]*3 # leafarea#
-fit2[2,]<-fit2[2,]*3 # leaf N#
-fit2[3,]<-fit2[3,]*3 # LMA#
-fit2[4,]<-fit2[4,]*3 # height#
-fit2[5,]<-fit2[5,]*3 # seed mass#
- fit2[6,]<-fit2[6,]*3 # stem density#
- fit2[7,]<-fit2[7,]*3 # stem density#
-#
-par(mar=c(4,4,2,2))#
-plot(est, cont=seq(1,100,by=1), display="filled.contour2", add=FALSE, ylab="", xlab="", cex.axis=0.75, ylim=c(-3, 3.5), xlim=c(-4, 5),las=1) #
-plot(est,abs.cont=cl[1], labels=c(0.5),labcex=0.75, add=TRUE, lwd=0.75, col="grey30")#
-plot(est,abs.cont=cl[2], labels=c(0.95),labcex=0.75, add=TRUE, lwd=0.5, col="grey60")#
-plot(est,abs.cont=cl[3], labels=c(0.99),labcex=0.75, add=TRUE, lwd=0.5, col="grey60")#
-points( pc12[,], pch=16, cex=0.25, col="black") #
-plot(fit, cex=0.90, col=1, labels=list(vectors = c("GR","CW","MCS","SD","CH","SAV","IS")))#
-segments(0,0, fit2[,1], fit2[,2], col=1, lty=2, lwd=1)#
-mtext("PC1", cex=0.75, side=1, line=0.5, adj=1)#
-mtext("PC2", cex=0.75, side=2, line=0.5, at=5.3) #, las=2)#
-# All species#
-#
-points<-data.frame(x=jitter(prin$scores[,1], amount=0.25), y=jitter(prin$scores[,2], amount=0.25))#
-#
-n <- nrow(points) # total species#
-s <- 20  # species selected#
-spread<-voronoiFilter(points, s)#
-#
-spread$species<-dat$species[as.numeric(rownames(spread))]#
-spread$abundance<-dat$Abundance.GBR[as.numeric(rownames(spread))]#
-#
+annotation_custom(ggplotGrob(#
 ggplot()+#
-#geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.15)+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)
+n=4#
+gower<-gowdis(dat[,cats])#
+knn<-get.knn(dat[,cats],k=n)$nn.index#
+near<-NULL#
+for(x in 1:n){#
+col<-dat$species[knn[,x]]#
+near<-cbind(near, x=col)}#
+colnames(near)<-paste("n", seq(1:n), sep="")#
+near<-as.data.frame(near)#
+near$species <- dat$species#
+near<-near[near$species %in% spread$species,]#
+near$group<-c(1:nrow(near))#
+near<-melt(near, id.var=c("group", "species"), value.name="near")#
+near[,c("x1","y1")]<-points[match(near$species, points$species),c("x","y")]#
+near[,c("x2","y2")]<-points[match(near$near, points$species), c("x","y")]#
+head(near)
+ggplot()+#
 geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
-geom_point(data=spread, aes(x,y, col=abundance))+#
-geom_text(data=spread, aes(x,y, label=species), size=2, position=position_nudge(x=0.7, y=0.1))+#
-scale_colour_manual(values=c("red","orange","green"))+#
-theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))#
-# Only common species#
+geom_point(data=spread, aes(x,y))+#
+geom_segment(data=near, aes(x=x1, y=y1, xend=x2, yend=y2), size=0.1)+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)
+knn<-get.knn(dat[,cats],k=n)$nn.index
+# Find 5 nearest neighbours in each node...#
+library("FNN")#
+library("reshape2")#
 #
-points<-data.frame(x=jitter(prin$scores[,1], amount=0.25), y=jitter(prin$scores[,2], amount=0.25))#
+n=4#
+#gower<-gowdis(dat[,cats])#
+knn<-get.knn(points[,c("x","y")],k=n)$nn.index#
+near<-NULL#
+for(x in 1:n){#
+col<-dat$species[knn[,x]]#
+near<-cbind(near, x=col)}#
+colnames(near)<-paste("n", seq(1:n), sep="")#
+near<-as.data.frame(near)#
+near$species <- dat$species#
+near<-near[near$species %in% spread$species,]#
+near$group<-c(1:nrow(near))#
+near<-melt(near, id.var=c("group", "species"), value.name="near")#
+near[,c("x1","y1")]<-points[match(near$species, points$species),c("x","y")]#
+near[,c("x2","y2")]<-points[match(near$near, points$species), c("x","y")]#
+head(near)#
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_segment(data=near, aes(x=x1, y=y1, xend=x2, yend=y2), size=0.1)+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)
+# Find 5 nearest neighbours in each node...#
+library("FNN")#
+library("reshape2")#
 #
-abuns<-cbind(points, abun=dat$Abundance.GBR, species=dat$species)#
-comm<-abuns[abuns$abun=="common",c("x","y")]#
-head(comm)#
+n=10#
+#gower<-gowdis(dat[,cats])#
+knn<-get.knn(points[,c("x","y")],k=n)$nn.index#
+near<-NULL#
+for(x in 1:n){#
+col<-dat$species[knn[,x]]#
+near<-cbind(near, x=col)}#
+colnames(near)<-paste("n", seq(1:n), sep="")#
+near<-as.data.frame(near)#
+near$species <- dat$species#
+near<-near[near$species %in% spread$species,]#
+near$group<-c(1:nrow(near))#
+near<-melt(near, id.var=c("group", "species"), value.name="near")#
+near[,c("x1","y1")]<-points[match(near$species, points$species),c("x","y")]#
+near[,c("x2","y2")]<-points[match(near$near, points$species), c("x","y")]#
+head(near)#
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_segment(data=near, aes(x=x1, y=y1, xend=x2, yend=y2), size=0.1)+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)
+# 2D spread....#
+points<-cbind(space, abun=dat$Abundance.GBR, species=dat$species)#
 #
-nrow(comm)#
-n <- nrow(comm) # total species#
+use<-points[,c("x","y")]#
+#use<-points[points$abun=="common",c("x","y")] # only common species#
+#
+n <- nrow(use) # total species#
 s <- 30  # species selected#
-spread<-voronoiFilter(comm, s)#
-spread$species<-abuns$species[as.numeric(rownames(spread))]#
+spread<-voronoiFilter(use, s)#
+spread$species<-points$species[as.numeric(rownames(spread))]#
 #
 ggplot()+#
 geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
 geom_point(data=spread, aes(x,y))+#
-geom_text(data=spread, aes(x,y, label=species), size=2, position=position_nudge(x=0.7, y=0.1))+#
-scale_colour_manual(values=c("red","orange","green"))+#
+geom_text(data=spread, aes(x,y, label=species), size=2, position=position_nudge(x=diff(range(spread$x))*0.07, y=diff(range(spread$y))*0.01))+#
 theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
 annotation_custom(ggplotGrob(#
 ggplot()+#
@@ -1359,37 +222,2270 @@ geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
 geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
 geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
 xmin = 3, xmax = 5, ymin = 2, ymax = 3)#
-# Clipperton species#
+# Find 5 nearest neighbours in each node...#
+library("FNN")#
+library("reshape2")#
 #
-clipp<-cbind(points, clipp=dat$clipperton, species=dat$species)#
-head(clipp)#
+n=10#
+#gower<-gowdis(dat[,cats])#
+knn<-get.knn(points[,c("x","y")],k=n)$nn.index#
+near<-NULL#
+for(x in 1:n){#
+col<-dat$species[knn[,x]]#
+near<-cbind(near, x=col)}#
+colnames(near)<-paste("n", seq(1:n), sep="")#
+near<-as.data.frame(near)#
+near$species <- dat$species#
+near<-near[near$species %in% spread$species,]#
+near$group<-c(1:nrow(near))#
+near<-melt(near, id.var=c("group", "species"), value.name="near")#
+near[,c("x1","y1")]<-points[match(near$species, points$species),c("x","y")]#
+near[,c("x2","y2")]<-points[match(near$near, points$species), c("x","y")]#
+head(near)#
 ggplot()+#
 geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
-geom_point(data=clipp[clipp$clipp==1,],aes(x,y))+#
-geom_text(data=clipp[clipp$clipp==1,], aes(x,y, label=species), size=2, position=position_nudge(x=0.7, y=0.1))+#
-scale_colour_manual(values=c("red","orange","green"))+#
+geom_point(data=spread, aes(x,y))+#
+geom_segment(data=near, aes(x=x1, y=y1, xend=x2, yend=y2), size=0.1)+#
 theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
-ggtitle("Clipperton atoll")#
-# 3D interactive plots#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)
+# Find 5 nearest neighbours in each node...#
+library("FNN")#
+library("reshape2")#
 #
-library("car")#
-library("rgl")#
-points<-data.frame(x=jitter(prin$scores[,1], amount=0.15), y=jitter(prin$scores[,2], amount=0.15), z=jitter(prin$scores[,3], amount=0.15), species=dat$species)#
-points$cols<-as.factor(ifelse(points$species %in% spread$species, "red","white"))#
-points$labs<-ifelse(points$cols=="red",points$species, "")#
-sub<-points[points$cols=="red",]#
-seg<-cbind(sub, data.frame(xend=rep(0,nrow(sub)),yend=rep(0,nrow(sub)),zend=rep(0,nrow(sub))))#
-head(points)#
+n=10#
+#gower<-gowdis(dat[,cats])#
+knn<-get.knn(points[,c("x","y")],k=n)$nn.index#
+near<-NULL#
+for(x in 1:n){#
+col<-dat$species[knn[,x]]#
+near<-cbind(near, x=col)}#
+colnames(near)<-paste("n", seq(1:n), sep="")#
+near<-as.data.frame(near)#
+near$species <- dat$species#
+near<-near[near$species %in% spread$species,]#
+near$group<-c(1:nrow(near))#
+near<-melt(near, id.var=c("group", "species"), value.name="near")#
+near[,c("x1","y1")]<-points[match(near$species, points$species),c("x","y")]#
+near[,c("x2","y2")]<-points[match(near$near, points$species), c("x","y")]#
+head(near)#
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_segment(data=near, aes(x=x1, y=y1, xend=x2, yend=y2), size=0.1)+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)
+# Find 5 nearest neighbours in each node...#
+library("FNN")#
+library("reshape2")#
 #
-  #writeWebGL()#
-plot3d(points$x, points$y, points$z, group=points$group, type="s",   #
-xlab="PC1", ylab="PC2", zlab="PC3", col=points$cols, size=0.5, box=FALSE, axes=F, col.panel = "black",)#
- # rgl.texts(points$x, points$y, points$z, points$labs, cex=0.25,col="red", adj=c(1.1, 1.1))#
-axes3d(c("x", "y", "z"), col="white")#
-segments3d(x=as.vector(t(seg[,c("x","xend")])),y=as.vector(t(seg[,c("y","yend")])), z=as.vector(t(seg[,c("z","zend")])), col='red', alpha=0.1)#
-           bg3d("slategrey")#
-           identify3d(points$x, points$y, points$z, labels = points$labs, n=length(points$x), #
-	plot = TRUE, adj = c(-0.1, 0.5), tolerance = 20, #
-	buttons = c("right", "middle"))#
+n=5#
+#gower<-gowdis(dat[,cats])#
+knn<-get.knn(points[,c("x","y")],k=n)$nn.index#
+near<-NULL#
+for(x in 1:n){#
+col<-dat$species[knn[,x]]#
+near<-cbind(near, x=col)}#
+colnames(near)<-paste("n", seq(1:n), sep="")#
+near<-as.data.frame(near)#
+near$species <- dat$species#
+near<-near[near$species %in% spread$species,]#
+near$group<-c(1:nrow(near))#
+near<-melt(near, id.var=c("group", "species"), value.name="near")#
+near[,c("x1","y1")]<-points[match(near$species, points$species),c("x","y")]#
+near[,c("x2","y2")]<-points[match(near$near, points$species), c("x","y")]#
+head(near)#
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_segment(data=near, aes(x=x1, y=y1, xend=x2, yend=y2), size=0.1)+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)
+# Find 5 nearest neighbours in each node...#
+library("FNN")#
+library("reshape2")#
 #
-  text3d(points$x, points$y, points$z, texts=points$labs, cex=0.25,col="red", adj=c(1.1, 1.1))
+n=8#
+#gower<-gowdis(dat[,cats])#
+knn<-get.knn(points[,c("x","y")],k=n)$nn.index#
+near<-NULL#
+for(x in 1:n){#
+col<-dat$species[knn[,x]]#
+near<-cbind(near, x=col)}#
+colnames(near)<-paste("n", seq(1:n), sep="")#
+near<-as.data.frame(near)#
+near$species <- dat$species#
+near<-near[near$species %in% spread$species,]#
+near$group<-c(1:nrow(near))#
+near<-melt(near, id.var=c("group", "species"), value.name="near")#
+near[,c("x1","y1")]<-points[match(near$species, points$species),c("x","y")]#
+near[,c("x2","y2")]<-points[match(near$near, points$species), c("x","y")]#
+head(near)#
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_segment(data=near, aes(x=x1, y=y1, xend=x2, yend=y2), size=0.1)+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)
+# Find 5 nearest neighbours in each node...#
+library("FNN")#
+library("reshape2")#
+#
+n=9#
+#gower<-gowdis(dat[,cats])#
+knn<-get.knn(points[,c("x","y")],k=n)$nn.index#
+near<-NULL#
+for(x in 1:n){#
+col<-dat$species[knn[,x]]#
+near<-cbind(near, x=col)}#
+colnames(near)<-paste("n", seq(1:n), sep="")#
+near<-as.data.frame(near)#
+near$species <- dat$species#
+near<-near[near$species %in% spread$species,]#
+near$group<-c(1:nrow(near))#
+near<-melt(near, id.var=c("group", "species"), value.name="near")#
+near[,c("x1","y1")]<-points[match(near$species, points$species),c("x","y")]#
+near[,c("x2","y2")]<-points[match(near$near, points$species), c("x","y")]#
+head(near)#
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_segment(data=near, aes(x=x1, y=y1, xend=x2, yend=y2), size=0.1)+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_segment(data=near, aes(x=x1, y=y1, xend=x2, yend=y2), size=0.1)+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
+labs(x="principal component 1", y="principal component 2")
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_text(data=spread, aes(x,y, label=species), size=2, position=position_nudge(x=diff(range(spread$x))*0.07, y=diff(range(spread$y))*0.01))+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
+labs(x="principal component 1", y="principal component 2")
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_segment(data=near, aes(x=x1, y=y1, xend=x2, yend=y2), size=0.1)+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
+labs(x="principal component 1", y="principal component 2")
+head(near)
+ifelse(dat$Abundance.GBR=="common", 10, 1)
+colnames(dat)
+hist(dat$Range.size)
+hist(log(dat$Range.size))
+hist(log10(dat$Range.size))
+quant(dat$Range.size,0.1)
+quantile(dat$Range.size,0.1)
+ggplot(dat)+geom_hist(aes(x=Range.size))+geom_vline(xintercept=l10)
+ggplot(dat)+geom_histogram(aes(x=Range.size))+geom_vline(xintercept=l10)
+l10<-quantile(dat$Range.size,0.1)#
+#
+ggplot(dat)+geom_histogram(aes(x=Range.size))+geom_vline(xintercept=l10)
+hist(log10(dat$Range.size))#
+line(l10)
+hist(log10(dat$Range.size))#
+line(x=l10)
+hist(log10(dat$Range.size))#
+vline(x=l10)
+?vline
+hist(log10(dat$Range.size))#
+abline(v=l10)
+hist(dat$Range.size)#
+abline(v=l10)
+dat$D.abun<-ifelse(dat$Abundance.GBR=="common", 10, 1)
+colnames(dat)#
+#
+# abundance #
+# very large weighting for abundant species#
+dat$D.abun<-ifelse(dat$Abundance.GBR=="common", 10, 1)#
+#
+# range size#
+# exclude endemics? - hughes 2001 defines as the lowest 10%#
+#
+q10<-quantile(dat$Range.size,0.1)#
+hist(dat$Range.size)#
+abline(v=q10)#
+dat$D.rang<-ifelse(dat$Range.size>q10, 3, 1)
+# Desirability index#
+############################
+colnames(dat)#
+#
+# abundance #
+# very large weighting for abundant species#
+dat$D.abun<-ifelse(dat$Abundance.GBR=="common", 10, 1)#
+#
+# range size#
+# exclude endemics? - hughes 2001 defines as the lowest 10%#
+# try bottom 25#
+q10<-quantile(dat$Range.size,0.25)#
+hist(dat$Range.size)#
+abline(v=q10)#
+dat$D.rang<-ifelse(dat$Range.size>q10, 1, 0)
+q<-quantile(dat$Range.size,0.25)#
+hist(dat$Range.size)#
+abline(v=q)#
+dat$D.rang<-ifelse(dat$Range.size>q, 1, 0)
+colnames(dat)
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_segment(data=near, aes(x=x1, y=y1, xend=x2, yend=y2), size=0.1)+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
+labs(x="principal component 1", y="principal component 2")
+# Desirability index (out of 100)#
+############################
+# 50 points for common (categorical - ctb)#
+# 20 points for large size (top 75% quartile)#
+# 15 points for large range (top 75% quartile)#
+# 15 points for old #
+colnames(dat)#
+#
+# abundance #
+dat$D.abun<-ifelse(dat$Abundance.GBR=="common", 50, 0)#
+#
+# colony size#
+#
+# range size#
+q<-quantile(dat$Range.size,0.25)#
+dat$D.rang<-ifelse(dat$Range.size>q, 10, 0)#
+#hist(dat$Range.size)#
+#abline(v=q)
+dat$Range.size
+dat$D.size<-ifelse(dat$cat_colonydiameter>2, 20, 0)
+dat$D.size
+colnames(dat)
+hist(dat$Species.age.phylogeny)
+hist(log10(dat$Species.age.phylogeny))
+hist(log10(dat$Genus.fossil.age))
+hist(dat$Genus.fossil.age)
+# genus age #
+hist(log10(dat$Species.age.phylogeny))#
+hist(dat$Genus.fossil.age)#
+qA<-quantile(dat$Genus.fossil.age,0.25)#
+dat$D.age<-ifelse(dat$Genus.fossil.age>qA, 15, 0)
+qA<-quantile(dat$Genus.fossil.age,0.25, na.rm=T)
+qA
+dat$D.age<-ifelse(dat$Genus.fossil.age>qA, 15, 0)
+dat$D.age
+qA<-quantile(dat$Species.age.phylogeny,0.25, na.rm=T)#
+dat$D.age<-ifelse(dat$Species.age.phylogeny>qA, 15, 0)
+dat$D.age
+hist(log10(dat$Species.age.phylogeny))#
+qA<-quantile(dat$Species.age.phylogeny,0.25, na.rm=T)#
+dat$D.age<-ifelse(dat$Species.age.phylogeny>qA, 15, 0)
+colnames(dat)
+# genus age #
+hist(log10(dat$Species.age.phylogeny))#
+hist(log10(dat$Genus.fossil.age))#
+qA<-quantile(dat$Species.age.phylogeny,0.25, na.rm=T)#
+dat$D.age<-ifelse(dat$Species.age.phylogeny>qA, 15, 0)
+dat$D.index<-dat$D.abun+dat$D.size+dat$D.rang+dat$D.age
+dat$D.index
+# Desirability index (out of 100)#
+############################
+# 50 points for common (categorical - ctb)#
+# 20 points for large size (top 75% quartile)#
+# 15 points for large range (top 75% quartile)#
+# 15 points for old #
+# restorability ?#
+colnames(dat)#
+#
+# abundance #
+dat$D.abun<-ifelse(dat$Abundance.GBR=="common", 50, 0)#
+#
+# colony size#
+dat$D.size<-ifelse(dat$cat_colonydiameter>2, 20, 0)#
+#
+# range size#
+qR<-quantile(dat$Range.size,0.25)#
+dat$D.rang<-ifelse(dat$Range.size>qR, 15, 0)#
+#hist(dat$Range.size)#
+#abline(v=qR)#
+#
+# genus age #
+hist(log10(dat$Species.age.phylogeny))#
+hist(log10(dat$Genus.fossil.age))#
+qA<-quantile(dat$Species.age.phylogeny,0.25, na.rm=T)#
+dat$D.age<-ifelse(dat$Species.age.phylogeny>qA, 15, 0)#
+dat$D.index<-dat$D.abun+dat$D.size+dat$D.rang+dat$D.age
+dat$D.index
+head(near)
+head(near)
+des<-melt(near[,c("group","species","near")], id.var="group")#
+(head(des))
+# Most desirable in each group#
+des<-melt(near[,c("group","species","near")], id.var="group", value.name="species")#
+head(des)
+# Most desirable in each group#
+des<-melt(near[,c("group","species","near")], id.var="group", value.name="species")#
+head(des)#
+des$D.index<-dat$D.index[match(des$species, dat$species))]
+# Most desirable in each group#
+des<-melt(near[,c("group","species","near")], id.var="group", value.name="species")#
+head(des)#
+des$D.index<-dat$D.index[match(des$species, dat$species)]
+# Most desirable in each group#
+des<-melt(near[,c("group","species","near")], id.var="group", value.name="species")#
+head(des)#
+des$D.index<-dat$D.index[match(des$species, dat$species)]#
+head(des)
+aggregate(D.index~group, des, max)
+aggregate(D.index+species~group, des, max)
+aggregate(D.index~group, des, max)
+aggregate(D.index~group, des, max)
+# Most desirable in each group#
+des<-melt(near[,c("group","species","near")], id.var="group", value.name="species")#
+des$D.index<-dat$D.index[match(des$species, dat$species)]#
+head(des)#
+#
+d.agg<-aggregate(D.index~group, des, max)#
+merge(d.agg, des)
+des
+des[order(as.numeric(des$group)),]
+# Most desirable in each group#
+des<-melt(near[,c("group","species","near")], id.var="group", value.name="species")#
+des<-des[order(as.numeric(des$group)),]#
+des
+near[,c("group","species","near")]
+unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))
+des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
+des<-des[order(as.numeric(des$group)),]#
+des
+des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
+des<-des[order(as.numeric(des$group)),]#
+des$D.index<-dat$D.index[match(des$species, dat$species)]#
+des
+d.agg<-aggregate(D.index~group, des, max)#
+merge(d.agg, des)
+d.max[order(as.numeric(d.max$group)),]
+d.max<-merge(d.agg, des)#
+d.max[order(as.numeric(d.max$group)),]
+# Desirability index (out of 100)#
+############################
+# 50 points for common (categorical - ctb)#
+# 20 points for large size (top 75% quartile)#
+# 15 points for large range (top 75% quartile)#
+# 15 points for old #
+# restorability ?#
+colnames(dat)#
+#
+# abundance #
+dat$D.abun<-ifelse(dat$Abundance.GBR=="common", 50, 0)#
+#
+# colony size#
+dat$D.size<-ifelse(dat$cat_colonydiameter>3, 20, 0)#
+#
+# range size#
+qR<-quantile(dat$Range.size,0.25)#
+dat$D.rang<-ifelse(dat$Range.size>qR, 15, 0)#
+#hist(dat$Range.size)#
+#abline(v=qR)#
+#
+# genus age #
+hist(log10(dat$Species.age.phylogeny))#
+hist(log10(dat$Genus.fossil.age))#
+qA<-quantile(dat$Species.age.phylogeny,0.25, na.rm=T)#
+dat$D.age<-ifelse(dat$Species.age.phylogeny>qA, 15, 0)#
+dat$D.index<-dat$D.abun+dat$D.size+dat$D.rang+dat$D.age#
+# Most desirable in each group#
+#
+des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
+des<-des[order(as.numeric(des$group)),]#
+des$D.index<-dat$D.index[match(des$species, dat$species)]#
+des#
+#
+d.agg<-aggregate(D.index~group, des, max)#
+d.max<-merge(d.agg, des)#
+d.max[order(as.numeric(d.max$group)),]
+quantile(dat$Genus.fossil.age,0.1, na.rm=T)
+# genus age #
+#hist(log10(dat$Species.age.phylogeny))#
+#hist(log10(dat$Genus.fossil.age))#
+qA<-quantile(dat$Genus.fossil.age,0.1, na.rm=T)#
+dat$D.age<-ifelse(dat$Genus.fossil.age>qA, 15, 0)
+dat$D.age
+# genus age #
+#hist(log10(dat$Species.age.phylogeny))#
+#hist(log10(dat$Genus.fossil.age))#
+qA<-quantile(dat$Genus.fossil.age,0.25, na.rm=T)#
+dat$D.age<-ifelse(dat$Genus.fossil.age>qA, 15, 0)
+dat$D.age
+# Desirability index (out of 100)#
+############################
+# 50 points for common (categorical - ctb)#
+# 20 points for large size (top 75% quartile)#
+# 15 points for large range (top 75% quartile)#
+# 15 points for old #
+# restorability ?#
+colnames(dat)#
+#
+# abundance #
+dat$D.abun<-ifelse(dat$Abundance.GBR=="common", 50, 0)#
+#
+# colony size#
+dat$D.size<-ifelse(dat$cat_colonydiameter>3, 20, 0)#
+#
+# range size#
+qR<-quantile(dat$Range.size,0.25)#
+dat$D.rang<-ifelse(dat$Range.size>qR, 15, 0)#
+#hist(dat$Range.size)#
+#abline(v=qR)#
+#
+# genus age #
+#hist(log10(dat$Species.age.phylogeny))#
+#hist(log10(dat$Genus.fossil.age))#
+qA<-quantile(dat$Genus.fossil.age,0.25, na.rm=T)#
+dat$D.age<-ifelse(dat$Genus.fossil.age>qA, 15, 0)#
+dat$D.age[is.na(dat$D.age)]<-15 # benefit of doubt#
+#
+dat$D.index<-dat$D.abun+dat$D.size+dat$D.rang+dat$D.age
+# Most desirable in each group#
+#
+des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
+des<-des[order(as.numeric(des$group)),]#
+des$D.index<-dat$D.index[match(des$species, dat$species)]#
+des#
+#
+d.agg<-aggregate(D.index~group, des, max)#
+d.max<-merge(d.agg, des)#
+d.max[order(as.numeric(d.max$group)),]
+duplicates(d.max$species)
+duplicate(d.max$species)
+duplicated(d.max$species)
+dmax[,duplicated(d.max$species)]
+d.max[duplicated(d.max$species),]
+d.max$dupe<-ifelse(d.max$species%in% dupe$species, "duplicate", "")
+dupe<-d.max[duplicated(d.max$species),"species"]#
+d.max$dupe<-ifelse(d.max$species%in% dupe$species, "duplicate", "")
+dupe<-d.max[duplicated(d.max$species),"species"]#
+d.max$dupe<-ifelse(d.max$species %in% dupe$species, "duplicate", "")
+ifelse(d.max$species %in% dupe$species, "duplicate", "")
+dupe<-d.max[duplicated(d.max$species),"species"]#
+d.max$dupe<-ifelse(d.max$species %in% dupe, "duplicate", "")
+d.max
+d.max
+# Find 5 nearest neighbours in each node...#
+library("FNN")#
+library("reshape2")#
+#
+n=4#
+#gower<-gowdis(dat[,cats])#
+knn<-get.knn(points[,c("x","y")],k=n)$nn.index#
+near<-NULL#
+for(x in 1:n){#
+col<-dat$species[knn[,x]]#
+near<-cbind(near, x=col)}#
+colnames(near)<-paste("n", seq(1:n), sep="")#
+near<-as.data.frame(near)#
+near$species <- dat$species#
+near<-near[near$species %in% spread$species,]#
+near$group<-c(1:nrow(near))#
+near<-melt(near, id.var=c("group", "species"), value.name="near")#
+near[,c("x1","y1")]<-points[match(near$species, points$species),c("x","y")]#
+near[,c("x2","y2")]<-points[match(near$near, points$species), c("x","y")]#
+head(near)#
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_segment(data=near, aes(x=x1, y=y1, xend=x2, yend=y2), size=0.1)+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
+labs(x="principal component 1", y="principal component 2")
+# Desirability index (out of 100)#
+############################
+# 50 points for common (categorical - ctb)#
+# 20 points for large size (top 75% quartile)#
+# 15 points for large range (top 75% quartile)#
+# 15 points for old (top 75% quartile)#
+# restorability ?#
+colnames(dat)#
+#
+# abundance #
+dat$D.abun<-ifelse(dat$Abundance.GBR=="common", 50, 0)#
+#
+# colony size#
+dat$D.size<-ifelse(dat$cat_colonydiameter>3, 20, 0)#
+#
+# range size#
+qR<-quantile(dat$Range.size,0.25)#
+dat$D.rang<-ifelse(dat$Range.size>qR, 15, 0)#
+#hist(dat$Range.size)#
+#abline(v=qR)#
+#
+# genus age #
+#hist(log10(dat$Species.age.phylogeny))#
+#hist(log10(dat$Genus.fossil.age))#
+qA<-quantile(dat$Genus.fossil.age,0.25, na.rm=T)#
+dat$D.age<-ifelse(dat$Genus.fossil.age>qA, 15, 0)#
+dat$D.age[is.na(dat$D.age)]<-15 # benefit of doubt#
+#
+dat$D.index<-dat$D.abun+dat$D.size+dat$D.rang+dat$D.age
+# Most desirable in each group#
+#
+des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
+des<-des[order(as.numeric(des$group)),]#
+des$D.index<-dat$D.index[match(des$species, dat$species)]#
+des#
+#
+d.agg<-aggregate(D.index~group, des, max)#
+d.max<-merge(d.agg, des)#
+d.max[order(as.numeric(d.max$group)),]#
+#
+dupe<-d.max[duplicated(d.max$species),"species"]#
+d.max$dupe<-ifelse(d.max$species %in% dupe, "duplicate", "")#
+d.max
+des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
+des<-des[order(as.numeric(des$group)),]#
+des$D.index<-dat$D.index[match(des$species, dat$species)]#
+des#
+#
+d.agg<-aggregate(D.index~group, des, max)#
+d.max<-merge(d.agg, des)#
+dupe<-d.max[duplicated(d.max$species),"species"]#
+d.max$dupe<-ifelse(d.max$species %in% dupe, "duplicate", "")#
+d.max[order(as.numeric(d.max$group)),]
+# Find 5 nearest neighbours in each node...#
+library("FNN")#
+library("reshape2")#
+#
+n=7#
+#gower<-gowdis(dat[,cats])#
+knn<-get.knn(points[,c("x","y")],k=n)$nn.index#
+near<-NULL#
+for(x in 1:n){#
+col<-dat$species[knn[,x]]#
+near<-cbind(near, x=col)}#
+colnames(near)<-paste("n", seq(1:n), sep="")#
+near<-as.data.frame(near)#
+near$species <- dat$species#
+near<-near[near$species %in% spread$species,]#
+near$group<-c(1:nrow(near))#
+near<-melt(near, id.var=c("group", "species"), value.name="near")#
+near[,c("x1","y1")]<-points[match(near$species, points$species),c("x","y")]#
+near[,c("x2","y2")]<-points[match(near$near, points$species), c("x","y")]#
+head(near)#
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_segment(data=near, aes(x=x1, y=y1, xend=x2, yend=y2), size=0.1)+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
+labs(x="principal component 1", y="principal component 2")#
+# Desirability index (out of 100)#
+############################
+# 50 points for common (categorical - ctb)#
+# 20 points for large size (top 75% quartile)#
+# 15 points for large range (top 75% quartile)#
+# 15 points for old (top 75% quartile)#
+# restorability ?#
+colnames(dat)#
+#
+# abundance #
+dat$D.abun<-ifelse(dat$Abundance.GBR=="common", 50, 0)#
+#
+# colony size#
+dat$D.size<-ifelse(dat$cat_colonydiameter>3, 20, 0)#
+#
+# range size#
+qR<-quantile(dat$Range.size,0.25)#
+dat$D.rang<-ifelse(dat$Range.size>qR, 15, 0)#
+#hist(dat$Range.size)#
+#abline(v=qR)#
+#
+# genus age #
+#hist(log10(dat$Species.age.phylogeny))#
+#hist(log10(dat$Genus.fossil.age))#
+qA<-quantile(dat$Genus.fossil.age,0.25, na.rm=T)#
+dat$D.age<-ifelse(dat$Genus.fossil.age>qA, 15, 0)#
+dat$D.age[is.na(dat$D.age)]<-15 # benefit of doubt#
+#
+dat$D.index<-dat$D.abun+dat$D.size+dat$D.rang+dat$D.age
+# Most desirable in each group#
+#
+des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
+des<-des[order(as.numeric(des$group)),]#
+des$D.index<-dat$D.index[match(des$species, dat$species)]#
+des#
+#
+d.agg<-aggregate(D.index~group, des, max)#
+d.max<-merge(d.agg, des)#
+dupe<-d.max[duplicated(d.max$species),"species"]#
+d.max$dupe<-ifelse(d.max$species %in% dupe, "duplicate", "")#
+d.max[order(as.numeric(d.max$group)),]
+# Desirability index (out of 100)#
+############################
+# 50 points for common (categorical - ctb)#
+# 20 points for large size (top 75% quartile)#
+# 15 points for large range (top 75% quartile)#
+# 15 points for old (top 75% quartile)#
+# restorability ?#
+colnames(dat)#
+#
+# abundance #
+dat$D.abun<-ifelse(dat$Abundance.GBR=="common", 50, 0)#
+#
+# colony size#
+dat$D.size<-ifelse(dat$cat_colonydiameter>3, 20, 0)#
+#
+# range size#
+qR<-quantile(dat$Range.size,0.5)#
+dat$D.rang<-ifelse(dat$Range.size>qR, 15, 0)#
+#hist(dat$Range.size)#
+#abline(v=qR)#
+#
+# genus age #
+#hist(log10(dat$Species.age.phylogeny))#
+#hist(log10(dat$Genus.fossil.age))#
+qA<-quantile(dat$Genus.fossil.age,0.25, na.rm=T)#
+dat$D.age<-ifelse(dat$Genus.fossil.age>qA, 15, 0)#
+dat$D.age[is.na(dat$D.age)]<-15 # benefit of doubt#
+#
+dat$D.index<-dat$D.abun+dat$D.size+dat$D.rang+dat$D.age#
+# Most desirable in each group#
+#
+des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
+des<-des[order(as.numeric(des$group)),]#
+des$D.index<-dat$D.index[match(des$species, dat$species)]#
+des#
+#
+d.agg<-aggregate(D.index~group, des, max)#
+d.max<-merge(d.agg, des)#
+dupe<-d.max[duplicated(d.max$species),"species"]#
+d.max$dupe<-ifelse(d.max$species %in% dupe, "duplicate", "")#
+d.max[order(as.numeric(d.max$group)),]
+# Desirability index (out of 100)#
+############################
+# 50 points for common (categorical - ctb)#
+# 20 points for large size (top 75% quartile)#
+# 15 points for large range (top 75% quartile)#
+# 15 points for old (top 75% quartile)#
+# restorability ?#
+colnames(dat)#
+#
+# abundance #
+dat$D.abun<-ifelse(dat$Abundance.GBR=="common", 50, 0)#
+#
+# colony size#
+dat$D.size<-ifelse(dat$cat_colonydiameter>4, 20, 0)#
+#
+# range size#
+qR<-quantile(dat$Range.size,0.25)#
+dat$D.rang<-ifelse(dat$Range.size>qR, 15, 0)#
+#hist(dat$Range.size)#
+#abline(v=qR)#
+#
+# genus age #
+#hist(log10(dat$Species.age.phylogeny))#
+#hist(log10(dat$Genus.fossil.age))#
+qA<-quantile(dat$Genus.fossil.age,0.25, na.rm=T)#
+dat$D.age<-ifelse(dat$Genus.fossil.age>qA, 15, 0)#
+dat$D.age[is.na(dat$D.age)]<-15 # benefit of doubt#
+#
+dat$D.index<-dat$D.abun+dat$D.size+dat$D.rang+dat$D.age#
+# Most desirable in each group#
+#
+des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
+des<-des[order(as.numeric(des$group)),]#
+des$D.index<-dat$D.index[match(des$species, dat$species)]#
+des#
+#
+d.agg<-aggregate(D.index~group, des, max)#
+d.max<-merge(d.agg, des)#
+dupe<-d.max[duplicated(d.max$species),"species"]#
+d.max$dupe<-ifelse(d.max$species %in% dupe, "duplicate", "")#
+d.max[order(as.numeric(d.max$group)),]
+# Desirability index (out of 100)#
+############################
+# 50 points for common (categorical - ctb)#
+# 20 points for large size (top 75% quartile)#
+# 15 points for large range (top 75% quartile)#
+# 15 points for old (top 75% quartile)#
+# restorability ?#
+colnames(dat)#
+#
+# abundance #
+dat$D.abun<-ifelse(dat$Abundance.GBR=="common", 50, 0)#
+#
+# colony size#
+dat$D.size<-ifelse(dat$cat_colonydiameter>2, 20, 0)#
+#
+# range size#
+qR<-quantile(dat$Range.size,0.25)#
+dat$D.rang<-ifelse(dat$Range.size>qR, 15, 0)#
+#hist(dat$Range.size)#
+#abline(v=qR)#
+#
+# genus age #
+#hist(log10(dat$Species.age.phylogeny))#
+#hist(log10(dat$Genus.fossil.age))#
+qA<-quantile(dat$Genus.fossil.age,0.25, na.rm=T)#
+dat$D.age<-ifelse(dat$Genus.fossil.age>qA, 15, 0)#
+dat$D.age[is.na(dat$D.age)]<-15 # benefit of doubt#
+#
+dat$D.index<-dat$D.abun+dat$D.size+dat$D.rang+dat$D.age#
+# Most desirable in each group#
+#
+des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
+des<-des[order(as.numeric(des$group)),]#
+des$D.index<-dat$D.index[match(des$species, dat$species)]#
+des#
+#
+d.agg<-aggregate(D.index~group, des, max)#
+d.max<-merge(d.agg, des)#
+dupe<-d.max[duplicated(d.max$species),"species"]#
+d.max$dupe<-ifelse(d.max$species %in% dupe, "duplicate", "")#
+d.max[order(as.numeric(d.max$group)),]
+subset(d.max, dupe=="duplicate")
+subset(d.max, dupe=="duplicate")
+# genus age #
+#hist(log10(dat$Species.age.phylogeny))#
+#hist(log10(dat$Genus.fossil.age))#
+qA<-quantile(dat$Genus.fossil.age,0.25, na.rm=T)#
+dat$D.age<-ifelse(dat$Genus.fossil.age>qA, 15, 0)#
+dat$D.age[is.na(dat$D.age)]<-15 # benefit of doubt#
+#
+dat$D.index<-dat$D.abun+dat$D.size+dat$D.rang+dat$D.age
+n=7#
+#gower<-gowdis(dat[,cats])#
+knn<-get.knn(points[,c("x","y")],k=n)$nn.index
+knn
+# 2D spread....#
+points<-cbind(space, abun=dat$Abundance.GBR, species=dat$species)#
+#
+use<-points[,c("x","y")]#
+#use<-points[points$abun=="common",c("x","y")] # only common species#
+#
+n <- nrow(use) # total species#
+s <- 25  # species selected#
+spread<-voronoiFilter(use, s)#
+spread$species<-points$species[as.numeric(rownames(spread))]#
+#
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_text(data=spread, aes(x,y, label=species), size=2, position=position_nudge(x=diff(range(spread$x))*0.07, y=diff(range(spread$y))*0.01))+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
+labs(x="principal component 1", y="principal component 2")
+# 2D spread....#
+points<-cbind(space, abun=dat$Abundance.GBR, species=dat$species)#
+#
+use<-points[,c("x","y")]#
+#use<-points[points$abun=="common",c("x","y")] # only common species#
+#
+n <- nrow(use) # total species#
+s <- 20  # species selected#
+spread<-voronoiFilter(use, s)#
+spread$species<-points$species[as.numeric(rownames(spread))]#
+#
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_text(data=spread, aes(x,y, label=species), size=2, position=position_nudge(x=diff(range(spread$x))*0.07, y=diff(range(spread$y))*0.01))+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
+labs(x="principal component 1", y="principal component 2")
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_text(data=spread, aes(x,y, label=species), size=2, position=position_nudge(x=diff(range(spread$x))*0.07, y=diff(range(spread$y))*0.01))+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
+labs(x="principal component 1", y="principal component 2")
+# 2D spread....#
+points<-cbind(space, abun=dat$Abundance.GBR, species=dat$species)#
+#
+use<-points[,c("x","y")]#
+#use<-points[points$abun=="common",c("x","y")] # only common species#
+#
+n <- nrow(use) # total species#
+s <- 25  # species selected#
+spread<-voronoiFilter(use, s)#
+spread$species<-points$species[as.numeric(rownames(spread))]#
+#
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_text(data=spread, aes(x,y, label=species), size=2, position=position_nudge(x=diff(range(spread$x))*0.07, y=diff(range(spread$y))*0.01))+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
+labs(x="principal component 1", y="principal component 2")
+# Find nearest neighbours in each node...#
+library("FNN")#
+library("reshape2")#
+#
+n=7#
+#gower<-gowdis(dat[,cats])#
+knn<-get.knn(points[,c("x","y")],k=n)$nn.index#
+near<-NULL#
+for(x in 1:n){#
+col<-dat$species[knn[,x]]#
+near<-cbind(near, x=col)}#
+colnames(near)<-paste("n", seq(1:n), sep="")#
+near<-as.data.frame(near)#
+near$species <- dat$species#
+near<-near[near$species %in% spread$species,]#
+near$group<-c(1:nrow(near))#
+near<-melt(near, id.var=c("group", "species"), value.name="near")#
+near[,c("x1","y1")]<-points[match(near$species, points$species),c("x","y")]#
+near[,c("x2","y2")]<-points[match(near$near, points$species), c("x","y")]#
+head(near)#
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_segment(data=near, aes(x=x1, y=y1, xend=x2, yend=y2), size=0.1)+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
+labs(x="principal component 1", y="principal component 2")
+n <- nrow(use) # total species#
+s <- 30  # species selected#
+spread<-voronoiFilter(use, s)#
+spread$species<-points$species[as.numeric(rownames(spread))]#
+#
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_text(data=spread, aes(x,y, label=species), size=2, position=position_nudge(x=diff(range(spread$x))*0.07, y=diff(range(spread$y))*0.01))+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
+labs(x="principal component 1", y="principal component 2")
+# Find nearest neighbours in each node...#
+library("FNN")#
+library("reshape2")#
+#
+n=7#
+#gower<-gowdis(dat[,cats])#
+knn<-get.knn(points[,c("x","y")],k=n)$nn.index#
+near<-NULL#
+for(x in 1:n){#
+col<-dat$species[knn[,x]]#
+near<-cbind(near, x=col)}#
+colnames(near)<-paste("n", seq(1:n), sep="")#
+near<-as.data.frame(near)#
+near$species <- dat$species#
+near<-near[near$species %in% spread$species,]#
+near$group<-c(1:nrow(near))#
+near<-melt(near, id.var=c("group", "species"), value.name="near")#
+near[,c("x1","y1")]<-points[match(near$species, points$species),c("x","y")]#
+near[,c("x2","y2")]<-points[match(near$near, points$species), c("x","y")]#
+head(near)#
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_segment(data=near, aes(x=x1, y=y1, xend=x2, yend=y2), size=0.1)+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
+labs(x="principal component 1", y="principal component 2")
+head(near)
+near[duplicated(near$species),]
+near<-near[!near$near %in % near$species]#
+#
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_segment(data=near, aes(x=x1, y=y1, xend=x2, yend=y2), size=0.1)+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
+labs(x="principal component 1", y="principal component 2")
+near<-near[!near$near %in% near$species,]#
+#
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_segment(data=near, aes(x=x1, y=y1, xend=x2, yend=y2), size=0.1)+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
+labs(x="principal component 1", y="principal component 2")
+duplicated(near$species)
+near[duplicated(near$species),]
+near[duplicated(near$near),]
+near$near[duplicated(near$near)]
+# remove duplicates#
+near<-near[!near$near %in% near$species,]#
+near<-near[!duplicated(near$near),]#
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_segment(data=near, aes(x=x1, y=y1, xend=x2, yend=y2), size=0.1)+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
+labs(x="principal component 1", y="principal component 2")
+# Find nearest neighbours in each node...#
+library("FNN")#
+library("reshape2")#
+#
+n=7#
+#gower<-gowdis(dat[,cats])#
+knn<-get.knn(points[,c("x","y")],k=n)$nn.index#
+near<-NULL#
+for(x in 1:n){#
+col<-dat$species[knn[,x]]#
+near<-cbind(near, x=col)}#
+colnames(near)<-paste("n", seq(1:n), sep="")#
+near<-as.data.frame(near)#
+near$species <- dat$species#
+near<-near[near$species %in% spread$species,]#
+near$group<-c(1:nrow(near))#
+near<-melt(near, id.var=c("group", "species"), value.name="near")#
+near[,c("x1","y1")]<-points[match(near$species, points$species),c("x","y")]#
+near[,c("x2","y2")]<-points[match(near$near, points$species), c("x","y")]#
+head(near)#
+#
+# remove duplicates#
+near<-near[!near$near %in% near$species,]#
+#near<-near[!duplicated(near$near),]#
+#
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_segment(data=near, aes(x=x1, y=y1, xend=x2, yend=y2), size=0.1)+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
+labs(x="principal component 1", y="principal component 2")
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_segment(data=near, aes(x=x1, y=y1, xend=x2, yend=y2), size=0.1)+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
+labs(x="principal component 1", y="principal component 2")
+# remove duplicates#
+near<-near[!near$near %in% near$species,]#
+near<-near[!duplicated(near$near),]#
+#
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_segment(data=near, aes(x=x1, y=y1, xend=x2, yend=y2), size=0.1)+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
+labs(x="principal component 1", y="principal component 2")
+n <- nrow(use) # total species#
+s <- 40  # species selected#
+spread<-voronoiFilter(use, s)#
+spread$species<-points$species[as.numeric(rownames(spread))]#
+#
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_text(data=spread, aes(x,y, label=species), size=2, position=position_nudge(x=diff(range(spread$x))*0.07, y=diff(range(spread$y))*0.01))+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
+labs(x="principal component 1", y="principal component 2")#
+# Find nearest neighbours in each node...#
+library("FNN")#
+library("reshape2")#
+#
+n=7#
+#gower<-gowdis(dat[,cats])#
+knn<-get.knn(points[,c("x","y")],k=n)$nn.index#
+near<-NULL#
+for(x in 1:n){#
+col<-dat$species[knn[,x]]#
+near<-cbind(near, x=col)}#
+colnames(near)<-paste("n", seq(1:n), sep="")#
+near<-as.data.frame(near)#
+near$species <- dat$species#
+near<-near[near$species %in% spread$species,]#
+near$group<-c(1:nrow(near))#
+near<-melt(near, id.var=c("group", "species"), value.name="near")#
+near[,c("x1","y1")]<-points[match(near$species, points$species),c("x","y")]#
+near[,c("x2","y2")]<-points[match(near$near, points$species), c("x","y")]#
+head(near)#
+#
+# remove duplicates#
+near<-near[!near$near %in% near$species,]#
+near<-near[!duplicated(near$near),]#
+#
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_segment(data=near, aes(x=x1, y=y1, xend=x2, yend=y2), size=0.1)+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
+labs(x="principal component 1", y="principal component 2")
+# Desirability index (out of 100)#
+############################
+# 50 points for common (categorical - ctb)#
+# 20 points for large size (top 75% quartile)#
+# 15 points for large range (top 75% quartile)#
+# 15 points for old (top 75% quartile)#
+# restorability ?#
+colnames(dat)#
+#
+# abundance #
+dat$D.abun<-ifelse(dat$Abundance.GBR=="common", 50, 0)#
+#
+# colony size#
+dat$D.size<-ifelse(dat$cat_colonydiameter>2, 20, 0)#
+#
+# range size#
+qR<-quantile(dat$Range.size,0.25)#
+dat$D.rang<-ifelse(dat$Range.size>qR, 15, 0)#
+#hist(dat$Range.size)#
+#abline(v=qR)#
+#
+# genus age #
+#hist(log10(dat$Species.age.phylogeny))#
+#hist(log10(dat$Genus.fossil.age))#
+qA<-quantile(dat$Genus.fossil.age,0.25, na.rm=T)#
+dat$D.age<-ifelse(dat$Genus.fossil.age>qA, 15, 0)#
+dat$D.age[is.na(dat$D.age)]<-15 # benefit of doubt#
+#
+dat$D.index<-dat$D.abun+dat$D.size+dat$D.rang+dat$D.age
+# Most desirable in each group#
+#
+des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
+des<-des[order(as.numeric(des$group)),]#
+des$D.index<-dat$D.index[match(des$species, dat$species)]#
+des#
+#
+d.agg<-aggregate(D.index~group, des, max)#
+d.max<-merge(d.agg, des)#
+dupe<-d.max[duplicated(d.max$species),"species"]#
+d.max$dupe<-ifelse(d.max$species %in% dupe, "duplicate", "")#
+d.max[order(as.numeric(d.max$group)),]#
+subset(d.max, dupe=="duplicate")
+des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
+des<-des[order(as.numeric(des$group)),]#
+des$D.index<-dat$D.index[match(des$species, dat$species)]#
+des#
+#
+d.agg<-aggregate(D.index~group, des, max)#
+d.max<-merge(d.agg, des)#
+dupe<-d.max[duplicated(d.max$species),"species"]#
+d.max$dupe<-ifelse(d.max$species %in% dupe, "duplicate", "")#
+d.max[order(as.numeric(d.max$group)),]
+des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
+des<-des[order(as.numeric(des$group)),]#
+des$D.index<-dat$D.index[match(des$species, dat$species)]#
+#
+d.agg<-aggregate(D.index~group, des, max)#
+d.max<-merge(d.agg, des)#
+d.max[order(as.numeric(d.max$group)),]
+ifelse(dat$Abundance.GBR=="common", 50, 0)
+# Desirability index (out of 100)#
+############################
+# 50 points for common (categorical - ctb)#
+# 20 points for large size (top 75% quartile)#
+# 15 points for large range (top 75% quartile)#
+# 15 points for old (top 75% quartile)#
+# restorability ?#
+colnames(dat)#
+#
+# abundance #
+dat$D.abun<-ifelse(dat$Abundance.GBR=="common", 50, 0)#
+#
+# colony size#
+dat$D.size<-ifelse(dat$cat_colonydiameter>3, 20, 0)#
+#
+# range size#
+qR<-quantile(dat$Range.size,0.25)#
+dat$D.rang<-ifelse(dat$Range.size>qR, 15, 0)#
+#hist(dat$Range.size)#
+#abline(v=qR)#
+#
+# genus age #
+#hist(log10(dat$Species.age.phylogeny))#
+#hist(log10(dat$Genus.fossil.age))#
+qA<-quantile(dat$Genus.fossil.age,0.25, na.rm=T)#
+dat$D.age<-ifelse(dat$Genus.fossil.age>qA, 15, 0)#
+dat$D.age[is.na(dat$D.age)]<-15 # benefit of doubt#
+#
+dat$D.index<-dat$D.abun+dat$D.size+dat$D.rang+dat$D.age#
+# Most desirable in each group#
+#
+des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
+des<-des[order(as.numeric(des$group)),]#
+des$D.index<-dat$D.index[match(des$species, dat$species)]#
+#
+d.agg<-aggregate(D.index~group, des, max)#
+d.max<-merge(d.agg, des)#
+d.max[order(as.numeric(d.max$group)),]
+dat$D.size<-dat$cat_colonydiameter/max(dat$cat_colonydiameter)*15
+dat$D.size
+# Desirability index (out of 100)#
+############################
+# 50 points for common (categorical - ctb)#
+# 20 points for large size (ranked)#
+# 15 points for large range (ranked)#
+# 15 points for old (top 75% quartile)#
+# restorability ?#
+colnames(dat)#
+#
+# abundance #
+dat$D.abun<-ifelse(dat$Abundance.GBR=="common", 50, dat$Abundance.GBR=="uncommon", 15, 0)#
+#
+# colony size#
+dat$D.size<-dat$cat_colonydiameter/max(dat$cat_colonydiameter)*20#
+#
+# range size#
+#qR<-quantile(dat$Range.size,0.25)#
+#dat$D.rang<-ifelse(dat$Range.size>qR, 15, 0)#
+#hist(dat$Range.size)#
+#abline(v=qR)#
+dat$D.range<-dat$dat$Range.size/max(dat$dat$Range.size)*15#
+# genus age #
+#hist(log10(dat$Species.age.phylogeny))#
+#hist(log10(dat$Genus.fossil.age))#
+qA<-quantile(dat$Genus.fossil.age,0.25, na.rm=T)#
+dat$D.age<-ifelse(dat$Genus.fossil.age>qA, 15, 0)#
+dat$D.age[is.na(dat$D.age)]<-15 # benefit of doubt#
+#
+dat$D.index<-dat$D.abun+dat$D.size+dat$D.rang+dat$D.age#
+# Most desirable in each group#
+#
+des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
+des<-des[order(as.numeric(des$group)),]#
+des$D.index<-dat$D.index[match(des$species, dat$species)]#
+#
+d.agg<-aggregate(D.index~group, des, max)#
+d.max<-merge(d.agg, des)#
+d.max[order(as.numeric(d.max$group)),]
+# Desirability index (out of 100)#
+############################
+# 50 points for common (categorical - ctb)#
+# 20 points for large size (ranked)#
+# 15 points for large range (ranked)#
+# 15 points for old (top 75% quartile)#
+# restorability ?#
+colnames(dat)#
+#
+# abundance #
+dat$D.abun<-ifelse(dat$Abundance.GBR=="common", 50, dat$Abundance.GBR=="uncommon", 15, 0)#
+#
+# colony size#
+dat$D.size<-dat$cat_colonydiameter/max(dat$cat_colonydiameter)*20#
+#
+# range size#
+#qR<-quantile(dat$Range.size,0.25)#
+#dat$D.rang<-ifelse(dat$Range.size>qR, 15, 0)#
+#hist(dat$Range.size)#
+#abline(v=qR)#
+dat$D.range<-dat$dat$Range.size/max(dat$dat$Range.size)*15#
+#
+# genus age #
+#hist(log10(dat$Species.age.phylogeny))#
+#hist(log10(dat$Genus.fossil.age))#
+qA<-quantile(dat$Genus.fossil.age,0.25, na.rm=T)#
+dat$D.age<-ifelse(dat$Genus.fossil.age>qA, 15, 0)#
+dat$D.age[is.na(dat$D.age)]<-15 # benefit of doubt
+# Desirability index (out of 100)#
+############################
+# 50 points for common (categorical - ctb)#
+# 20 points for large size (ranked)#
+# 15 points for large range (ranked)#
+# 15 points for old (top 75% quartile)#
+# restorability ?#
+colnames(dat)#
+#
+# abundance #
+dat$D.abun<-ifelse(dat$Abundance.GBR=="common", 50, 0)
+# colony size#
+dat$D.size<-dat$cat_colonydiameter/max(dat$cat_colonydiameter)*20#
+#
+# range size#
+#qR<-quantile(dat$Range.size,0.25)#
+#dat$D.rang<-ifelse(dat$Range.size>qR, 15, 0)#
+#hist(dat$Range.size)#
+#abline(v=qR)#
+dat$D.range<-dat$dat$Range.size/max(dat$dat$Range.size)*15
+dat$D.range<-dat$Range.size/max(dat$Range.size)*15
+# genus age #
+#hist(log10(dat$Species.age.phylogeny))#
+#hist(log10(dat$Genus.fossil.age))#
+qA<-quantile(dat$Genus.fossil.age,0.25, na.rm=T)#
+dat$D.age<-ifelse(dat$Genus.fossil.age>qA, 15, 0)#
+dat$D.age[is.na(dat$D.age)]<-15 # benefit of doubt
+dat$D.index<-dat$D.abun+dat$D.size+dat$D.rang+dat$D.age
+# Most desirable in each group#
+#
+des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
+des<-des[order(as.numeric(des$group)),]#
+des$D.index<-dat$D.index[match(des$species, dat$species)]#
+#
+d.agg<-aggregate(D.index~group, des, max)#
+d.max<-merge(d.agg, des)#
+d.max[order(as.numeric(d.max$group)),]
+des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
+des<-des[order(as.numeric(des$group)),]#
+des$D.index<-dat$D.index[match(des$species, dat$species)]#
+#
+d.agg<-aggregate(D.index~group, des, max)#
+d.max<-merge(d.agg, des)#
+d.max[order(as.numeric(d.max$group)),]
+# Desirability index (out of 100)#
+############################
+# 50 points for common (categorical - ctb)#
+# 20 points for large size (ranked)#
+# 15 points for large range (ranked)#
+# 15 points for old (top 75% quartile)#
+# restorability ?#
+colnames(dat)#
+#
+# abundance #
+dat$D.abun<-ifelse(dat$Abundance.GBR=="common", 50, 0)#
+#
+# colony size#
+dat$D.size<-dat$cat_colonydiameter/max(dat$cat_colonydiameter)*20#
+#
+# range size#
+#qR<-quantile(dat$Range.size,0.25)#
+#dat$D.rang<-ifelse(dat$Range.size>qR, 15, 0)#
+#hist(dat$Range.size)#
+#abline(v=qR)#
+dat$D.range<-dat$Range.size/max(dat$Range.size)*15#
+#
+# genus age #
+#hist(log10(dat$Species.age.phylogeny))#
+#hist(log10(dat$Genus.fossil.age))#
+#qA<-quantile(dat$Genus.fossil.age,0.25, na.rm=T)#
+#dat$D.age<-ifelse(dat$Genus.fossil.age>qA, 15, 0)#
+#dat$D.age[is.na(dat$D.age)]<-15 # benefit of doubt#
+dat$D.range<-dat$D.age/max(dat$D.age)*15#
+dat$D.index<-dat$D.abun+dat$D.size+dat$D.rang+dat$D.age#
+# Most desirable in each group#
+#
+des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
+des<-des[order(as.numeric(des$group)),]#
+des$D.index<-dat$D.index[match(des$species, dat$species)]#
+#
+d.agg<-aggregate(D.index~group, des, max)#
+d.max<-merge(d.agg, des)#
+d.max[order(as.numeric(d.max$group)),]
+#hist(log10(dat$Genus.fossil.age))#
+#qA<-quantile(dat$Genus.fossil.age,0.25, na.rm=T)#
+#dat$D.age<-ifelse(dat$Genus.fossil.age>qA, 15, 0)#
+#dat$D.age[is.na(dat$D.age)]<-15 # benefit of doubt#
+dat$D.range<-dat$D.age/max(dat$D.age)*15#
+dat$D.index<-dat$D.abun+dat$D.size+dat$D.rang+dat$D.age#
+# Most desirable in each group#
+#
+des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
+des<-des[order(as.numeric(des$group)),]#
+des$D.index<-dat$D.index[match(des$species, dat$species)]
+des$D.index
+d.agg<-aggregate(D.index~group, des, max)#
+d.max<-merge(d.agg, des)#
+d.max[order(as.numeric(d.max$group)),]
+nrow(d.max)
+# Desirability index (out of 100)#
+############################
+# 50 points for common (categorical - ctb)#
+# 20 points for large size (ranked)#
+# 15 points for large range (ranked)#
+# 15 points for old (top 75% quartile)#
+# restorability ?#
+colnames(dat)#
+#
+# abundance #
+dat$D.abun<-ifelse(dat$Abundance.GBR=="common", 50, ifelse(dat$Abundance.GBR=="uncommon", 10, 0))
+# colony size#
+dat$D.size<-dat$cat_colonydiameter/max(dat$cat_colonydiameter)*20#
+#
+# range size#
+#qR<-quantile(dat$Range.size,0.25)#
+#dat$D.rang<-ifelse(dat$Range.size>qR, 15, 0)#
+#hist(dat$Range.size)#
+#abline(v=qR)#
+dat$D.range<-dat$Range.size/max(dat$Range.size)*15#
+#
+# genus age #
+#hist(log10(dat$Species.age.phylogeny))#
+#hist(log10(dat$Genus.fossil.age))#
+#qA<-quantile(dat$Genus.fossil.age,0.25, na.rm=T)#
+#dat$D.age<-ifelse(dat$Genus.fossil.age>qA, 15, 0)#
+#dat$D.age[is.na(dat$D.age)]<-15 # benefit of doubt#
+dat$D.range<-dat$D.age/max(dat$D.age)*15#
+dat$D.index<-dat$D.abun+dat$D.size+dat$D.rang+dat$D.age#
+# Most desirable in each group#
+#
+des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
+des<-des[order(as.numeric(des$group)),]#
+des$D.index<-dat$D.index[match(des$species, dat$species)]#
+#
+d.agg<-aggregate(D.index~group, des, max)#
+d.max<-merge(d.agg, des)#
+d.max[order(as.numeric(d.max$group)),]#
+nrow(d.max)
+colnames(dat)#
+#
+# abundance #
+dat$D.abun<-ifelse(dat$Abundance.GBR=="common", 50, ifelse(dat$Abundance.GBR=="uncommon", 10, 0))#
+#
+# colony size#
+dat$D.size<-dat$cat_colonydiameter/max(dat$cat_colonydiameter)*20#
+#
+# range size#
+#qR<-quantile(dat$Range.size,0.25)#
+#dat$D.rang<-ifelse(dat$Range.size>qR, 15, 0)#
+#hist(dat$Range.size)#
+#abline(v=qR)#
+dat$D.range<-dat$Range.size/max(dat$Range.size)*15#
+#
+# genus age #
+#hist(log10(dat$Species.age.phylogeny))#
+#hist(log10(dat$Genus.fossil.age))#
+#qA<-quantile(dat$Genus.fossil.age,0.25, na.rm=T)#
+#dat$D.age<-ifelse(dat$Genus.fossil.age>qA, 15, 0)#
+#dat$D.age[is.na(dat$D.age)]<-15 # benefit of doubt#
+dat$D.age<-dat$D.age/max(dat$D.age)*10#
+#Species.age.phylogeny#
+dat$D.index<-dat$D.abun+dat$D.size+dat$D.rang+dat$D.age#
+# Most desirable in each group#
+#
+des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
+des<-des[order(as.numeric(des$group)),]#
+des$D.index<-dat$D.index[match(des$species, dat$species)]#
+#
+d.agg<-aggregate(D.index~group, des, max)#
+d.max<-merge(d.agg, des)#
+d.max[order(as.numeric(d.max$group)),]#
+nrow(d.max)
+#qR<-quantile(dat$Range.size,0.25)#
+#dat$D.rang<-ifelse(dat$Range.size>qR, 15, 0)#
+#hist(dat$Range.size)#
+#abline(v=qR)#
+dat$D.range<-dat$Range.size/max(dat$Range.size)*15#
+#
+# genus age #
+#hist(log10(dat$Species.age.phylogeny))#
+#hist(log10(dat$Genus.fossil.age))#
+#qA<-quantile(dat$Genus.fossil.age,0.25, na.rm=T)#
+#dat$D.age<-ifelse(dat$Genus.fossil.age>qA, 15, 0)#
+#dat$D.age[is.na(dat$D.age)]<-15 # benefit of doubt#
+dat$D.age<-dat$D.age/max(dat$D.age)*10#
+#Species.age.phylogeny#
+dat$D.index<-dat$D.abun+dat$D.size+dat$D.rang+dat$D.age
+# Most desirable in each group#
+#
+des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
+des<-des[order(as.numeric(des$group)),]#
+des$D.index<-dat$D.index[match(des$species, dat$species)]#
+#
+d.agg<-aggregate(D.index~group, des, max)#
+d.max<-merge(d.agg, des)#
+d.max[order(as.numeric(d.max$group)),]#
+nrow(d.max)
+# range size#
+#qR<-quantile(dat$Range.size,0.25)#
+#dat$D.rang<-ifelse(dat$Range.size>qR, 15, 0)#
+#hist(dat$Range.size)#
+#abline(v=qR)#
+dat$D.range<-dat$Range.size/max(dat$Range.size)*15#
+#
+# genus age #
+#hist(log10(dat$Species.age.phylogeny))#
+#hist(log10(dat$Genus.fossil.age))#
+#qA<-quantile(dat$Genus.fossil.age,0.25, na.rm=T)#
+#dat$D.age<-ifelse(dat$Genus.fossil.age>qA, 15, 0)#
+#dat$D.age[is.na(dat$D.age)]<-15 # benefit of doubt#
+dat$D.age<-dat$Genus.fossil.age/max(dat$Genus.fossil.age)*10#
+#Species.age.phylogeny#
+#dat$D.age2<-dat$D.age/max(dat$D.age)*5#
+#
+dat$D.index<-dat$D.abun+dat$D.size+dat$D.rang+dat$D.age#
+# Most desirable in each group#
+#
+des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
+des<-des[order(as.numeric(des$group)),]#
+des$D.index<-dat$D.index[match(des$species, dat$species)]#
+#
+d.agg<-aggregate(D.index~group, des, max)#
+d.max<-merge(d.agg, des)#
+d.max[order(as.numeric(d.max$group)),]#
+nrow(d.max)
+max(dat$Genus.fossil.age)
+# genus age #
+#hist(log10(dat$Species.age.phylogeny))#
+#hist(log10(dat$Genus.fossil.age))#
+#qA<-quantile(dat$Genus.fossil.age,0.25, na.rm=T)#
+#dat$D.age<-ifelse(dat$Genus.fossil.age>qA, 15, 0)#
+#dat$D.age[is.na(dat$D.age)]<-15 # benefit of doubt#
+dat$D.age<-dat$Genus.fossil.age/max(dat$Genus.fossil.age, na.rm=T)*10#
+#Species.age.phylogeny#
+#dat$D.age2<-dat$D.age/max(dat$D.age)*5
+dat$D.index<-dat$D.abun+dat$D.size+dat$D.rang+dat$D.age
+# Most desirable in each group#
+#
+des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
+des<-des[order(as.numeric(des$group)),]#
+des$D.index<-dat$D.index[match(des$species, dat$species)]#
+#
+d.agg<-aggregate(D.index~group, des, max)#
+d.max<-merge(d.agg, des)#
+d.max[order(as.numeric(d.max$group)),]#
+nrow(d.max)
+dat$D.age2<-dat$Species.age.phylogeny/max(dat$Species.age.phylogeny)*5
+dat$D.age2
+dat$D.age2<-dat$Species.age.phylogeny/max(dat$Species.age.phylogeny, na.rm=T)*5
+dat$D.index<-dat$D.abun+dat$D.size+dat$D.rang+dat$D.age+dat$D.age2#
+# Most desirable in each group#
+#
+des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
+des<-des[order(as.numeric(des$group)),]#
+des$D.index<-dat$D.index[match(des$species, dat$species)]#
+#
+d.agg<-aggregate(D.index~group, des, max)#
+d.max<-merge(d.agg, des)#
+d.max[order(as.numeric(d.max$group)),]#
+nrow(d.max)
+select<-points[points$species %in% d.max$species,]
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=select, aes(x,y))+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+labs(x="principal component 1", y="principal component 2")
+points$D.index<-dat$D.index[match(points$species, dat$species)]#
+select<-points[points$species %in% d.max$species,]
+ggplot()+#
+geom_point(data=points, aes(x,y, size=D.index), shape=21, col="grey")+#
+geom_point(data=select, aes(x,y))+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+labs(x="principal component 1", y="principal component 2")
+ggplot()+#
+geom_point(data=points, aes(x,y, size=D.index), shape=21, col="grey")+#
+geom_point(data=select, aes(x,y))+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+labs(x="principal component 1", y="principal component 2")+#
+scale_radius()
+ggplot()+#
+geom_point(data=points, aes(x,y, size=D.index), shape=21, col="grey")+#
+geom_point(data=select, aes(x,y))+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+labs(x="principal component 1", y="principal component 2")+#
+scale_radius(range=c(0,1))
+ggplot()+#
+geom_point(data=points, aes(x,y, size=D.index), shape=21, col="grey")+#
+geom_point(data=select, aes(x,y))+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+labs(x="principal component 1", y="principal component 2")+#
+scale_radius(range=c(0,2))
+ggplot()+#
+geom_point(data=points, aes(x,y, size=D.index), shape=21, col="grey")+#
+geom_point(data=select, aes(x,y))+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+labs(x="principal component 1", y="principal component 2")+#
+scale_radius(range=c(0,3))
+ggplot()+#
+geom_point(data=points, aes(x,y, size=D.index, col=D.index), shape=21, col="grey")+#
+geom_point(data=select, aes(x,y))+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+labs(x="principal component 1", y="principal component 2")+#
+scale_radius(range=c(0,3))
+ggplot()+#
+geom_point(data=points, aes(x,y, size=D.index, col=D.index), shape=21)+#
+geom_point(data=select, aes(x,y))+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+labs(x="principal component 1", y="principal component 2")+#
+scale_radius(range=c(0,3))
+ggplot()+#
+geom_point(data=points, aes(x,y, size=D.index, col=D.index), shape=21)+#
+geom_point(data=select, aes(x,y))+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+labs(x="principal component 1", y="principal component 2")+#
+scale_radius(range=c(0,3))+#
+scale_colour_viridius()
+library("viridis")#
+#
+ggplot()+#
+geom_point(data=points, aes(x,y, size=D.index, col=D.index), shape=21)+#
+geom_point(data=select, aes(x,y))+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+labs(x="principal component 1", y="principal component 2")+#
+scale_radius(range=c(0,3))+#
+scale_colour_viridius()
+ggplot()+#
+geom_point(data=points, aes(x,y, size=D.index, col=D.index), shape=21)+#
+geom_point(data=select, aes(x,y))+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+labs(x="principal component 1", y="principal component 2")+#
+scale_radius(range=c(0,3))+#
+scale_colour_viridis()
+ggplot()+#
+geom_point(data=points, aes(x,y, size=D.index, col=D.index), shape=21)+#
+geom_point(data=select, aes(x,y))+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+labs(x="principal component 1", y="principal component 2")+#
+scale_radius(range=c(0,3))
+ggplot()+#
+geom_point(data=points, aes(x,y, size=D.index), shape=21, col="grey")+#
+geom_point(data=select, aes(x,y))+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+labs(x="principal component 1", y="principal component 2")+#
+scale_radius(range=c(0,3))
+ggplot()+#
+geom_point(data=points, aes(x,y, size=D.index), shape=21, col="grey")+#
+geom_point(data=select, aes(x,y))+#
+geom_text(data=spread, aes(x,y, label=species), size=2, position=position_nudge(x=diff(range(spread$x))*0.07, y=diff(range(spread$y))*0.01))+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+labs(x="principal component 1", y="principal component 2")+#
+scale_radius(range=c(0,3))
+ggplot()+#
+geom_point(data=points, aes(x,y, size=D.index), shape=21, col="grey")+#
+geom_point(data=select, aes(x,y))+#
+geom_text(data=select, aes(x,y, label=species), size=2, position=position_nudge(x=diff(range(spread$x))*0.07, y=diff(range(spread$y))*0.01))+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+labs(x="principal component 1", y="principal component 2")+#
+scale_radius(range=c(0,3))
+# 2D spread....#
+points<-cbind(space, abun=dat$Abundance.GBR, species=dat$species)#
+#
+use<-points[,c("x","y")]#
+#use<-points[points$abun=="common",c("x","y")] # only common species#
+#
+n <- nrow(use) # total species#
+s <- 30  # species selected#
+spread<-voronoiFilter(use, s)#
+spread$species<-points$species[as.numeric(rownames(spread))]#
+#
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_text(data=spread, aes(x,y, label=species), size=2, position=position_nudge(x=diff(range(spread$x))*0.07, y=diff(range(spread$y))*0.01))+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
+labs(x="principal component 1", y="principal component 2")#
+# Find nearest neighbours in each node...#
+library("FNN")#
+library("reshape2")#
+#
+n=7#
+#gower<-gowdis(dat[,cats])#
+knn<-get.knn(points[,c("x","y")],k=n)$nn.index#
+near<-NULL#
+for(x in 1:n){#
+col<-dat$species[knn[,x]]#
+near<-cbind(near, x=col)}#
+colnames(near)<-paste("n", seq(1:n), sep="")#
+near<-as.data.frame(near)#
+near$species <- dat$species#
+near<-near[near$species %in% spread$species,]#
+near$group<-c(1:nrow(near))#
+near<-melt(near, id.var=c("group", "species"), value.name="near")#
+near[,c("x1","y1")]<-points[match(near$species, points$species),c("x","y")]#
+near[,c("x2","y2")]<-points[match(near$near, points$species), c("x","y")]#
+head(near)#
+#
+# remove duplicates#
+near<-near[!near$near %in% near$species,]#
+near<-near[!duplicated(near$near),]#
+#
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_segment(data=near, aes(x=x1, y=y1, xend=x2, yend=y2), size=0.1)+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
+labs(x="principal component 1", y="principal component 2")
+# Desirability index (out of 100)#
+############################
+# 50 points for common (categorical - ctb)#
+# 20 points for large size (ranked)#
+# 15 points for large range (ranked)#
+# 15 points for old (top 75% quartile)#
+# restorability ?#
+colnames(dat)#
+#
+# abundance #
+dat$D.abun<-ifelse(dat$Abundance.GBR=="common", 50, ifelse(dat$Abundance.GBR=="uncommon", 10, 0))#
+#
+# colony size#
+dat$D.size<-dat$cat_colonydiameter/max(dat$cat_colonydiameter)*20#
+#
+# range size#
+#qR<-quantile(dat$Range.size,0.25)#
+#dat$D.rang<-ifelse(dat$Range.size>qR, 15, 0)#
+#hist(dat$Range.size)#
+#abline(v=qR)#
+dat$D.range<-dat$Range.size/max(dat$Range.size)*15#
+#
+# genus age #
+#hist(log10(dat$Species.age.phylogeny))#
+#hist(log10(dat$Genus.fossil.age))#
+#qA<-quantile(dat$Genus.fossil.age,0.25, na.rm=T)#
+#dat$D.age<-ifelse(dat$Genus.fossil.age>qA, 15, 0)#
+#dat$D.age[is.na(dat$D.age)]<-15 # benefit of doubt#
+dat$D.age<-dat$Genus.fossil.age/max(dat$Genus.fossil.age, na.rm=T)*10#
+#Species.age.phylogeny#
+dat$D.age2<-dat$Species.age.phylogeny/max(dat$Species.age.phylogeny, na.rm=T)*5#
+#
+dat$D.index<-dat$D.abun+dat$D.size+dat$D.rang+dat$D.age+dat$D.age2#
+# Most desirable in each group#
+#
+des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
+des<-des[order(as.numeric(des$group)),]#
+des$D.index<-dat$D.index[match(des$species, dat$species)]#
+#
+d.agg<-aggregate(D.index~group, des, max)#
+d.max<-merge(d.agg, des)#
+d.max[order(as.numeric(d.max$group)),]#
+nrow(d.max)#
+#
+points$D.index<-dat$D.index[match(points$species, dat$species)]#
+select<-points[points$species %in% d.max$species,]#
+#
+ggplot()+#
+geom_point(data=points, aes(x,y, size=D.index), shape=21, col="grey")+#
+geom_point(data=select, aes(x,y))+#
+geom_text(data=select, aes(x,y, label=species), size=2, position=position_nudge(x=diff(range(spread$x))*0.07, y=diff(range(spread$y))*0.01))+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+labs(x="principal component 1", y="principal component 2")+#
+scale_radius(range=c(0,3))
+# 2D spread....#
+points<-cbind(space, abun=dat$Abundance.GBR, species=dat$species)#
+#
+use<-points[,c("x","y")]#
+#use<-points[points$abun=="common",c("x","y")] # only common species#
+#
+n <- nrow(use) # total species#
+s <- 20  # species selected#
+spread<-voronoiFilter(use, s)#
+spread$species<-points$species[as.numeric(rownames(spread))]#
+#
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_text(data=spread, aes(x,y, label=species), size=2, position=position_nudge(x=diff(range(spread$x))*0.07, y=diff(range(spread$y))*0.01))+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
+labs(x="principal component 1", y="principal component 2")#
+# Find nearest neighbours in each node...#
+library("FNN")#
+library("reshape2")#
+#
+n=7#
+#gower<-gowdis(dat[,cats])#
+knn<-get.knn(points[,c("x","y")],k=n)$nn.index#
+near<-NULL#
+for(x in 1:n){#
+col<-dat$species[knn[,x]]#
+near<-cbind(near, x=col)}#
+colnames(near)<-paste("n", seq(1:n), sep="")#
+near<-as.data.frame(near)#
+near$species <- dat$species#
+near<-near[near$species %in% spread$species,]#
+near$group<-c(1:nrow(near))#
+near<-melt(near, id.var=c("group", "species"), value.name="near")#
+near[,c("x1","y1")]<-points[match(near$species, points$species),c("x","y")]#
+near[,c("x2","y2")]<-points[match(near$near, points$species), c("x","y")]#
+head(near)#
+#
+# remove duplicates#
+near<-near[!near$near %in% near$species,]#
+near<-near[!duplicated(near$near),]#
+#
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_segment(data=near, aes(x=x1, y=y1, xend=x2, yend=y2), size=0.1)+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
+labs(x="principal component 1", y="principal component 2")
+# Desirability index (out of 100)#
+############################
+# 50 points for common (categorical - ctb)#
+# 20 points for large size (ranked)#
+# 15 points for large range (ranked)#
+# 15 points for old (top 75% quartile)#
+# restorability ?#
+colnames(dat)#
+#
+# abundance #
+dat$D.abun<-ifelse(dat$Abundance.GBR=="common", 50, ifelse(dat$Abundance.GBR=="uncommon", 10, 0))#
+#
+# colony size#
+dat$D.size<-dat$cat_colonydiameter/max(dat$cat_colonydiameter)*20#
+#
+# range size#
+#qR<-quantile(dat$Range.size,0.25)#
+#dat$D.rang<-ifelse(dat$Range.size>qR, 15, 0)#
+#hist(dat$Range.size)#
+#abline(v=qR)#
+dat$D.range<-dat$Range.size/max(dat$Range.size)*15#
+#
+# genus age #
+#hist(log10(dat$Species.age.phylogeny))#
+#hist(log10(dat$Genus.fossil.age))#
+#qA<-quantile(dat$Genus.fossil.age,0.25, na.rm=T)#
+#dat$D.age<-ifelse(dat$Genus.fossil.age>qA, 15, 0)#
+#dat$D.age[is.na(dat$D.age)]<-15 # benefit of doubt#
+dat$D.age<-dat$Genus.fossil.age/max(dat$Genus.fossil.age, na.rm=T)*10#
+#Species.age.phylogeny#
+dat$D.age2<-dat$Species.age.phylogeny/max(dat$Species.age.phylogeny, na.rm=T)*5#
+#
+dat$D.index<-dat$D.abun+dat$D.size+dat$D.rang+dat$D.age+dat$D.age2#
+# Most desirable in each group#
+#
+des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
+des<-des[order(as.numeric(des$group)),]#
+des$D.index<-dat$D.index[match(des$species, dat$species)]#
+#
+d.agg<-aggregate(D.index~group, des, max)#
+d.max<-merge(d.agg, des)#
+d.max[order(as.numeric(d.max$group)),]#
+nrow(d.max)#
+#
+points$D.index<-dat$D.index[match(points$species, dat$species)]#
+select<-points[points$species %in% d.max$species,]#
+#
+ggplot()+#
+geom_point(data=points, aes(x,y, size=D.index), shape=21, col="grey")+#
+geom_point(data=select, aes(x,y))+#
+geom_text(data=select, aes(x,y, label=species), size=2, position=position_nudge(x=diff(range(spread$x))*0.07, y=diff(range(spread$y))*0.01))+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+labs(x="principal component 1", y="principal component 2")+#
+scale_radius(range=c(0,3))
+# 2D spread....#
+points<-cbind(space, abun=dat$Abundance.GBR, species=dat$species)#
+#
+use<-points[,c("x","y")]#
+#use<-points[points$abun=="common",c("x","y")] # only common species#
+#
+n <- nrow(use) # total species#
+s <- 40  # species selected#
+spread<-voronoiFilter(use, s)#
+spread$species<-points$species[as.numeric(rownames(spread))]#
+#
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_text(data=spread, aes(x,y, label=species), size=2, position=position_nudge(x=diff(range(spread$x))*0.07, y=diff(range(spread$y))*0.01))+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
+labs(x="principal component 1", y="principal component 2")#
+# Find nearest neighbours in each node...#
+library("FNN")#
+library("reshape2")#
+#
+n=7#
+#gower<-gowdis(dat[,cats])#
+knn<-get.knn(points[,c("x","y")],k=n)$nn.index#
+near<-NULL#
+for(x in 1:n){#
+col<-dat$species[knn[,x]]#
+near<-cbind(near, x=col)}#
+colnames(near)<-paste("n", seq(1:n), sep="")#
+near<-as.data.frame(near)#
+near$species <- dat$species#
+near<-near[near$species %in% spread$species,]#
+near$group<-c(1:nrow(near))#
+near<-melt(near, id.var=c("group", "species"), value.name="near")#
+near[,c("x1","y1")]<-points[match(near$species, points$species),c("x","y")]#
+near[,c("x2","y2")]<-points[match(near$near, points$species), c("x","y")]#
+head(near)#
+#
+# remove duplicates#
+near<-near[!near$near %in% near$species,]#
+near<-near[!duplicated(near$near),]#
+#
+ggplot()+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
+geom_point(data=spread, aes(x,y))+#
+geom_segment(data=near, aes(x=x1, y=y1, xend=x2, yend=y2), size=0.1)+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+annotation_custom(ggplotGrob(#
+ggplot()+#
+geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
+geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
+geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
+xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
+labs(x="principal component 1", y="principal component 2")#
+# Desirability index (out of 100)#
+############################
+# 50 points for common (categorical - ctb)#
+# 20 points for large size (ranked)#
+# 15 points for large range (ranked)#
+# 15 points for old (top 75% quartile)#
+# restorability ?#
+colnames(dat)#
+#
+# abundance #
+dat$D.abun<-ifelse(dat$Abundance.GBR=="common", 50, ifelse(dat$Abundance.GBR=="uncommon", 10, 0))#
+#
+# colony size#
+dat$D.size<-dat$cat_colonydiameter/max(dat$cat_colonydiameter)*20#
+#
+# range size#
+#qR<-quantile(dat$Range.size,0.25)#
+#dat$D.rang<-ifelse(dat$Range.size>qR, 15, 0)#
+#hist(dat$Range.size)#
+#abline(v=qR)#
+dat$D.range<-dat$Range.size/max(dat$Range.size)*15#
+#
+# genus age #
+#hist(log10(dat$Species.age.phylogeny))#
+#hist(log10(dat$Genus.fossil.age))#
+#qA<-quantile(dat$Genus.fossil.age,0.25, na.rm=T)#
+#dat$D.age<-ifelse(dat$Genus.fossil.age>qA, 15, 0)#
+#dat$D.age[is.na(dat$D.age)]<-15 # benefit of doubt#
+dat$D.age<-dat$Genus.fossil.age/max(dat$Genus.fossil.age, na.rm=T)*10#
+#Species.age.phylogeny#
+dat$D.age2<-dat$Species.age.phylogeny/max(dat$Species.age.phylogeny, na.rm=T)*5#
+#
+dat$D.index<-dat$D.abun+dat$D.size+dat$D.rang+dat$D.age+dat$D.age2#
+# Most desirable in each group#
+#
+des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
+des<-des[order(as.numeric(des$group)),]#
+des$D.index<-dat$D.index[match(des$species, dat$species)]#
+#
+d.agg<-aggregate(D.index~group, des, max)#
+d.max<-merge(d.agg, des)#
+d.max[order(as.numeric(d.max$group)),]#
+nrow(d.max)#
+#
+points$D.index<-dat$D.index[match(points$species, dat$species)]#
+select<-points[points$species %in% d.max$species,]#
+#
+ggplot()+#
+geom_point(data=points, aes(x,y, size=D.index), shape=21, col="grey")+#
+geom_point(data=select, aes(x,y))+#
+geom_text(data=select, aes(x,y, label=species), size=2, position=position_nudge(x=diff(range(spread$x))*0.07, y=diff(range(spread$y))*0.01))+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+labs(x="principal component 1", y="principal component 2")+#
+scale_radius(range=c(0,3))
+head(select)
+knn2<-get.knn(select[,c("x","y")],k=nrow(select))
+knn2<-get.knn(select[,c("x","y")],k=nrow(select)-1)
+knn2
+knn2<-get.knn(select[,c("x","y")],k=nrow(select)-1)$nn.dist#
+head(knn2)
+daisy(select[,c("x","y")],dist="euclidean")
+library("vegan")#
+#
+# self thinning... #
+# find closest pairs, remove lowest D.index#
+head(select)#
+knn2<-daisy(select[,c("x","y")],dist="euclidean")
+dist(select[,c("x","y")])
+# self thinning... #
+# find closest pairs, remove lowest D.index#
+head(select)#
+rownames(select)<-select$species#
+knn2<-dist(select[,c("x","y")])
+# self thinning... #
+# find closest pairs, remove lowest D.index#
+head(select)#
+rownames(select)<-select$species#
+knn2<-melt(dist(select[,c("x","y")]))#
+head(knn2)
+dist(select[,c("x","y")])
+dist(select[,c("x","y")])
+# self thinning... #
+# find closest pairs, remove lowest D.index#
+head(select)#
+rownames(select)<-select$species#
+knn2<-data.frame(dist(select[,c("x","y")]))#
+head(knn2)
+as.matrix(dist(select[,c("x","y")]))
+rownames(select)<-select$species#
+knn2<-as.matrix(dist(select[,c("x","y")]))#
+#head(knn2)#
+#
+diag(knn2)
+lower.tri(x, diag = FALSE)
+lower.tri(knn2, diag = FALSE)
+# self thinning... #
+# find closest pairs, remove lowest D.index#
+head(select)#
+rownames(select)<-select$species#
+knn2<-as.matrix(dist(select[,c("x","y")]))#
+#head(knn2)#
+knn2[lower.tri(knn2, diag = FALSE),]
+# self thinning... #
+# find closest pairs, remove lowest D.index#
+head(select)#
+rownames(select)<-select$species#
+knn2<-as.matrix(dist(select[,c("x","y")]))#
+#head(knn2)#
+knn2[lower.tri(knn2, diag = FALSE)]
+# self thinning... #
+# find closest pairs, remove lowest D.index#
+head(select)#
+rownames(select)<-select$species#
+knn2<-as.matrix(dist(select[,c("x","y")]))#
+#head(knn2)#
+knn2[lower.tri(knn2, diag = FALSE),]
+# self thinning... #
+# find closest pairs, remove lowest D.index#
+head(select)#
+rownames(select)<-select$species#
+knn2<-as.matrix(dist(select[,c("x","y")]))#
+#head(knn2)#
+knn2[lower.tri(knn2, diag = FALSE)]<-NA
+knn2
+# self thinning... #
+# find closest pairs, remove lowest D.index#
+head(select)#
+rownames(select)<-select$species#
+knn2<-as.matrix(dist(select[,c("x","y")]))#
+#head(knn2)#
+knn2[upper.tri(knn2, diag = FALSE)]<-NA#
+#
+knn2
+# self thinning... #
+# find closest pairs, remove lowest D.index#
+head(select)#
+rownames(select)<-select$species#
+knn2<-as.matrix(dist(select[,c("x","y")]))#
+knn2[upper.tri(knn2, diag = FALSE)]<-NA#
+knn2<-melt(knn2)#
+knn2<-knn2[!is.na(knn2),]
+knn2
+# self thinning... #
+# find closest pairs, remove lowest D.index#
+head(select)#
+rownames(select)<-select$species#
+knn2<-as.matrix(dist(select[,c("x","y")]))#
+knn2[upper.tri(knn2, diag = FALSE)]<-NA#
+knn2<-melt(knn2)#
+knn2<-knn2[!is.na(knn2)]#
+knn2
+# self thinning... #
+# find closest pairs, remove lowest D.index#
+head(select)#
+rownames(select)<-select$species#
+knn2<-as.matrix(dist(select[,c("x","y")]))#
+knn2[upper.tri(knn2, diag = FALSE)]<-NA#
+knn2<-melt(knn2)#
+#knn2<-knn2[!is.na(knn2)]#
+knn2
+# self thinning... #
+# find closest pairs, remove lowest D.index#
+head(select)#
+rownames(select)<-select$species#
+knn2<-as.matrix(dist(select[,c("x","y")]))#
+knn2[upper.tri(knn2, diag = FALSE)]<-NA#
+knn2<-melt(knn2)#
+knn2<-knn2[!is.na(knn2$value)]#
+knn2
+# self thinning... #
+# find closest pairs, remove lowest D.index#
+head(select)#
+rownames(select)<-select$species#
+knn2<-as.matrix(dist(select[,c("x","y")]))#
+knn2[upper.tri(knn2, diag = FALSE)]<-NA#
+knn2<-melt(knn2)#
+head(knn2)
+# self thinning... #
+# find closest pairs, remove lowest D.index#
+head(select)#
+rownames(select)<-select$species#
+knn2<-as.matrix(dist(select[,c("x","y")]))#
+knn2[upper.tri(knn2, diag = TRUE)]<-NA#
+knn2<-melt(knn2)#
+head(knn2)
+knn2<-knn2[!is.na(knn2$value)]
+# self thinning... #
+# find closest pairs, remove lowest D.index#
+head(select)#
+rownames(select)<-select$species#
+knn2<-as.matrix(dist(select[,c("x","y")]))#
+knn2[upper.tri(knn2, diag = TRUE)]<-NA#
+knn2<-melt(knn2)#
+head(knn2)#
+knn2<-knn2[!is.na(knn2$value),]#
+knn2
+# self thinning... #
+# find closest pairs, remove lowest D.index#
+head(select)#
+rownames(select)<-select$species#
+knn2<-as.matrix(dist(select[,c("x","y")]))#
+knn2[upper.tri(knn2, diag = TRUE)]<-NA#
+knn2<-melt(knn2)#
+knn2<-knn2[!is.na(knn2$value),]#
+head(knn2)
+# find closest pairs, remove lowest D.index#
+head(select)#
+rownames(select)<-select$species#
+knn2<-as.matrix(dist(select[,c("x","y")]))#
+knn2[upper.tri(knn2, diag = TRUE)]<-NA#
+knn2<-melt(knn2, value.name="dist")#
+knn2<-knn2[!is.na(knn2$value),]#
+head(knn2)
+# self thinning... #
+# find closest pairs, remove lowest D.index#
+head(select)#
+rownames(select)<-select$species#
+knn2<-as.matrix(dist(select[,c("x","y")]))#
+knn2[upper.tri(knn2, diag = TRUE)]<-NA#
+knn2<-melt(knn2)#
+knn2<-knn2[!is.na(knn2$value),]#
+head(knn2)
+knn2[order(knn2$value),]
+pairs<-knn2[order(knn2$value),]
+head(pairs)
+pairs<-knn2[order(knn2$value),]#
+head(pairs)
+# self thinning... #
+# find closest pairs, remove lowest D.index#
+head(select)#
+rownames(select)<-select$species#
+knn2<-as.matrix(dist(select[,c("x","y")]))#
+knn2[upper.tri(knn2, diag = TRUE)]<-NA#
+knn2<-melt(knn2)#
+knn2<-knn2[!is.na(knn2$value),]#
+#
+pairs<-knn2[order(knn2$value),]#
+head(pairs)
+c(1:s)
+c(1:s)
+pairs<-knn2[order(knn2$value),][c(1:20),]#
+head(pairs)
+pairs
+pairs<-knn2[order(knn2$value),][c(1:20),]#
+pairs
+pairs$D1<-dat$D.index[match(pairs$Var1, dat$species)]
+pairs<-knn2[order(knn2$value),][c(1:20),]#
+pairs$D1<-dat$D.index[match(pairs$Var1, dat$species)]#
+pairs
+pairs<-knn2[order(knn2$value),][c(1:20),]#
+pairs$D1<-dat$D.index[match(pairs$Var1, dat$species)]#
+pairs$D2<-dat$D.index[match(pairs$Var1, dat$species)]#
+pairs
+pairs<-knn2[order(knn2$value),][c(1:20),]#
+pairs$D1<-dat$D.index[match(pairs$Var1, dat$species)]#
+pairs$D2<-dat$D.index[match(pairs$Var2, dat$species)]#
+pairs
+# range size#
+#qR<-quantile(dat$Range.size,0.25)#
+#dat$D.rang<-ifelse(dat$Range.size>qR, 15, 0)#
+#hist(dat$Range.size)#
+#abline(v=qR)#
+dat$D.range<-dat$Range.size/max(dat$Range.size)*15#
+#
+# genus age #
+#hist(log10(dat$Species.age.phylogeny))#
+#hist(log10(dat$Genus.fossil.age))#
+#qA<-quantile(dat$Genus.fossil.age,0.25, na.rm=T)#
+#dat$D.age<-ifelse(dat$Genus.fossil.age>qA, 15, 0)#
+dat$D.age<-dat$Genus.fossil.age/max(dat$Genus.fossil.age, na.rm=T)*10#
+dat$D.age[is.na(dat$D.age)]<-15 # benefit of doubt#
+#Species.age.phylogeny#
+dat$D.age2<-dat$Species.age.phylogeny/max(dat$Species.age.phylogeny, na.rm=T)*5#
+#
+dat$D.index<-dat$D.abun+dat$D.size+dat$D.rang+dat$D.age+dat$D.age2#
+# Most desirable in each group#
+#
+des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
+des<-des[order(as.numeric(des$group)),]#
+des$D.index<-dat$D.index[match(des$species, dat$species)]#
+#
+d.agg<-aggregate(D.index~group, des, max)#
+d.max<-merge(d.agg, des)#
+d.max[order(as.numeric(d.max$group)),]#
+nrow(d.max)#
+#
+points$D.index<-dat$D.index[match(points$species, dat$species)]#
+select<-points[points$species %in% d.max$species,]#
+#
+ggplot()+#
+geom_point(data=points, aes(x,y, size=D.index), shape=21, col="grey")+#
+geom_point(data=select, aes(x,y))+#
+geom_text(data=select, aes(x,y, label=species), size=2, position=position_nudge(x=diff(range(spread$x))*0.07, y=diff(range(spread$y))*0.01))+#
+theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
+labs(x="principal component 1", y="principal component 2")+#
+scale_radius(range=c(0,3))
+# self thinning... #
+# find closest pairs, remove lowest D.index#
+head(select)#
+rownames(select)<-select$species#
+knn2<-as.matrix(dist(select[,c("x","y")]))#
+knn2[upper.tri(knn2, diag = TRUE)]<-NA#
+knn2<-melt(knn2)#
+knn2<-knn2[!is.na(knn2$value),]#
+#
+pairs<-knn2[order(knn2$value),][c(1:20),]#
+pairs$D1<-dat$D.index[match(pairs$Var1, dat$species)]#
+pairs$D2<-dat$D.index[match(pairs$Var2, dat$species)]#
+pairs
+# self thinning... #
+# find closest pairs, remove lowest D.index#
+head(select)#
+rownames(select)<-select$species#
+knn2<-as.matrix(dist(select[,c("x","y")]))#
+knn2[upper.tri(knn2, diag = TRUE)]<-NA#
+knn2<-melt(knn2)#
+knn2<-knn2[!is.na(knn2$value),]#
+#
+pairs<-knn2[order(knn2$value),][c(1:25),]#
+pairs$D1<-dat$D.index[match(pairs$Var1, dat$species)]#
+pairs$D2<-dat$D.index[match(pairs$Var2, dat$species)]#
+pairs
+# self thinning... #
+# find closest pairs, remove lowest D.index#
+head(select)#
+rownames(select)<-select$species#
+knn2<-as.matrix(dist(select[,c("x","y")]))#
+knn2[upper.tri(knn2, diag = TRUE)]<-NA#
+knn2<-melt(knn2)#
+knn2<-knn2[!is.na(knn2$value),]#
+#
+pairs<-knn2[order(knn2$value),][c(1:15),]#
+pairs$D1<-dat$D.index[match(pairs$Var1, dat$species)]#
+pairs$D2<-dat$D.index[match(pairs$Var2, dat$species)]#
+pairs
+min(c(pairs$D1, pairs$D2))
+min(c(pairs$D1, pairs$D2))

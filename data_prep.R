@@ -19,6 +19,7 @@ matches<-pnas$species[match(ctb$species, pnas$species)]
 ctb$species[is.na(matches)] # ctb species NOT found in pnas data
 # find out where these 4 are.. but remove for now
 
+
 # narrow ctb data to that that match 
 ctb<-ctb[!is.na(matches),]
 nrow(ctb)
@@ -30,6 +31,7 @@ nrow(pnas)
 # select traits of interest
 colnames(ctb)
 raw<-ctb[,c("species", "Genus.fossil.age","Species.age.phylogeny","Abundance.GBR", "Range.size", "Growth.form.typical","Corallite.width.maximum","Colony.maximum.diameter", "Growth.rate","Oocyte.size.at.maturity","Skeletal.density","Substrate.attachment", "Coloniality", "Mode.of.larval.development","Sexual.system", "Symbiodinium.sp..in.propagules", "Water.clarity.preference", "Polyps.per.area")]
+head(raw)
 
 colnames(pnas)
 cats<-pnas[,c("species", "genus","domain","cat_growthrate", "cat_corallitesize", "cat_colonydiameter" , "cat_skeletaldensity", "cat_colonyheight","cat_SA_vol", "cat_spacesize", "dat_growth", "dat_skeletal", "dat_corallite" ,"dat_colonydiameter", "reproductive_mode")]
@@ -38,6 +40,7 @@ head(raw)
 
 dat<-merge(raw, cats, by="species")
 head(dat)
+tail(dat)
 nrow(dat)
 
 

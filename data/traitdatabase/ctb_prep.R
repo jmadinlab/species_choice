@@ -1,6 +1,4 @@
 
-library("ggplot2")
-library("cowplot")
 
 
 # download: 
@@ -10,6 +8,7 @@ library("cowplot")
 # use "subset by class", tick all boxes, click "download"
 # for each class, create a seperate folder
 ##############################################################
+
 
 
 
@@ -40,6 +39,24 @@ all<-all[,c("specie_name","specie_id", "location_name","trait_name", "trait_id",
 
 
 
+
+
+# remove unaccepted/outdated species
+##############################################################
+all<-all[!all$specie_name=="Stylophora mordax",]
+all<-all[!all$specie_name=="Turbinaria crater",]#inquirendum
+# change outdated species
+all$specie_name[all$specie_name=="Lobophyllia pachysepta"]<-"Acanthastrea pachysepta"
+all$specie_name[all$specie_name=="Parascolymia rowleyensis"]<-"Lobophyllia rowleyensis"
+all$specie_name[all$specie_name=="Parascolymia vitiensis"]<-"Lobophyllia vitiensis"
+# profundacella = superficialis
+all<-all[!all$specie_name=="Psammocora profundacella",]
+all$specie_name[all$specie_name=="Psammocora superficialis"]<-"Psammocora profundacella"
+
+
+
+
+
 # observations/species per trait
 ##############################################################
 # observations
@@ -47,7 +64,8 @@ obs<-aggregate(all$trait_name, by=c(trait=list(all$trait_name)), FUN=length)
 obs<-subset(obs, trait!="Water depth")
 obs<-subset(obs, trait!="Season")
 obs<-subset(obs, trait!="Bleaching event")
-obsplot<-ggplot(obs)+geom_bar(aes(x=reorder(trait, -x), x), stat="identity")+
+obsplot<-ggplot(obs)+
+geom_bar(aes(x=reorder(trait, -x), x), stat="identity")+
 theme(axis.text.x=element_text(angle=45, size=6, hjust=1))+
 labs(y="N observations (log-scale)",x="trait")+scale_y_log10()
 obsplot
@@ -433,15 +451,7 @@ head(combine)
 
 
 
-# remove unaccepted species
-combine<-combine[!combine$species=="Stylophora mordax",]
-combine<-combine[!combine$species=="Turbinaria crater",]#inquirendum
 
-# change outdated species
-combine$species[combine$species=="Lobophyllia pachysepta"]<-"Acanthastrea pachysepta"
-combine$species[combine$species=="Parascolymia rowleyensis"]<-"Lobophyllia rowleyensis"
-combine$species[combine$species=="Parascolymia vitiensis"]<-"Lobophyllia vitiensis"
-combine$species[combine$species=="Psammocora superficialis"]<-"Psammocora profundacella"
 
 
 
