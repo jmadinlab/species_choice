@@ -1,26 +1,35 @@
 
-# -- mike wd -- #
+# -- mike wd -- # You really got to stop doing this! 
 #setwd("/Users/mikemcwilliam/Documents/PostDoc/species_choice")
+
 
 library("ggplot2")
 library("cowplot")
 source("data_prep.R")
 
-
 # Anyalsis
-library(tripack)
+
 source("R/functions.R")
 library("FD")
 
 # points selection
-#n <- 100 # total species
-#s <- 20  # species selected
-#dat <- data.frame(x=rnorm(n), y=rnorm(n))
-#plot(y ~ x, dat, col="grey")
-# random
-#points(y ~ x, dat[sample(1:n, s, replace=FALSE),], col="red", pch=20, cex=0.6)
-# most evenly spread
-#points(y ~ x, voronoiFilter(dat, s), col="blue", pch=20, cex=0.6)
+
+n <- 150 # total species
+s <- 20  # species selected
+dat <- data.frame(x=rnorm(n), y=rnorm(n), z=rnorm(n))
+dat$abund <- rlnorm(n, log(10), log(2.5))
+dat$abund <- dat$abund / max(dat$abund)
+
+plot(y ~ x, dat, col="grey", cex=1 + dat$abund*5)
+
+dat2D <- voronoiFilter(dat, s)
+# dat3D <- voronoiFilter3D(dat, s)
+dat2Da <- voronoiFilterAb(dat, s)
+
+points(y ~ x, dat2D, col="blue", pch=20, cex=0.6)
+# points(y ~ x, dat3D, col="red", pch=3)
+points(y ~ x, dat2Da, col="red", pch=3)
+legend("topleft", pch=c(0, 20, 3), col=c("grey", "blue", "red"), bty="n", legend=c("species and abundance", "even spread alone", "even spread acct. abundance"), cex=0.6)
 
 
 # select traits
@@ -30,7 +39,14 @@ colnames(dat)
 
 cats<-c("cat_growthrate", "cat_corallitesize", "cat_colonydiameter" , "cat_skeletaldensity", "cat_colonyheight","cat_SA_vol", "cat_spacesize")
 
+library(rgl)
+pp <- scatterplot3d(dat, angle=55, phi=20)
+pp$points3d(dat2D, col="blue", pch=20, cex=0.6)
+pp$points3d(dat3D, col="red", pch=3)
 
+plot3d( x = dat, type="s", radius=0.1, col=rgb(0,0,0,0.1))
+spheres3d(x = dat2D, col = "red", radius = 0.2, alpha=0.3)
+spheres3d(x = dat3D, col = "blue", radius = 0.2, alpha=0.3)
 
 # generate components
 
