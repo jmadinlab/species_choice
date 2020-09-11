@@ -1,6 +1,6 @@
 # Functions
 library(tripack)
-library(geometry)
+
 
 voronoiFilter <- function(dat, s) {
   subset <- dat
@@ -8,7 +8,7 @@ voronoiFilter <- function(dat, s) {
   for (i in 1:(nrow(dat)-s)) {
     v <- voronoi.mosaic(x=subset[,'x'], y=subset[,'y'], duplicate='error')
     info <- cells(v)
-    areas <- unlist(lapply(info,function(x) x$area))
+    areas <- unlist(lapply(info, function(x) x$area))
     smallest <- which(areas == min(areas, na.rm=TRUE))
     dropped <- c(dropped, which(paste(dat[,'x'], dat[,'y'], sep='_') == paste(subset[smallest,'x'], subset[smallest,'y'], sep='_')))
     subset <- subset[-smallest,]
@@ -41,7 +41,23 @@ voronoiFilter3D <- function(dat, s) {
   return(dat[-dropped,])
 }
 
+# 
 
-
-
-
+voronoiFilterAb <- function(dat, s) {
+  subset <- dat
+  dropped <- vector()
+  for (i in 1:(nrow(dat)-s)) {
+    v <- voronoi.mosaic(x=subset[,'x'], y=subset[,'y'], duplicate='error')
+    info <- cells(v)
+    areas <- unlist(lapply(info, function(x) x$area))
+    
+    # Incorporating relative abundance (b/w 0 and 1) simply by multiplying with area
+    areas <- areas * subset$abund
+    
+    # Find smallest value, no longer just the voronoi area
+    smallest <- which(areas == min(areas, na.rm=TRUE))
+    dropped <- c(dropped, which(paste(dat[,'x'], dat[,'y'], sep='_') == paste(subset[smallest,'x'], subset[smallest,'y'], sep='_')))
+    subset <- subset[-smallest,]
+  }
+  return(dat[-dropped,])
+}
