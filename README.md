@@ -5,8 +5,6 @@ This analysis is about hedging our bets for the future. The aim is to construct 
  2.  **maximimum** regional abundance, geographic range, and extinction survival
  3. Ideally, the high range of trait space will also capture a high genetic and phylogenetic diversity, and a range of sensitivities to future stressors. This can be tested later.
 
-
-
 # Analysis
 
 #### Step 1: Construct trait space
@@ -23,47 +21,37 @@ We used trait data from [this paper](https://www.pnas.org/content/115/12/3084.sh
 
 Figure 3 of the original paper shows that a PCoA (principal coordinates analysis) of these traits separates out the major morphological groups, and that the GBR has different occupancy to the Caribbean due to the lack of branching corals. Each point is a species and the contours show dense clusters:
 
-<img src="figs/pnas.png" alt="drawing" width="300"/>
+<p align="center">
+<img src="figs/pnas.png" alt="drawing" width="300"/> </p>
 <br/>
- <br/>
-  <br/>
 
+The trait vectors indicate the areas of trait space that bring high trait values. The axes reflect trade-offs, e.g. between growth and corallite size on axis 1, which captures a range of demographic and physiological variation, and height and skeletal density/surface area on axis 2:
 
-The trait vectors (see list for abbreviations) indicate which areas of trait space bring high trait values:
-
-<img src="figs/vectors.png" alt="drawing" width="500"/>
+<p align="center">
+<img src="figs/vectors.png" alt="drawing" width="400"/> </p>
 <br/>
- <br/>
-  <br/>
 
-The axes reveal trade-offs such as the negative relationship between growth and corallite size on axis 1, which captures a range of important demographic and physiological variation. Axis 2 is driven by a negative relationship between height and skeletal density/surface area. A third axis (not shown) aligns closely with maximum size.
 
 #### Step 2: Find species with high spread
 
 To generate species (points) with maximum spread in trait space we used [voronoi mosaics](https://en.wikipedia.org/wiki/Voronoi_diagram), which evenly partition the space between neighbouring points, and uses partitions to construct cells for each point:
 
-<img src="figs/voronoi.png" alt="drawing" width="300"/>
+<p align="center">
+<img src="figs/voronoi.png" alt="drawing" width="300"/> </p>
  <br/>
-  <br/>
-   <br/>
 
 By gradually removing the points occupying the smallest cells we are left with points with maximum spread. When we apply this function to trait space using **20 species**, it looks like this:
 
-
-<img src="figs/figure1.png" alt="drawing" width="500"/>
+<p align="center">
+<img src="figs/figure1.png" alt="drawing" width="400"/> </p>
  <br/>
-  <br/>
-   <br/>
-
 
 Including more dimensions captures more trait variation, which is especially important in this trait space where the third principal component aligns strongly with colony size. Therefore, it may be more informative to construct this analysis in three dimensions:
 
-
-<img src="figs/figure2.png" alt="drawing" width="300"/>
-
-Red = selected species.
-<br/>
- <br/>
+<p align="center">
+<img src="figs/figure2.png" alt="drawing" width="400"/> </p>
+<p align="center">
+  <b>Explore <a href=https://mikemcwilliam.github.io/webGL/index.html >here</a> </p>
   <br/>
 
 #### Step 3: Weigh species selection by "desirability" index
@@ -75,28 +63,17 @@ We still need to discuss how to do this, but for this demonstration we used the 
 - [Genus fossil age](https://coraltraits.org/traits/116) scaled between 0 and 1
 - Multiply each together to get weighting/desirability
 
-When we do this, the voronoi function changes some of it's selections to favour species with higher 'desirability' indicated by point size below:
+When we do this, the voronoi function changes some of it's selections to favour species with higher 'desirability' indicated by point size below.
 
-<img src="figs/figure3.png" alt="drawing" width="500"/>
+<p align="center">
+<img src="figs/figure3.png" alt="drawing" width="400"/> </p>
 <br/>
- <br/>
-  <br/>
-
 
 Which gives the following species:
 
-<img src="figs/species.png" alt="drawing" width="500"/>
+<p align="center">
+<img src="figs/species.png" alt="drawing" width="400"/> </p>
 <br/>
- <br/>
-  <br/>
-
-
-
-
-
-
-
-
 
 #### Step 4: Do species represent potential winners, losers or both?
 
@@ -104,23 +81,9 @@ We had a quick look at this question using bleaching sensitivity index using dat
 
 The selected species (red points) have a large range of bleaching sensitivities compared to the total distribution (histogram), but they do not include the most sensitive species:
 
-<img src="figs/BRI.png" alt="drawing" width="500"/>
+<p align="center">
+<img src="figs/BRI.png" alt="drawing" width="400"/> </p>
 <br/>
- <br/>
-  <br/>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # Still to do
 

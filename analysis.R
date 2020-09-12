@@ -1,6 +1,4 @@
 
-# -- mike wd -- # You really got to stop doing this! 
-#setwd("/Users/mikemcwilliam/Documents/PostDoc/species_choice")
 
 library("ggplot2")
 library("cowplot")
@@ -10,9 +8,6 @@ source("data_prep.R")
 
 source("R/functions.R")
 library("FD")
-
-
-
 
 # points
 ##############################
@@ -27,26 +22,20 @@ dat <- cbind(dat, space)
 
 s <- 20
 
-
-
-
 # trait vectors 
 ##############################
 library("vegan")
-# princomp
 prin<-princomp((dat[,cats]), cor = TRUE, scores = TRUE)
 pc12<-prin$scores[,1:2]
-ll<-prin$loadings
-H <- Hpi(x=pc12)      # optimal bandwidth estimation
-est<- kde(x=pc12, H=H, compute.cont=TRUE)    # kernel density estimation
+#ll<-prin$loadings
 fit<-envfit(pc12, dat[,cats]) # use envfit for drawing arrows
 fit2<-fit$vectors$arrows*-3 # drawing line segments opposite arrows
-plot( pc12[,], pch=16, cex=0.25, col="grey", add=FALSE, ylab="", xlab="", cex.axis=0.75, ylim=c(-3, 3.5), xlim=c(-4, 5),las=1) 
+
+plot( pc12[,], pch=16, cex=0.5, col="grey", ylab="", xlab="", cex.axis=0.75, ylim=c(-3, 3.5), xlim=c(-4, 5),las=1) 
 plot(fit, cex=0.90, col=1, labels=list(vectors = c("GR","CW","MCS","SD","CH","SAV","R")))
 segments(0,0, fit2[,1], fit2[,2], col=1, lty=2, lwd=1)
 mtext("PC1", cex=0.75, side=1, line=0.5, adj=1)
-mtext("PC2", cex=0.75, side=2, line=0.5, at=3.5) #, las=2)
-
+mtext("PC2", cex=0.75, side=2, line=0.5, at=3.5) 
 
 
 
@@ -55,7 +44,7 @@ mtext("PC2", cex=0.75, side=2, line=0.5, at=3.5) #, las=2)
 ##############################
 
 # Range size
-hist(dat$Range.size)
+#hist(dat$Range.size)
 dat$Range.size <- dat$Range.size / max(dat$Range.size)
 
 # Abundance
@@ -76,7 +65,7 @@ dat$BI <- runif(nrow(dat))
 dat$Genus.fossil.age[is.na(dat$Genus.fossil.age)] <- mean(dat$Genus.fossil.age, na.rm=TRUE)
 dat$genus_age <- dat$Genus.fossil.age / max(dat$Genus.fossil.age, na.rm=TRUE)
 sum(is.na(dat$Genus.fossil.age))
-hist(dat$genus_age)
+#hist(dat$genus_age)
 
 
 # 2D

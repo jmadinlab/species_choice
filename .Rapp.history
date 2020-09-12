@@ -1,445 +1,3 @@
-ggplot()+#
-geom_point(data=points, aes(x,y, size=D.index, col=D.index), shape=21, col="grey")+#
-geom_point(data=select, aes(x,y))+#
-theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
-labs(x="principal component 1", y="principal component 2")+#
-scale_radius(range=c(0,3))
-ggplot()+#
-geom_point(data=points, aes(x,y, size=D.index, col=D.index), shape=21)+#
-geom_point(data=select, aes(x,y))+#
-theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
-labs(x="principal component 1", y="principal component 2")+#
-scale_radius(range=c(0,3))
-ggplot()+#
-geom_point(data=points, aes(x,y, size=D.index, col=D.index), shape=21)+#
-geom_point(data=select, aes(x,y))+#
-theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
-labs(x="principal component 1", y="principal component 2")+#
-scale_radius(range=c(0,3))+#
-scale_colour_viridius()
-library("viridis")#
-#
-ggplot()+#
-geom_point(data=points, aes(x,y, size=D.index, col=D.index), shape=21)+#
-geom_point(data=select, aes(x,y))+#
-theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
-labs(x="principal component 1", y="principal component 2")+#
-scale_radius(range=c(0,3))+#
-scale_colour_viridius()
-ggplot()+#
-geom_point(data=points, aes(x,y, size=D.index, col=D.index), shape=21)+#
-geom_point(data=select, aes(x,y))+#
-theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
-labs(x="principal component 1", y="principal component 2")+#
-scale_radius(range=c(0,3))+#
-scale_colour_viridis()
-ggplot()+#
-geom_point(data=points, aes(x,y, size=D.index, col=D.index), shape=21)+#
-geom_point(data=select, aes(x,y))+#
-theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
-labs(x="principal component 1", y="principal component 2")+#
-scale_radius(range=c(0,3))
-ggplot()+#
-geom_point(data=points, aes(x,y, size=D.index), shape=21, col="grey")+#
-geom_point(data=select, aes(x,y))+#
-theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
-labs(x="principal component 1", y="principal component 2")+#
-scale_radius(range=c(0,3))
-ggplot()+#
-geom_point(data=points, aes(x,y, size=D.index), shape=21, col="grey")+#
-geom_point(data=select, aes(x,y))+#
-geom_text(data=spread, aes(x,y, label=species), size=2, position=position_nudge(x=diff(range(spread$x))*0.07, y=diff(range(spread$y))*0.01))+#
-theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
-labs(x="principal component 1", y="principal component 2")+#
-scale_radius(range=c(0,3))
-ggplot()+#
-geom_point(data=points, aes(x,y, size=D.index), shape=21, col="grey")+#
-geom_point(data=select, aes(x,y))+#
-geom_text(data=select, aes(x,y, label=species), size=2, position=position_nudge(x=diff(range(spread$x))*0.07, y=diff(range(spread$y))*0.01))+#
-theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
-labs(x="principal component 1", y="principal component 2")+#
-scale_radius(range=c(0,3))
-# 2D spread....#
-points<-cbind(space, abun=dat$Abundance.GBR, species=dat$species)#
-#
-use<-points[,c("x","y")]#
-#use<-points[points$abun=="common",c("x","y")] # only common species#
-#
-n <- nrow(use) # total species#
-s <- 30  # species selected#
-spread<-voronoiFilter(use, s)#
-spread$species<-points$species[as.numeric(rownames(spread))]#
-#
-ggplot()+#
-geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
-geom_point(data=spread, aes(x,y))+#
-geom_text(data=spread, aes(x,y, label=species), size=2, position=position_nudge(x=diff(range(spread$x))*0.07, y=diff(range(spread$y))*0.01))+#
-theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
-annotation_custom(ggplotGrob(#
-ggplot()+#
-geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
-geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
-geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
-xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
-labs(x="principal component 1", y="principal component 2")#
-# Find nearest neighbours in each node...#
-library("FNN")#
-library("reshape2")#
-#
-n=7#
-#gower<-gowdis(dat[,cats])#
-knn<-get.knn(points[,c("x","y")],k=n)$nn.index#
-near<-NULL#
-for(x in 1:n){#
-col<-dat$species[knn[,x]]#
-near<-cbind(near, x=col)}#
-colnames(near)<-paste("n", seq(1:n), sep="")#
-near<-as.data.frame(near)#
-near$species <- dat$species#
-near<-near[near$species %in% spread$species,]#
-near$group<-c(1:nrow(near))#
-near<-melt(near, id.var=c("group", "species"), value.name="near")#
-near[,c("x1","y1")]<-points[match(near$species, points$species),c("x","y")]#
-near[,c("x2","y2")]<-points[match(near$near, points$species), c("x","y")]#
-head(near)#
-#
-# remove duplicates#
-near<-near[!near$near %in% near$species,]#
-near<-near[!duplicated(near$near),]#
-#
-ggplot()+#
-geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
-geom_point(data=spread, aes(x,y))+#
-geom_segment(data=near, aes(x=x1, y=y1, xend=x2, yend=y2), size=0.1)+#
-theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
-annotation_custom(ggplotGrob(#
-ggplot()+#
-geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
-geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
-geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
-xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
-labs(x="principal component 1", y="principal component 2")
-# Desirability index (out of 100)#
-############################
-# 50 points for common (categorical - ctb)#
-# 20 points for large size (ranked)#
-# 15 points for large range (ranked)#
-# 15 points for old (top 75% quartile)#
-# restorability ?#
-colnames(dat)#
-#
-# abundance #
-dat$D.abun<-ifelse(dat$Abundance.GBR=="common", 50, ifelse(dat$Abundance.GBR=="uncommon", 10, 0))#
-#
-# colony size#
-dat$D.size<-dat$cat_colonydiameter/max(dat$cat_colonydiameter)*20#
-#
-# range size#
-#qR<-quantile(dat$Range.size,0.25)#
-#dat$D.rang<-ifelse(dat$Range.size>qR, 15, 0)#
-#hist(dat$Range.size)#
-#abline(v=qR)#
-dat$D.range<-dat$Range.size/max(dat$Range.size)*15#
-#
-# genus age #
-#hist(log10(dat$Species.age.phylogeny))#
-#hist(log10(dat$Genus.fossil.age))#
-#qA<-quantile(dat$Genus.fossil.age,0.25, na.rm=T)#
-#dat$D.age<-ifelse(dat$Genus.fossil.age>qA, 15, 0)#
-#dat$D.age[is.na(dat$D.age)]<-15 # benefit of doubt#
-dat$D.age<-dat$Genus.fossil.age/max(dat$Genus.fossil.age, na.rm=T)*10#
-#Species.age.phylogeny#
-dat$D.age2<-dat$Species.age.phylogeny/max(dat$Species.age.phylogeny, na.rm=T)*5#
-#
-dat$D.index<-dat$D.abun+dat$D.size+dat$D.rang+dat$D.age+dat$D.age2#
-# Most desirable in each group#
-#
-des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
-des<-des[order(as.numeric(des$group)),]#
-des$D.index<-dat$D.index[match(des$species, dat$species)]#
-#
-d.agg<-aggregate(D.index~group, des, max)#
-d.max<-merge(d.agg, des)#
-d.max[order(as.numeric(d.max$group)),]#
-nrow(d.max)#
-#
-points$D.index<-dat$D.index[match(points$species, dat$species)]#
-select<-points[points$species %in% d.max$species,]#
-#
-ggplot()+#
-geom_point(data=points, aes(x,y, size=D.index), shape=21, col="grey")+#
-geom_point(data=select, aes(x,y))+#
-geom_text(data=select, aes(x,y, label=species), size=2, position=position_nudge(x=diff(range(spread$x))*0.07, y=diff(range(spread$y))*0.01))+#
-theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
-labs(x="principal component 1", y="principal component 2")+#
-scale_radius(range=c(0,3))
-# 2D spread....#
-points<-cbind(space, abun=dat$Abundance.GBR, species=dat$species)#
-#
-use<-points[,c("x","y")]#
-#use<-points[points$abun=="common",c("x","y")] # only common species#
-#
-n <- nrow(use) # total species#
-s <- 20  # species selected#
-spread<-voronoiFilter(use, s)#
-spread$species<-points$species[as.numeric(rownames(spread))]#
-#
-ggplot()+#
-geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
-geom_point(data=spread, aes(x,y))+#
-geom_text(data=spread, aes(x,y, label=species), size=2, position=position_nudge(x=diff(range(spread$x))*0.07, y=diff(range(spread$y))*0.01))+#
-theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
-annotation_custom(ggplotGrob(#
-ggplot()+#
-geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
-geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
-geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
-xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
-labs(x="principal component 1", y="principal component 2")#
-# Find nearest neighbours in each node...#
-library("FNN")#
-library("reshape2")#
-#
-n=7#
-#gower<-gowdis(dat[,cats])#
-knn<-get.knn(points[,c("x","y")],k=n)$nn.index#
-near<-NULL#
-for(x in 1:n){#
-col<-dat$species[knn[,x]]#
-near<-cbind(near, x=col)}#
-colnames(near)<-paste("n", seq(1:n), sep="")#
-near<-as.data.frame(near)#
-near$species <- dat$species#
-near<-near[near$species %in% spread$species,]#
-near$group<-c(1:nrow(near))#
-near<-melt(near, id.var=c("group", "species"), value.name="near")#
-near[,c("x1","y1")]<-points[match(near$species, points$species),c("x","y")]#
-near[,c("x2","y2")]<-points[match(near$near, points$species), c("x","y")]#
-head(near)#
-#
-# remove duplicates#
-near<-near[!near$near %in% near$species,]#
-near<-near[!duplicated(near$near),]#
-#
-ggplot()+#
-geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
-geom_point(data=spread, aes(x,y))+#
-geom_segment(data=near, aes(x=x1, y=y1, xend=x2, yend=y2), size=0.1)+#
-theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
-annotation_custom(ggplotGrob(#
-ggplot()+#
-geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
-geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
-geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
-xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
-labs(x="principal component 1", y="principal component 2")
-# Desirability index (out of 100)#
-############################
-# 50 points for common (categorical - ctb)#
-# 20 points for large size (ranked)#
-# 15 points for large range (ranked)#
-# 15 points for old (top 75% quartile)#
-# restorability ?#
-colnames(dat)#
-#
-# abundance #
-dat$D.abun<-ifelse(dat$Abundance.GBR=="common", 50, ifelse(dat$Abundance.GBR=="uncommon", 10, 0))#
-#
-# colony size#
-dat$D.size<-dat$cat_colonydiameter/max(dat$cat_colonydiameter)*20#
-#
-# range size#
-#qR<-quantile(dat$Range.size,0.25)#
-#dat$D.rang<-ifelse(dat$Range.size>qR, 15, 0)#
-#hist(dat$Range.size)#
-#abline(v=qR)#
-dat$D.range<-dat$Range.size/max(dat$Range.size)*15#
-#
-# genus age #
-#hist(log10(dat$Species.age.phylogeny))#
-#hist(log10(dat$Genus.fossil.age))#
-#qA<-quantile(dat$Genus.fossil.age,0.25, na.rm=T)#
-#dat$D.age<-ifelse(dat$Genus.fossil.age>qA, 15, 0)#
-#dat$D.age[is.na(dat$D.age)]<-15 # benefit of doubt#
-dat$D.age<-dat$Genus.fossil.age/max(dat$Genus.fossil.age, na.rm=T)*10#
-#Species.age.phylogeny#
-dat$D.age2<-dat$Species.age.phylogeny/max(dat$Species.age.phylogeny, na.rm=T)*5#
-#
-dat$D.index<-dat$D.abun+dat$D.size+dat$D.rang+dat$D.age+dat$D.age2#
-# Most desirable in each group#
-#
-des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
-des<-des[order(as.numeric(des$group)),]#
-des$D.index<-dat$D.index[match(des$species, dat$species)]#
-#
-d.agg<-aggregate(D.index~group, des, max)#
-d.max<-merge(d.agg, des)#
-d.max[order(as.numeric(d.max$group)),]#
-nrow(d.max)#
-#
-points$D.index<-dat$D.index[match(points$species, dat$species)]#
-select<-points[points$species %in% d.max$species,]#
-#
-ggplot()+#
-geom_point(data=points, aes(x,y, size=D.index), shape=21, col="grey")+#
-geom_point(data=select, aes(x,y))+#
-geom_text(data=select, aes(x,y, label=species), size=2, position=position_nudge(x=diff(range(spread$x))*0.07, y=diff(range(spread$y))*0.01))+#
-theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
-labs(x="principal component 1", y="principal component 2")+#
-scale_radius(range=c(0,3))
-# 2D spread....#
-points<-cbind(space, abun=dat$Abundance.GBR, species=dat$species)#
-#
-use<-points[,c("x","y")]#
-#use<-points[points$abun=="common",c("x","y")] # only common species#
-#
-n <- nrow(use) # total species#
-s <- 40  # species selected#
-spread<-voronoiFilter(use, s)#
-spread$species<-points$species[as.numeric(rownames(spread))]#
-#
-ggplot()+#
-geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
-geom_point(data=spread, aes(x,y))+#
-geom_text(data=spread, aes(x,y, label=species), size=2, position=position_nudge(x=diff(range(spread$x))*0.07, y=diff(range(spread$y))*0.01))+#
-theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
-annotation_custom(ggplotGrob(#
-ggplot()+#
-geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
-geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
-geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
-xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
-labs(x="principal component 1", y="principal component 2")#
-# Find nearest neighbours in each node...#
-library("FNN")#
-library("reshape2")#
-#
-n=7#
-#gower<-gowdis(dat[,cats])#
-knn<-get.knn(points[,c("x","y")],k=n)$nn.index#
-near<-NULL#
-for(x in 1:n){#
-col<-dat$species[knn[,x]]#
-near<-cbind(near, x=col)}#
-colnames(near)<-paste("n", seq(1:n), sep="")#
-near<-as.data.frame(near)#
-near$species <- dat$species#
-near<-near[near$species %in% spread$species,]#
-near$group<-c(1:nrow(near))#
-near<-melt(near, id.var=c("group", "species"), value.name="near")#
-near[,c("x1","y1")]<-points[match(near$species, points$species),c("x","y")]#
-near[,c("x2","y2")]<-points[match(near$near, points$species), c("x","y")]#
-head(near)#
-#
-# remove duplicates#
-near<-near[!near$near %in% near$species,]#
-near<-near[!duplicated(near$near),]#
-#
-ggplot()+#
-geom_point(data=points, aes(x,y), shape=21, col="grey", size=2)+#
-geom_point(data=spread, aes(x,y))+#
-geom_segment(data=near, aes(x=x1, y=y1, xend=x2, yend=y2), size=0.1)+#
-theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
-annotation_custom(ggplotGrob(#
-ggplot()+#
-geom_segment(data=spread, aes(x=x,y=y,xend=0,yend=0),size=0.25)+#
-geom_point(data=points, aes(x,y), shape=21, col="grey", size=0.15)+#
-geom_point(data=spread, aes(x,y), size=0.5)+theme_void()), #
-xmin = 3, xmax = 5, ymin = 2, ymax = 3)+#
-labs(x="principal component 1", y="principal component 2")#
-# Desirability index (out of 100)#
-############################
-# 50 points for common (categorical - ctb)#
-# 20 points for large size (ranked)#
-# 15 points for large range (ranked)#
-# 15 points for old (top 75% quartile)#
-# restorability ?#
-colnames(dat)#
-#
-# abundance #
-dat$D.abun<-ifelse(dat$Abundance.GBR=="common", 50, ifelse(dat$Abundance.GBR=="uncommon", 10, 0))#
-#
-# colony size#
-dat$D.size<-dat$cat_colonydiameter/max(dat$cat_colonydiameter)*20#
-#
-# range size#
-#qR<-quantile(dat$Range.size,0.25)#
-#dat$D.rang<-ifelse(dat$Range.size>qR, 15, 0)#
-#hist(dat$Range.size)#
-#abline(v=qR)#
-dat$D.range<-dat$Range.size/max(dat$Range.size)*15#
-#
-# genus age #
-#hist(log10(dat$Species.age.phylogeny))#
-#hist(log10(dat$Genus.fossil.age))#
-#qA<-quantile(dat$Genus.fossil.age,0.25, na.rm=T)#
-#dat$D.age<-ifelse(dat$Genus.fossil.age>qA, 15, 0)#
-#dat$D.age[is.na(dat$D.age)]<-15 # benefit of doubt#
-dat$D.age<-dat$Genus.fossil.age/max(dat$Genus.fossil.age, na.rm=T)*10#
-#Species.age.phylogeny#
-dat$D.age2<-dat$Species.age.phylogeny/max(dat$Species.age.phylogeny, na.rm=T)*5#
-#
-dat$D.index<-dat$D.abun+dat$D.size+dat$D.rang+dat$D.age+dat$D.age2#
-# Most desirable in each group#
-#
-des<-unique(melt(near[,c("group","species","near")], id.var="group", value.name="species"))#
-des<-des[order(as.numeric(des$group)),]#
-des$D.index<-dat$D.index[match(des$species, dat$species)]#
-#
-d.agg<-aggregate(D.index~group, des, max)#
-d.max<-merge(d.agg, des)#
-d.max[order(as.numeric(d.max$group)),]#
-nrow(d.max)#
-#
-points$D.index<-dat$D.index[match(points$species, dat$species)]#
-select<-points[points$species %in% d.max$species,]#
-#
-ggplot()+#
-geom_point(data=points, aes(x,y, size=D.index), shape=21, col="grey")+#
-geom_point(data=select, aes(x,y))+#
-geom_text(data=select, aes(x,y, label=species), size=2, position=position_nudge(x=diff(range(spread$x))*0.07, y=diff(range(spread$y))*0.01))+#
-theme_bw()+theme(panel.grid.major=element_blank(), panel.grid.minor=element_blank(),legend.title=element_blank(), legend.position=c(0.85,0.9), legend.key.size=unit(2, "mm"))+#
-labs(x="principal component 1", y="principal component 2")+#
-scale_radius(range=c(0,3))
-head(select)
-knn2<-get.knn(select[,c("x","y")],k=nrow(select))
-knn2<-get.knn(select[,c("x","y")],k=nrow(select)-1)
-knn2
-knn2<-get.knn(select[,c("x","y")],k=nrow(select)-1)$nn.dist#
-head(knn2)
-daisy(select[,c("x","y")],dist="euclidean")
-library("vegan")#
-#
-# self thinning... #
-# find closest pairs, remove lowest D.index#
-head(select)#
-knn2<-daisy(select[,c("x","y")],dist="euclidean")
-dist(select[,c("x","y")])
-# self thinning... #
-# find closest pairs, remove lowest D.index#
-head(select)#
-rownames(select)<-select$species#
-knn2<-dist(select[,c("x","y")])
-# self thinning... #
-# find closest pairs, remove lowest D.index#
-head(select)#
-rownames(select)<-select$species#
-knn2<-melt(dist(select[,c("x","y")]))#
-head(knn2)
-dist(select[,c("x","y")])
-# self thinning... #
-# find closest pairs, remove lowest D.index#
-head(select)#
-rownames(select)<-select$species#
-knn2<-data.frame(dist(select[,c("x","y")]))#
-head(knn2)
-as.matrix(dist(select[,c("x","y")]))
-rownames(select)<-select$species#
-knn2<-as.matrix(dist(select[,c("x","y")]))#
-#head(knn2)#
-#
-diag(knn2)
-lower.tri(x, diag = FALSE)
 lower.tri(knn2, diag = FALSE)
 # self thinning... #
 # find closest pairs, remove lowest D.index#
@@ -1110,16 +668,6 @@ segments(0,0, fit2[,1], fit2[,2], col=1, lty=2, lwd=1)#
 mtext("PC1", cex=0.75, side=1, line=0.5, adj=1)#
 mtext("PC2", cex=0.75, side=2, line=0.5, at=5.3) #, las=2)
 par(mar=c(4,4,2,2))#
-#plot(est, cont=seq(1,100,by=1), display="filled.contour2", add=FALSE, ylab="", xlab="", cex.axis=0.75, ylim=c(-3, 3.5), xlim=c(-4, 5),las=1) #
-#plot(est,abs.cont=cl[1], labels=c(0.5),labcex=0.75, add=TRUE, lwd=0.75, col="grey30")#
-#plot(est,abs.cont=cl[2], labels=c(0.95),labcex=0.75, add=TRUE, lwd=0.5, col="grey60")#
-#plot(est,abs.cont=cl[3], labels=c(0.99),labcex=0.75, add=TRUE, lwd=0.5, col="grey60")#
-points( pc12[,], pch=16, cex=0.25, col="black") #
-plot(fit, cex=0.90, col=1, labels=list(vectors = c("GR","CW","MCS","SD","CH","SAV","IS")))#
-segments(0,0, fit2[,1], fit2[,2], col=1, lty=2, lwd=1)#
-mtext("PC1", cex=0.75, side=1, line=0.5, adj=1)#
-mtext("PC2", cex=0.75, side=2, line=0.5, at=5.3) #, las=2)
-par(mar=c(4,4,2,2))#
 plot( pc12[,], pch=16, cex=0.25, col="black") #
 #plot(est, cont=seq(1,100,by=1), display="filled.contour2", add=FALSE, ylab="", xlab="", cex.axis=0.75, ylim=c(-3, 3.5), xlim=c(-4, 5),las=1) #
 #plot(est,abs.cont=cl[1], labels=c(0.5),labcex=0.75, add=TRUE, lwd=0.75, col="grey30")#
@@ -1217,17 +765,6 @@ plot(fit, cex=0.90, col=1, labels=list(vectors = c("GR","CW","MCS","SD","CH","SA
 segments(0,0, fit2[,1], fit2[,2], col=1, lty=2, lwd=1)#
 mtext("PC1", cex=0.75, side=1, line=0.5, adj=1)#
 mtext("PC2", cex=0.75, side=2, line=0.5, at=3.5) #, las=2)
-par(mar=c(4,4,2,2))#
-plot( pc12[,], pch=16, cex=0.25, col="black", add=FALSE, ylab="", xlab="", cex.axis=0.75, ylim=c(-3, 3.5), xlim=c(-4, 5),las=1) #
-#plot(est, cont=seq(1,100,by=1), display="filled.contour2", add=FALSE, ylab="", xlab="", cex.axis=0.75, ylim=c(-3, 3.5), xlim=c(-4, 5),las=1) #
-#plot(est,abs.cont=cl[1], labels=c(0.5),labcex=0.75, add=TRUE, lwd=0.75, col="grey30")#
-#plot(est,abs.cont=cl[2], labels=c(0.95),labcex=0.75, add=TRUE, lwd=0.5, col="grey60")#
-#plot(est,abs.cont=cl[3], labels=c(0.99),labcex=0.75, add=TRUE, lwd=0.5, col="grey60")#
-points( pc12[,], pch=16, cex=0.25, col="black") #
-plot(fit, cex=0.90, col=1, labels=list(vectors = c("GR","CW","MCS","SD","CH","SAV","R")))#
-segments(0,0, fit2[,1], fit2[,2], col=1, lty=2, lwd=1)#
-mtext("PC1", cex=0.75, side=1, line=0.5, adj=1)#
-mtext("PC2", cex=0.75, side=2, line=0.5, at=3.5) #, las=2)
 fit2[7,]<-fit2[7,]*3 # stem density#
 par(mar=c(4,4,2,2))#
 plot( pc12[,], pch=16, cex=0.25, col="grey", add=FALSE, ylab="", xlab="", cex.axis=0.75, ylim=c(-3, 3.5), xlim=c(-4, 5),las=1) #
@@ -1267,17 +804,6 @@ plot( pc12[,], pch=16, cex=0.25, col="grey", add=FALSE, ylab="", xlab="", cex.ax
 #plot(est,abs.cont=cl[2], labels=c(0.95),labcex=0.75, add=TRUE, lwd=0.5, col="grey60")#
 #plot(est,abs.cont=cl[3], labels=c(0.99),labcex=0.75, add=TRUE, lwd=0.5, col="grey60")#
 points( pc12[,], pch=16, cex=0.25, col="black") #
-plot(fit, cex=0.90, col=1, labels=list(vectors = c("GR","CW","MCS","SD","CH","SAV","R")))#
-segments(0,0, fit2[,1], fit2[,2], col=1, lty=2, lwd=1)#
-mtext("PC1", cex=0.75, side=1, line=0.5, adj=1)#
-mtext("PC2", cex=0.75, side=2, line=0.5, at=3.5) #, las=2)
-par(mar=c(4,4,2,2))#
-plot( pc12[,], pch=16, cex=0.25, col="grey", add=FALSE, ylab="", xlab="", cex.axis=0.75, ylim=c(-3, 3.5), xlim=c(-4, 5),las=1) #
-#plot(est, cont=seq(1,100,by=1), display="filled.contour2", add=FALSE, ylab="", xlab="", cex.axis=0.75, ylim=c(-3, 3.5), xlim=c(-4, 5),las=1) #
-#plot(est,abs.cont=cl[1], labels=c(0.5),labcex=0.75, add=TRUE, lwd=0.75, col="grey30")#
-#plot(est,abs.cont=cl[2], labels=c(0.95),labcex=0.75, add=TRUE, lwd=0.5, col="grey60")#
-#plot(est,abs.cont=cl[3], labels=c(0.99),labcex=0.75, add=TRUE, lwd=0.5, col="grey60")#
-#points( pc12[,], pch=16, cex=0.25, col="black") #
 plot(fit, cex=0.90, col=1, labels=list(vectors = c("GR","CW","MCS","SD","CH","SAV","R")))#
 segments(0,0, fit2[,1], fit2[,2], col=1, lty=2, lwd=1)#
 mtext("PC1", cex=0.75, side=1, line=0.5, adj=1)#
@@ -1520,9 +1046,6 @@ dat3D$species
 plot(y ~ x, dat, col="grey", cex=(dat$abund)*3, xlab="PC1", ylab="PC2")#
 points(y ~ x, dat2D, col="blue", pch=20, cex=0.6)#
 legend("topleft", pch=c(0, 20, 3), col=c("grey", "blue", "red"), bty="n", legend=c("species and abundance", "even spread alone", "even spread acct. abundance"), cex=0.6)
-plot(y ~ x, dat, col="grey", cex=(dat$abund)*3, xlab="PC1", ylab="PC2")#
-points(y ~ x, dat2D, col="blue", pch=20, cex=0.6)#
-legend("topleft", pch=c(0, 20, 3), col=c("grey", "blue", "red"), bty="n", legend=c("species and abundance", "even spread alone", "even spread acct. abundance"), cex=0.6)
 plot(y ~ x, dat, col="grey", cex=1, xlab="PC1", ylab="PC2")#
 points(y ~ x, dat2D, col="blue", pch=20, cex=0.6)#
 legend("topleft", pch=c(0, 20, 3), col=c("grey", "blue", "red"), bty="n", legend=c("species and abundance", "even spread alone", "even spread acct. abundance"), cex=0.6)
@@ -1613,14 +1136,6 @@ plot3d(dat$x, dat$y, dat$z, group=dat$group, type="s",   #
 xlab="PC1", ylab="PC2", zlab="PC3", size=0.5, box=FALSE, axes=F, col.panel = "black",)#
 points3d(dat3D$x, dat3D$y, dat3D$z, group=dat$group, col="red")#
 axes3d(c("x", "y", "z"), col="white", ntick=3)#
-segments3d(x=as.vector(t(seg[,c("x","xend")])),y=as.vector(t(seg[,c("y","yend")])), z=as.vector(t(seg[,c("z","zend")])), col='red', alpha=0.1)#
-           bg3d("slategrey") #
-  text3d(points$x, points$y, points$z, texts=points$labs, cex=0.5,col="red", adj=c(1.1, 1.1))
-#writeWebGL()#
-plot3d(dat$x, dat$y, dat$z, group=dat$group, type="s",   #
-xlab="PC1", ylab="PC2", zlab="PC3", size=0.5, box=FALSE, axes=F, col.panel = "black",)#
-points3d(dat3D$x, dat3D$y, dat3D$z, group=dat$group, col="red")#
-axes3d(c("x", "y", "z"), col="white", ntick=3)#
 #segments3d(x=as.vector(t(seg[,c("x","xend")])),y=as.vector(t(seg[,c("y","yend")])), z=as.vector(t(seg[,c("z","zend")])), col='red', alpha=0.1)#
            bg3d("slategrey") #
   text3d(points$x, points$y, points$z, texts=points$labs, cex=0.5,col="red", adj=c(1.1, 1.1))
@@ -1648,12 +1163,6 @@ axes3d(c("x", "y", "z"), col="white", ntick=3)#
            bg3d("slategrey")
 dat3D$y
 dat3D$x
-#writeWebGL()#
-plot3d(dat$x, dat$y, dat$z, type="s", xlab="PC1", ylab="PC2", zlab="PC3", size=0.5, box=FALSE, axes=F, col.panel = "black",)#
-points3d(dat3D$x, dat3D$y, dat3D$z,  col="red", size=2)#
-axes3d(c("x", "y", "z"), col="white", ntick=3)#
-#segments3d(x=as.vector(t(seg[,c("x","xend")])),y=as.vector(t(seg[,c("y","yend")])), z=as.vector(t(seg[,c("z","zend")])), col='red', alpha=0.1)#
-           bg3d("slategrey")
 #writeWebGL()#
 plot3d(dat$x, dat$y, dat$z, type="s", xlab="PC1", ylab="PC2", zlab="PC3", size=0.5, box=FALSE, axes=F, col.panel = "black",)#
 points3d(dat3D$x, dat3D$y, dat3D$z,  col="red", size=2)#
@@ -2068,10 +1577,6 @@ points(y ~ x, dat2D, col="blue", pch=20, cex=0.6)#
 legend("topleft", pch=c(0, 20, 5), col=c("grey", "blue", "red"), bty="n", legend=c("species", "even 2D spread alone", "even 3D spread & d.index"), cex=0.6)
 plot(y ~ x, dat, col="grey", cex=(dat$abund)*3, xlab="PC1", ylab="PC2")#
 points(y ~ x, dat2D, col="blue", pch=20, cex=0.6)#
- points(y ~ x, dat3D_Di, col="green", pch=5, cex=1.2)#
-legend("topleft", pch=c(0, 20, 5), col=c("grey", "blue", "red"), bty="n", legend=c("species", "even 2D spread alone", "even 3D spread & d.index"), cex=0.6)
-plot(y ~ x, dat, col="grey", cex=(dat$abund)*3, xlab="PC1", ylab="PC2")#
-points(y ~ x, dat2D, col="blue", pch=20, cex=0.6)#
  points(y ~ x, dat3D_Di, col="red", pch=5, cex=1.2)#
 legend("topleft", pch=c(0, 20, 5), col=c("grey", "blue", "red"), bty="n", legend=c("species", "even 2D spread alone", "even 3D spread & d.index"), cex=0.6)
 dat3D_Di$species
@@ -2183,9 +1688,6 @@ plot(y ~ x, dat, col="grey", cex=(dat$abund)*3, xlab="PC1", ylab="PC2")#
 points(y ~ x, dat2D, col="blue", pch=20, cex=0.6)#
  points(y ~ x, dat3D_Di, col="red", pch=5, cex=1.2)#
 legend("topleft", pch=c(0, 20, 5), col=c("grey", "blue", "red"), bty="n", legend=c("species", "even 2D spread alone", "even 3D spread & d.index"), cex=0.6)
-library("ggplot2")#
-library("cowplot")#
-source("data_prep.R")
 library("ggplot2")#
 library("cowplot")#
 source("data_prep.R")
@@ -2664,3 +2166,623 @@ geom_histogram(data=dat, aes(x=BRI), bins=15, fill="white", col="grey")+#
 geom_point(data=dat3D_Di, aes(x=BRI, y=1) , fill="red", shape=25)+#
 #scale_x_log10()+#
 ggtitle("bleaching response index of selected species (red)")
+library("ggplot2")#
+library("cowplot")#
+source("data_prep.R")#
+#
+# Anyalsis#
+#
+source("R/functions.R")#
+library("FD")
+# points#
+###############################
+dat<-read.csv("data/data.csv")#
+dat$Abundance.GBR <- factor(dat$Abundance.GBR, levels=c("rare","uncommon", "common"))#
+#
+cats<-c("cat_growthrate", "cat_corallitesize", "cat_colonydiameter" , "cat_skeletaldensity", "cat_colonyheight","cat_SA_vol", "cat_spacesize")#
+pcoa <- pcoa(gowdis(dat[,cats]))#
+#
+space <- data.frame(x=jitter(pcoa$vectors[,1], amount=0.01), y=jitter(pcoa$vectors[,2], amount=0.01), z=jitter(pcoa$vectors[,3], amount=0.01))#
+dat <- cbind(dat, space)#
+#
+s <- 20
+library("ggplot2")#
+library("cowplot")#
+source("data_prep.R")#
+#
+# Anyalsis#
+#
+source("R/functions.R")#
+library("FD")#
+#
+# points#
+###############################
+dat<-read.csv("data/data.csv")#
+dat$Abundance.GBR <- factor(dat$Abundance.GBR, levels=c("rare","uncommon", "common"))#
+#
+cats<-c("cat_growthrate", "cat_corallitesize", "cat_colonydiameter" , "cat_skeletaldensity", "cat_colonyheight","cat_SA_vol", "cat_spacesize")#
+pcoa <- pcoa(gowdis(dat[,cats]))#
+#
+space <- data.frame(x=jitter(pcoa$vectors[,1], amount=0.01), y=jitter(pcoa$vectors[,2], amount=0.01), z=jitter(pcoa$vectors[,3], amount=0.01))#
+dat <- cbind(dat, space)#
+#
+s <- 20#
+#
+# trait vectors #
+###############################
+library("vegan")#
+# princomp#
+prin<-princomp((dat[,cats]), cor = TRUE, scores = TRUE)#
+pc12<-prin$scores[,1:2]#
+ll<-prin$loadings#
+H <- Hpi(x=pc12)      # optimal bandwidth estimation#
+est<- kde(x=pc12, H=H, compute.cont=TRUE)    # kernel density estimation#
+fit<-envfit(pc12, dat[,cats]) # use envfit for drawing arrows#
+fit2<-fit$vectors$arrows*-3 # drawing line segments opposite arrows#
+plot( pc12[,], pch=16, cex=0.25, col="grey", add=FALSE, ylab="", xlab="", cex.axis=0.75, ylim=c(-3, 3.5), xlim=c(-4, 5),las=1) #
+plot(fit, cex=0.90, col=1, labels=list(vectors = c("GR","CW","MCS","SD","CH","SAV","R")))#
+segments(0,0, fit2[,1], fit2[,2], col=1, lty=2, lwd=1)#
+mtext("PC1", cex=0.75, side=1, line=0.5, adj=1)#
+mtext("PC2", cex=0.75, side=2, line=0.5, at=3.5) #, las=2)
+library("vegan")#
+# princomp#
+prin<-princomp((dat[,cats]), cor = TRUE, scores = TRUE)#
+pc12<-prin$scores[,1:2]#
+ll<-prin$loadings#
+fit<-envfit(pc12, dat[,cats]) # use envfit for drawing arrows#
+fit2<-fit$vectors$arrows*-3 # drawing line segments opposite arrows#
+plot( pc12[,], pch=16, cex=0.25, col="grey", add=FALSE, ylab="", xlab="", cex.axis=0.75, ylim=c(-3, 3.5), xlim=c(-4, 5),las=1) #
+plot(fit, cex=0.90, col=1, labels=list(vectors = c("GR","CW","MCS","SD","CH","SAV","R")))#
+segments(0,0, fit2[,1], fit2[,2], col=1, lty=2, lwd=1)#
+mtext("PC1", cex=0.75, side=1, line=0.5, adj=1)#
+mtext("PC2", cex=0.75, side=2, line=0.5, at=3.5) #, las=2)
+# princomp#
+prin<-princomp((dat[,cats]), cor = TRUE, scores = TRUE)#
+pc12<-prin$scores[,1:2]#
+ll<-prin$loadings#
+fit<-envfit(pc12, dat[,cats]) # use envfit for drawing arrows#
+fit2<-fit$vectors$arrows*-3 # drawing line segments opposite arrows#
+plot( pc12[,], pch=16, cex=0.25, col="grey", add=FALSE, ylab="", xlab="", cex.axis=0.75, ylim=c(-3, 3.5), xlim=c(-4, 5),las=1) #
+plot(fit, cex=1, col=1, labels=list(vectors = c("GR","CW","MCS","SD","CH","SAV","R")))#
+segments(0,0, fit2[,1], fit2[,2], col=1, lty=2, lwd=1)#
+mtext("PC1", cex=0.75, side=1, line=0.5, adj=1)#
+mtext("PC2", cex=0.75, side=2, line=0.5, at=3.5) #, las=2)
+# trait vectors #
+###############################
+library("vegan")#
+# princomp#
+prin<-princomp((dat[,cats]), cor = TRUE, scores = TRUE)#
+pc12<-prin$scores[,1:2]#
+ll<-prin$loadings#
+fit<-envfit(pc12, dat[,cats]) # use envfit for drawing arrows#
+fit2<-fit$vectors$arrows*-3 # drawing line segments opposite arrows#
+plot( pc12[,], pch=16, cex=0.5, col="grey", add=FALSE, ylab="", xlab="", cex.axis=0.75, ylim=c(-3, 3.5), xlim=c(-4, 5),las=1) #
+plot(fit, cex=0.90, col=1, labels=list(vectors = c("GR","CW","MCS","SD","CH","SAV","R")))#
+segments(0,0, fit2[,1], fit2[,2], col=1, lty=2, lwd=1)#
+mtext("PC1", cex=0.75, side=1, line=0.5, adj=1)#
+mtext("PC2", cex=0.75, side=2, line=0.5, at=3.5) #, las=2)
+# trait vectors #
+###############################
+library("vegan")#
+# princomp#
+prin<-princomp((dat[,cats]), cor = TRUE, scores = TRUE)#
+pc12<-prin$scores[,1:2]#
+ll<-prin$loadings#
+fit<-envfit(pc12, dat[,cats]) # use envfit for drawing arrows#
+fit2<-fit$vectors$arrows*-3 # drawing line segments opposite arrows#
+plot( pc12[,], pch=16, cex=1, col="grey", add=FALSE, ylab="", xlab="", cex.axis=0.75, ylim=c(-3, 3.5), xlim=c(-4, 5),las=1) #
+plot(fit, cex=0.90, col=1, labels=list(vectors = c("GR","CW","MCS","SD","CH","SAV","R")))#
+segments(0,0, fit2[,1], fit2[,2], col=1, lty=2, lwd=1)#
+mtext("PC1", cex=0.75, side=1, line=0.5, adj=1)#
+mtext("PC2", cex=0.75, side=2, line=0.5, at=3.5) #, las=2)
+###############################
+library("vegan")#
+# princomp#
+prin<-princomp((dat[,cats]), cor = TRUE, scores = TRUE)#
+pc12<-prin$scores[,1:2]#
+ll<-prin$loadings#
+fit<-envfit(pc12, dat[,cats]) # use envfit for drawing arrows#
+fit2<-fit$vectors$arrows*-3 # drawing line segments opposite arrows#
+plot( pc12[,], pch=16, cex=0.5, col="grey", add=FALSE, ylab="", xlab="", cex.axis=0.75, ylim=c(-3, 3.5), xlim=c(-4, 5),las=1) #
+plot(fit, cex=0.90, col=1, labels=list(vectors = c("GR","CW","MCS","SD","CH","SAV","R")))#
+segments(0,0, fit2[,1], fit2[,2], col=1, lty=2, lwd=1)#
+mtext("PC1", cex=0.75, side=1, line=0.5, adj=1)#
+mtext("PC2", cex=0.75, side=2, line=0.5, at=3.5) #, las=2)
+library("ggplot2")#
+library("cowplot")#
+source("data_prep.R")#
+#
+# Anyalsis#
+#
+source("R/functions.R")#
+library("FD")#
+#
+# points#
+###############################
+dat<-read.csv("data/data.csv")#
+dat$Abundance.GBR <- factor(dat$Abundance.GBR, levels=c("rare","uncommon", "common"))#
+#
+cats<-c("cat_growthrate", "cat_corallitesize", "cat_colonydiameter" , "cat_skeletaldensity", "cat_colonyheight","cat_SA_vol", "cat_spacesize")#
+pcoa <- pcoa(gowdis(dat[,cats]))#
+#
+space <- data.frame(x=jitter(pcoa$vectors[,1], amount=0.01), y=jitter(pcoa$vectors[,2], amount=0.01), z=jitter(pcoa$vectors[,3], amount=0.01))#
+dat <- cbind(dat, space)#
+#
+s <- 20#
+#
+# trait vectors #
+###############################
+library("vegan")#
+# princomp#
+prin<-princomp((dat[,cats]), cor = TRUE, scores = TRUE)#
+pc12<-prin$scores[,1:2]#
+ll<-prin$loadings#
+fit<-envfit(pc12, dat[,cats]) # use envfit for drawing arrows#
+fit2<-fit$vectors$arrows*-3 # drawing line segments opposite arrows#
+plot( pc12[,], pch=16, cex=0.5, col="grey", add=FALSE, ylab="", xlab="", cex.axis=0.75, ylim=c(-3, 3.5), xlim=c(-4, 5),las=1) #
+plot(fit, cex=0.90, col=1, labels=list(vectors = c("GR","CW","MCS","SD","CH","SAV","R")))#
+segments(0,0, fit2[,1], fit2[,2], col=1, lty=2, lwd=1)#
+mtext("PC1", cex=0.75, side=1, line=0.5, adj=1)#
+mtext("PC2", cex=0.75, side=2, line=0.5, at=3.5) #, las=2)
+# download: #
+###############################################################
+# go to https://coraltraits.org#
+# go to "data", "traits"#
+# use "subset by class", tick all boxes, click "download"#
+# for each class, create a seperate folder#
+###############################################################
+# merge all trait types#
+###############################################################
+# import each dataset#
+b<-read.csv("data/traitdatabase/biomechanical/data_20200108.csv")#
+g<-read.csv("data/traitdatabase/geographical/data_20200909.csv")#
+m<-read.csv("data/traitdatabase/morphological/data_20200108.csv")#
+pl<-read.csv("data/traitdatabase/phylogenetic/data_20200108.csv")#
+ps<-read.csv("data/traitdatabase/physiological/data_20200108.csv")#
+r<-read.csv("data/traitdatabase/reproductive/data_20200108.csv")#
+s<-read.csv("data/traitdatabase/stoiciometric/data_20200108.csv")#
+e<-read.csv("data/traitdatabase/ecological/data_20200908.csv")
+# merge into new dataset - "all"#
+colnames(b)==colnames(s)#
+all<-rbind(b, g, m, pl, ps, r, s, e)#
+nrow(all)#
+#
+# select relevant columns for "all"#
+colnames(all)#
+all<-all[,c("specie_name","specie_id", "location_name","trait_name", "trait_id", "standard_unit", "methodology_name","value","value_type")]
+# remove unaccepted/outdated species#
+###############################################################
+all<-all[!all$specie_name=="Stylophora mordax",]#
+all<-all[!all$specie_name=="Turbinaria crater",]#inquirendum#
+# change outdated species#
+all$specie_name[all$specie_name=="Lobophyllia pachysepta"]<-"Acanthastrea pachysepta"#
+all$specie_name[all$specie_name=="Parascolymia rowleyensis"]<-"Lobophyllia rowleyensis"#
+all$specie_name[all$specie_name=="Parascolymia vitiensis"]<-"Lobophyllia vitiensis"#
+# profundacella = superficialis#
+all<-all[!all$specie_name=="Psammocora profundacella",]#
+all$specie_name[all$specie_name=="Psammocora superficialis"]<-"Psammocora profundacella"
+# observations/species per trait#
+###############################################################
+# observations#
+obs<-aggregate(all$trait_name, by=c(trait=list(all$trait_name)), FUN=length)#
+obs<-subset(obs, trait!="Water depth")#
+obs<-subset(obs, trait!="Season")#
+obs<-subset(obs, trait!="Bleaching event")#
+obsplot<-ggplot(obs)+#
+geom_bar(aes(x=reorder(trait, -x), x), stat="identity")+#
+theme(axis.text.x=element_text(angle=45, size=6, hjust=1))+#
+labs(y="N observations (log-scale)",x="trait")+scale_y_log10()#
+obsplot#
+#
+# species#
+sp<-aggregate(all$trait_name, by = all[c('trait_name','specie_name')], length)#
+spcount<-aggregate(sp$trait_name, by=c(trait=list(sp$trait_name)), FUN=length)#
+spplot<-ggplot(spcount)+geom_bar(aes(x=reorder(trait, -x), x), stat="identity")+#
+theme(axis.text.x=element_text(angle=45, size=6, hjust=1))+#
+labs(y="N species (log-scale)",x="trait")+scale_y_log10()#
+spplot
+# function: visualise methods/units#
+###############################################################
+t.hist<-function(dat, method, n, tf=c("none","log")){#
+	dat$value<-as.numeric(as.character(dat$value))#
+	if (tf=="none") {dat$value<-dat$value}#
+	if (tf=="log") {dat$value<-log(dat$value)}#
+	ggplot(dat)+#
+	geom_histogram(aes(value,fill=get(method)), bins=n)+#
+	theme(axis.title=element_text(size=9), axis.text=element_text(size=9))+#
+	theme(legend.title=element_blank())+ggtitle(paste(method))+#
+	xlab(paste(unique(dat$trait_name)))}#
+methods<-function(dat, n, tf){#
+	plot_grid(t.hist(dat, "value_type",  n, tf),#
+	t.hist(dat, "methodology_name",  n, tf),#
+	t.hist(dat, "standard_unit",  n, tf), ncol=1, align="v")}
+colnames(all)
+# remove unaccepted/outdated species#
+###############################################################
+all<-all[!all$specie_name=="Stylophora mordax",]#
+all<-all[!all$specie_name=="Turbinaria crater",]#inquirendum#
+# change outdated species#
+all$specie_name[all$specie_name=="Lobophyllia pachysepta"]<-"Acanthastrea pachysepta"#
+all$specie_name[all$specie_name=="Parascolymia rowleyensis"]<-"Lobophyllia rowleyensis"#
+all$specie_name[all$specie_name=="Parascolymia vitiensis"]<-"Lobophyllia vitiensis"#
+# profundacella = superficialis#
+all<-all[!all$specie_name=="Psammocora profundacella",]#
+all$specie_name[all$specie_name=="Psammocora superficialis"]<-"Psammocora profundacella"#
+# observations/species per trait#
+###############################################################
+# observations#
+obs<-aggregate(all$trait_name, by=c(trait=list(all$trait_name)), FUN=length)#
+obs<-subset(obs, trait!="Water depth")#
+obs<-subset(obs, trait!="Season")#
+obs<-subset(obs, trait!="Bleaching event")#
+obsplot<-ggplot(obs)+#
+geom_bar(aes(x=reorder(trait, -x), x), stat="identity")+#
+theme(axis.text.x=element_text(angle=45, size=6, hjust=1))+#
+labs(y="N observations (log-scale)",x="trait")+scale_y_log10()#
+obsplot#
+#
+# species#
+sp<-aggregate(all$trait_name, by = all[c('trait_name','specie_name')], length)#
+spcount<-aggregate(sp$trait_name, by=c(trait=list(sp$trait_name)), FUN=length)#
+spplot<-ggplot(spcount)+geom_bar(aes(x=reorder(trait, -x), x), stat="identity")+#
+theme(axis.text.x=element_text(angle=45, size=6, hjust=1))+#
+labs(y="N species (log-scale)",x="trait")+scale_y_log10()#
+spplot#
+###############################################################
+# function: visualise methods/units#
+###############################################################
+t.hist<-function(dat, method, n, tf=c("none","log")){#
+	dat$value<-as.numeric(as.character(dat$value))#
+	if (tf=="none") {dat$value<-dat$value}#
+	if (tf=="log") {dat$value<-log(dat$value)}#
+	ggplot(dat)+#
+	geom_histogram(aes(value,fill=get(method)), bins=n)+#
+	theme(axis.title=element_text(size=9), axis.text=element_text(size=9))+#
+	theme(legend.title=element_blank())+ggtitle(paste(method))+#
+	xlab(paste(unique(dat$trait_name)))}#
+methods<-function(dat, n, tf){#
+	plot_grid(t.hist(dat, "value_type",  n, tf),#
+	t.hist(dat, "methodology_name",  n, tf),#
+	t.hist(dat, "standard_unit",  n, tf), ncol=1, align="v")}#
+###############################################################
+# function: find means/select category#
+###############################################################
+sp.means<-function(d, trait){#
+	new<-aggregate(as.numeric(as.character(d$value)),#
+	by=c(species=list(d$specie_name)), FUN=mean, na.rm=T)#
+	colnames(new)[2]<-trait#
+	new}#
+#
+sp.cat<-function(d, trait){#
+	new<-data.frame(species=d$specie_name, x<-as.character(d$value))#
+	colnames(new)[2]<-paste(trait)#
+	new } #
+###############################################################
+# Process each trait individually#
+###############################################################
+traitlist<-data.frame(trait=unique(all$trait_name), id=unique(all$trait_id))#
+unique(all$trait_name)
+# merge all trait types#
+###############################################################
+# import each dataset#
+b<-read.csv("data/traitdatabase/biomechanical/data_20200108.csv")#
+g<-read.csv("data/traitdatabase/geographical/data_20200909.csv")#
+m<-read.csv("data/traitdatabase/morphological/data_20200108.csv")#
+pl<-read.csv("data/traitdatabase/phylogenetic/data_20200108.csv")#
+ps<-read.csv("data/traitdatabase/physiological/data_20200108.csv")#
+r<-read.csv("data/traitdatabase/reproductive/data_20200108.csv")#
+s<-read.csv("data/traitdatabase/stoiciometric/data_20200108.csv")#
+e<-read.csv("data/traitdatabase/ecological/data_20200908.csv")#
+# merge into new dataset - "all"#
+colnames(b)==colnames(s)#
+all<-rbind(b, g, m, pl, ps, r, s, e)#
+nrow(all)#
+#
+# select relevant columns for "all"#
+colnames(all)
+# merge#
+combine<-Reduce(function(x, y) merge(x, y, all=TRUE), list(g1, t1,t2, t3,t4, t5, t6, t7,t8, t9,t10,t11,t12,t13,t14,t15,t16,t17,t18, t19,t20,t21,t22,t23,t24,t25,t26,t27,t28,t29,t30, t31, t32, t33, t34, t35, t36, t37, t38, t39, t40))#
+head(combine)
+# Coral Traits Database means  - www.coraltraits.org#
+#source("data/traitdatabase/ctb_prep.R")#
+ctb<-read.csv("data/traitdatabase/output.csv")#
+ctb<-ctb[ctb$Zooxanthellate=="zooxanthellate",] # zooxanthellate only#
+ctb<-ctb[!is.na(ctb$Abundance.GBR),] # gbr only#
+nrow(ctb)
+# Coral Traits Database means  - www.coraltraits.org#
+#source("data/traitdatabase/ctb_prep.R")#
+ctb<-read.csv("data/traitdatabase/output.csv")#
+ctb<-ctb[ctb$Zooxanthellate=="zooxanthellate",] # zooxanthellate only#
+ctb<-ctb[!is.na(ctb$Abundance.GBR),] # gbr only#
+nrow(ctb)#
+# trait biogeography - McWilliam et al. 2018 PNAS#
+dat<-read.csv("data/pnas2018/traitbiogeography.csv")#
+dat$species<-gsub("Coscinarea", "Coscinaraea",dat$species)#
+dat$species<-gsub("Dipsastrea", "Dipsastraea",dat$species)#
+dat$species<-gsub("erythrea","erythraea",dat$species)#
+dat$species<-gsub("Stylarea","Stylaraea",dat$species)#
+dat$species<-gsub("Paramontastrea", "Paramontastraea",dat$species)#
+dat$species<-gsub("Montastrea", "Montastraea",dat$species)#
+#dat$species<-gsub("Helioseris cuc", "Leptoseris cuc",dat$species)#
+dat$species<-gsub("Caulastrea", "Caulastraea",dat$species)#
+dat$species<-gsub("Anomastrea", "Anomastraea",dat$species)#
+dat$species<-gsub("Favia leptophylla", "Mussismilia leptophylla",dat$species)
+# download: #
+###############################################################
+# go to https://coraltraits.org#
+# go to "data", "traits"#
+# use "subset by class", tick all boxes, click "download"#
+# for each class, create a seperate folder#
+###############################################################
+# merge all trait types#
+###############################################################
+# import each dataset#
+b<-read.csv("data/traitdatabase/biomechanical/data_20200108.csv")#
+g<-read.csv("data/traitdatabase/geographical/data_20200909.csv")#
+m<-read.csv("data/traitdatabase/morphological/data_20200108.csv")#
+pl<-read.csv("data/traitdatabase/phylogenetic/data_20200108.csv")#
+ps<-read.csv("data/traitdatabase/physiological/data_20200108.csv")#
+r<-read.csv("data/traitdatabase/reproductive/data_20200108.csv")#
+s<-read.csv("data/traitdatabase/stoiciometric/data_20200108.csv")#
+e<-read.csv("data/traitdatabase/ecological/data_20200908.csv")#
+# merge into new dataset - "all"#
+colnames(b)==colnames(s)#
+all<-rbind(b, g, m, pl, ps, r, s, e)#
+nrow(all)#
+#
+# select relevant columns for "all"#
+colnames(all)#
+all<-all[,c("specie_name","specie_id", "location_name","trait_name", "trait_id", "standard_unit", "methodology_name","value","value_type")]#
+###############################################################
+# remove unaccepted/outdated species#
+###############################################################
+all<-all[!all$specie_name=="Stylophora mordax",]#
+all<-all[!all$specie_name=="Turbinaria crater",]#inquirendum#
+# change outdated species#
+all$specie_name[all$specie_name=="Lobophyllia pachysepta"]<-"Acanthastrea pachysepta"#
+all$specie_name[all$specie_name=="Parascolymia rowleyensis"]<-"Lobophyllia rowleyensis"#
+all$specie_name[all$specie_name=="Parascolymia vitiensis"]<-"Lobophyllia vitiensis"#
+# profundacella = superficialis#
+all<-all[!all$specie_name=="Psammocora profundacella",]#
+all$specie_name[all$specie_name=="Psammocora superficialis"]<-"Psammocora profundacella"
+# Coral Traits Database means  - www.coraltraits.org#
+#source("data/traitdatabase/ctb_prep.R")#
+ctb<-read.csv("data/traitdatabase/output.csv")#
+ctb<-ctb[ctb$Zooxanthellate=="zooxanthellate",] # zooxanthellate only#
+ctb<-ctb[!is.na(ctb$Abundance.GBR),] # gbr only#
+nrow(ctb)#
+# trait biogeography - McWilliam et al. 2018 PNAS#
+dat<-read.csv("data/pnas2018/traitbiogeography.csv")#
+dat$species<-gsub("Coscinarea", "Coscinaraea",dat$species)#
+dat$species<-gsub("Dipsastrea", "Dipsastraea",dat$species)#
+dat$species<-gsub("erythrea","erythraea",dat$species)#
+dat$species<-gsub("Stylarea","Stylaraea",dat$species)#
+dat$species<-gsub("Paramontastrea", "Paramontastraea",dat$species)#
+dat$species<-gsub("Montastrea", "Montastraea",dat$species)#
+#dat$species<-gsub("Helioseris cuc", "Leptoseris cuc",dat$species)#
+dat$species<-gsub("Caulastrea", "Caulastraea",dat$species)#
+dat$species<-gsub("Anomastrea", "Anomastraea",dat$species)#
+dat$species<-gsub("Favia leptophylla", "Mussismilia leptophylla",dat$species)#
+#
+# TRAIT MISTAKES..#
+# Tables should be given highest SA & space (original 2, 2, 2)#
+dat$cat_SA_vol[dat$raw_growth_form=="tables_or_plates"]<-5#
+dat$cat_spacesize[dat$raw_growth_form=="tables_or_plates"]<-4#
+dat$cat_colonyheight[dat$raw_growth_form=="tables_or_plates"]<-3#
+# branching closed? Bushy or staghorn?  (original 4, 3, 4)#
+#dat$cat_spacesize[dat$raw_growth_form=="branching_closed"]<-2#
+#dat$cat_SA_vol[dat$raw_growth_form=="branching_closed"]<-4#
+#dat$cat_colonyheight[dat$raw_growth_form=="branching_closed"]<-3#
+#
+# match pnas and ctb#
+matches<-dat$species[match(ctb$species, dat$species)]#
+ctb$species[is.na(matches)] # ctb species NOT found in pnas data#
+# find out where these 4 are.. but remove for now#
+ctb<-ctb[!is.na(matches),]#
+nrow(ctb)#
+dat<-dat[match(ctb$species, dat$species),]#
+nrow(dat)#
+#
+# select traits of interest#
+colnames(ctb)#
+raw<-ctb[,c("species", "Genus.fossil.age","Species.age.phylogeny","Abundance.GBR", "Range.size", "Growth.form.typical","Corallite.width.maximum","Colony.maximum.diameter", "Growth.rate","Oocyte.size.at.maturity","Skeletal.density","Substrate.attachment", "Coloniality", "Mode.of.larval.development","Sexual.system", "Symbiodinium.sp..in.propagules", "Water.clarity.preference", "Polyps.per.area")]#
+head(raw)#
+#
+colnames(dat)#
+cats<-dat[,c("species", "genus","domain","cat_growthrate", "cat_corallitesize", "cat_colonydiameter" , "cat_skeletaldensity", "cat_colonyheight","cat_SA_vol", "cat_spacesize", "dat_growth", "dat_skeletal", "dat_corallite" ,"dat_colonydiameter", "reproductive_mode")]#
+head(cats)#
+head(raw)#
+#
+dat<-merge(raw, cats, by="species")#
+head(dat)#
+tail(dat)#
+nrow(dat)
+# clipperton species#
+clipperton<-c("Porites lobata", "Pavona varians", "Pavona minuta", "Leptoseris scabra", "Pavona maldivensis", "Pocillopora meandrina", "Porites lutea")#
+dat$clipperton<-NA#
+dat$clipperton<-ifelse(dat$species %in% clipperton, 1, 0)
+# clipperton species#
+clipperton<-c("Porites lobata", "Pavona varians", "Pavona minuta", "Leptoseris scabra", "Pavona maldivensis", "Pocillopora meandrina", "Porites lutea")#
+dat$clipperton<-NA#
+dat$clipperton<-ifelse(dat$species %in% clipperton, 1, 0)#
+#
+# bleaching susceptibility... #
+bri<-read.csv("data/BRI/bleaching_response_index.csv")[,c(1,2)]#
+names(bri)<-c("species", "BRI")#
+dat$BRI<-bri$BRI[match(dat$species, bri$species)]#
+#head(dat)
+# export#
+write.csv(dat, "data/data.csv")
+library("ggplot2")#
+library("cowplot")#
+source("data_prep.R")#
+#
+# Anyalsis#
+#
+source("R/functions.R")#
+library("FD")#
+#
+# points#
+###############################
+dat<-read.csv("data/data.csv")#
+dat$Abundance.GBR <- factor(dat$Abundance.GBR, levels=c("rare","uncommon", "common"))#
+#
+cats<-c("cat_growthrate", "cat_corallitesize", "cat_colonydiameter" , "cat_skeletaldensity", "cat_colonyheight","cat_SA_vol", "cat_spacesize")#
+pcoa <- pcoa(gowdis(dat[,cats]))#
+#
+space <- data.frame(x=jitter(pcoa$vectors[,1], amount=0.01), y=jitter(pcoa$vectors[,2], amount=0.01), z=jitter(pcoa$vectors[,3], amount=0.01))#
+dat <- cbind(dat, space)#
+#
+s <- 20
+# trait vectors #
+###############################
+library("vegan")#
+# princomp#
+prin<-princomp((dat[,cats]), cor = TRUE, scores = TRUE)#
+pc12<-prin$scores[,1:2]#
+ll<-prin$loadings#
+fit<-envfit(pc12, dat[,cats]) # use envfit for drawing arrows#
+fit2<-fit$vectors$arrows*-3 # drawing line segments opposite arrows#
+plot( pc12[,], pch=16, cex=0.5, col="grey", add=FALSE, ylab="", xlab="", cex.axis=0.75, ylim=c(-3, 3.5), xlim=c(-4, 5),las=1) #
+plot(fit, cex=0.90, col=1, labels=list(vectors = c("GR","CW","MCS","SD","CH","SAV","R")))#
+segments(0,0, fit2[,1], fit2[,2], col=1, lty=2, lwd=1)#
+mtext("PC1", cex=0.75, side=1, line=0.5, adj=1)#
+mtext("PC2", cex=0.75, side=2, line=0.5, at=3.5) #, las=2)
+# DESIRABILITY#
+###############################
+#
+# Range size#
+hist(dat$Range.size)#
+dat$Range.size <- dat$Range.size / max(dat$Range.size)#
+#
+# Abundance#
+dat$abund <- NA#
+dat$abund[dat$Abundance.GBR=="common"] <- 1#
+dat$abund[dat$Abundance.GBR=="uncommon"] <- 0.25#
+dat$abund[dat$Abundance.GBR=="rare"] <- 0.1#
+#
+# Bleaching Index#
+# miz <- read.csv("data/mizerek/338_2018_1702_MOESM1_ESM.csv", as.is=TRUE)#
+# miz <- miz[c("Revised.species.name", "BI")]#
+# names(miz) <- c("species", "BI")#
+# dat <- merge(dat, miz, all.x=TRUE)#
+# hist(miz$BI)#
+dat$BI <- runif(nrow(dat))#
+#
+# Genus age#
+dat$Genus.fossil.age[is.na(dat$Genus.fossil.age)] <- mean(dat$Genus.fossil.age, na.rm=TRUE)#
+dat$genus_age <- dat$Genus.fossil.age / max(dat$Genus.fossil.age, na.rm=TRUE)#
+sum(is.na(dat$Genus.fossil.age))#
+hist(dat$genus_age)
+runif(nrow(dat))
+# trait vectors #
+###############################
+library("vegan")#
+# princomp#
+prin<-princomp((dat[,cats]), cor = TRUE, scores = TRUE)#
+pc12<-prin$scores[,1:2]#
+ll<-prin$loadings#
+fit<-envfit(pc12, dat[,cats]) # use envfit for drawing arrows#
+fit2<-fit$vectors$arrows*-3 # drawing line segments opposite arrows#
+plot( pc12[,], pch=16, cex=0.5, col="grey", add=FALSE, ylab="", xlab="", cex.axis=0.75, ylim=c(-3, 3.5), xlim=c(-4, 5),las=1) #
+plot(fit, cex=0.90, col=1, labels=list(vectors = c("GR","CW","MCS","SD","CH","SAV","R")))#
+segments(0,0, fit2[,1], fit2[,2], col=1, lty=2, lwd=1)#
+mtext("PC1", cex=0.75, side=1, line=0.5, adj=1)#
+mtext("PC2", cex=0.75, side=2, line=0.5, at=3.5)
+plot(fit, cex=0.90, col=1, labels=list(vectors = c("GR","CW","MCS","SD","CH","SAV","R")))#
+segments(0,0, fit2[,1], fit2[,2], col=1, lty=2, lwd=1)#
+mtext("PC1", cex=0.75, side=1, line=0.5, adj=1)#
+mtext("PC2", cex=0.75, side=2, line=0.5, at=3.5)
+cex.axis=0.75, ylim=c(-3, 3.5), xlim=c(-4, 5),las=1) #
+plot(fit, cex=0.90, col=1, labels=list(vectors = c("GR","CW","MCS","SD","CH","SAV","R")))#
+segments(0,0, fit2[,1], fit2[,2], col=1, lty=2, lwd=1)#
+mtext("PC1", cex=0.75, side=1, line=0.5, adj=1)#
+mtext("PC2", cex=0.75, side=2, line=0.5, at=3.5)
+plot( pc12[,], pch=16, cex=0.5, col="grey", add=FALSE, ylab="", xlab="", cex.axis=0.75, ylim=c(-3, 3.5), xlim=c(-4, 5),las=1) #
+plot(fit, cex=0.90, col=1, labels=list(vectors = c("GR","CW","MCS","SD","CH","SAV","R")))#
+segments(0,0, fit2[,1], fit2[,2], col=1, lty=2, lwd=1)#
+mtext("PC1", cex=0.75, side=1, line=0.5, adj=1)#
+mtext("PC2", cex=0.75, side=2, line=0.5, at=3.5)
+plot( pc12[,], pch=16, cex=0.5, col="grey", ylab="", xlab="", cex.axis=0.75, ylim=c(-3, 3.5), xlim=c(-4, 5),las=1) #
+plot(fit, cex=0.90, col=1, labels=list(vectors = c("GR","CW","MCS","SD","CH","SAV","R")))#
+segments(0,0, fit2[,1], fit2[,2], col=1, lty=2, lwd=1)#
+mtext("PC1", cex=0.75, side=1, line=0.5, adj=1)#
+mtext("PC2", cex=0.75, side=2, line=0.5, at=3.5)
+library("vegan")#
+prin<-princomp((dat[,cats]), cor = TRUE, scores = TRUE)#
+pc12<-prin$scores[,1:2]#
+#ll<-prin$loadings#
+fit<-envfit(pc12, dat[,cats]) # use envfit for drawing arrows#
+fit2<-fit$vectors$arrows*-3 # drawing line segments opposite arrows#
+#
+plot( pc12[,], pch=16, cex=0.5, col="grey", ylab="", xlab="", cex.axis=0.75, ylim=c(-3, 3.5), xlim=c(-4, 5),las=1) #
+plot(fit, cex=0.90, col=1, labels=list(vectors = c("GR","CW","MCS","SD","CH","SAV","R")))#
+segments(0,0, fit2[,1], fit2[,2], col=1, lty=2, lwd=1)#
+mtext("PC1", cex=0.75, side=1, line=0.5, adj=1)#
+mtext("PC2", cex=0.75, side=2, line=0.5, at=3.5)
+# Coral Traits Database means  - www.coraltraits.org#
+#source("data/traitdatabase/ctb_prep.R")#
+ctb<-read.csv("data/traitdatabase/output.csv")#
+ctb<-ctb[ctb$Zooxanthellate=="zooxanthellate",] # zooxanthellate only#
+ctb<-ctb[!is.na(ctb$Abundance.GBR),] # gbr only#
+nrow(ctb)#
+# trait biogeography - McWilliam et al. 2018 PNAS#
+dat<-read.csv("data/pnas2018/traitbiogeography.csv")#
+dat$species<-gsub("Coscinarea", "Coscinaraea",dat$species)#
+dat$species<-gsub("Dipsastrea", "Dipsastraea",dat$species)#
+dat$species<-gsub("erythrea","erythraea",dat$species)#
+dat$species<-gsub("Stylarea","Stylaraea",dat$species)#
+dat$species<-gsub("Paramontastrea", "Paramontastraea",dat$species)#
+dat$species<-gsub("Montastrea", "Montastraea",dat$species)#
+#dat$species<-gsub("Helioseris cuc", "Leptoseris cuc",dat$species)#
+dat$species<-gsub("Caulastrea", "Caulastraea",dat$species)#
+dat$species<-gsub("Anomastrea", "Anomastraea",dat$species)#
+dat$species<-gsub("Favia leptophylla", "Mussismilia leptophylla",dat$species)#
+#
+# TRAIT MISTAKES..#
+# Tables should be given highest SA & space (original 2, 2, 2)#
+dat$cat_SA_vol[dat$raw_growth_form=="tables_or_plates"]<-5#
+dat$cat_spacesize[dat$raw_growth_form=="tables_or_plates"]<-4#
+dat$cat_colonyheight[dat$raw_growth_form=="tables_or_plates"]<-3#
+# branching closed? Bushy or staghorn?  (original 4, 3, 4)#
+#dat$cat_spacesize[dat$raw_growth_form=="branching_closed"]<-2#
+#dat$cat_SA_vol[dat$raw_growth_form=="branching_closed"]<-4#
+#dat$cat_colonyheight[dat$raw_growth_form=="branching_closed"]<-3#
+#
+# match pnas and ctb#
+matches<-dat$species[match(ctb$species, dat$species)]#
+ctb$species[is.na(matches)] # ctb species NOT found in pnas data#
+# find out where these 4 are.. but remove for now#
+ctb<-ctb[!is.na(matches),]#
+nrow(ctb)#
+dat<-dat[match(ctb$species, dat$species),]#
+nrow(dat)#
+#
+# select traits of interest#
+colnames(ctb)#
+raw<-ctb[,c("species", "Genus.fossil.age","Species.age.phylogeny","Abundance.GBR", "Range.size", "Growth.form.typical","Corallite.width.maximum","Colony.maximum.diameter", "Growth.rate","Oocyte.size.at.maturity","Skeletal.density","Substrate.attachment", "Coloniality", "Mode.of.larval.development","Sexual.system", "Symbiodinium.sp..in.propagules", "Water.clarity.preference", "Polyps.per.area")]#
+head(raw)#
+#
+colnames(dat)#
+cats<-dat[,c("species", "genus","domain","cat_growthrate", "cat_corallitesize", "cat_colonydiameter" , "cat_skeletaldensity", "cat_colonyheight","cat_SA_vol", "cat_spacesize", "dat_growth", "dat_skeletal", "dat_corallite" ,"dat_colonydiameter", "reproductive_mode")]#
+head(cats)#
+head(raw)#
+#
+dat<-merge(raw, cats, by="species")#
+head(dat)#
+tail(dat)#
+nrow(dat)#
+#
+# clipperton species#
+clipperton<-c("Porites lobata", "Pavona varians", "Pavona minuta", "Leptoseris scabra", "Pavona maldivensis", "Pocillopora meandrina", "Porites lutea")#
+dat$clipperton<-NA#
+dat$clipperton<-ifelse(dat$species %in% clipperton, 1, 0)#
+#
+# bleaching susceptibility... #
+bri<-read.csv("data/BRI/bleaching_response_index.csv")[,c(1,2)]#
+names(bri)<-c("species", "BRI")#
+dat$BRI<-bri$BRI[match(dat$species, bri$species)]#
+#head(dat)#
+#hist(log10(dat$BRI))
+tax<-read.csv("data/taxonomy.csv")#
+#head(tax)

@@ -37,10 +37,6 @@ all<-all[,c("specie_name","specie_id", "location_name","trait_name", "trait_id",
 
 
 
-
-
-
-
 # remove unaccepted/outdated species
 ##############################################################
 all<-all[!all$specie_name=="Stylophora mordax",]
