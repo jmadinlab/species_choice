@@ -1,9 +1,10 @@
 # Species choice analysis
 
-This analysis is about hedging our bets for the future. The aim is to construct a framework that generates a selection of n species with:
- 1. a **range** of functionally important traits, including morphology, physiology and demography
- 2.  **maximimum** regional abundance, geographic range, and extinction survival
- 3. Ideally, the high range of trait space will also capture a high genetic and phylogenetic diversity, and a range of sensitivities to future stressors. This can be tested later.
+This analysis is about hedging our bets for the future. The aim is to construct a framework that generates a selection of n species with:  
+
+1. a **range** of functionally important traits, including morphology, physiology and demography
+2. **maximimum** regional abundance, geographic range, and extinction survival
+3. Ideally, the high range of trait space will also capture a high genetic and phylogenetic diversity, and a range of sensitivities to future stressors. This can be tested later.
 
 
 
