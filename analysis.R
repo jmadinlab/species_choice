@@ -2,7 +2,6 @@
 # -- mike wd -- # You really got to stop doing this! 
 #setwd("/Users/mikemcwilliam/Documents/PostDoc/species_choice")
 
-
 library("ggplot2")
 library("cowplot")
 source("data_prep.R")
@@ -12,7 +11,11 @@ source("data_prep.R")
 source("R/functions.R")
 library("FD")
 
-# poin
+
+
+
+# points
+##############################
 dat<-read.csv("data/data.csv")
 dat$Abundance.GBR <- factor(dat$Abundance.GBR, levels=c("rare","uncommon", "common"))
 
@@ -24,6 +27,32 @@ dat <- cbind(dat, space)
 
 s <- 20
 
+
+
+
+# trait vectors 
+##############################
+library("vegan")
+# princomp
+prin<-princomp((dat[,cats]), cor = TRUE, scores = TRUE)
+pc12<-prin$scores[,1:2]
+ll<-prin$loadings
+H <- Hpi(x=pc12)      # optimal bandwidth estimation
+est<- kde(x=pc12, H=H, compute.cont=TRUE)    # kernel density estimation
+fit<-envfit(pc12, dat[,cats]) # use envfit for drawing arrows
+fit2<-fit$vectors$arrows*-3 # drawing line segments opposite arrows
+plot( pc12[,], pch=16, cex=0.25, col="grey", add=FALSE, ylab="", xlab="", cex.axis=0.75, ylim=c(-3, 3.5), xlim=c(-4, 5),las=1) 
+plot(fit, cex=0.90, col=1, labels=list(vectors = c("GR","CW","MCS","SD","CH","SAV","R")))
+segments(0,0, fit2[,1], fit2[,2], col=1, lty=2, lwd=1)
+mtext("PC1", cex=0.75, side=1, line=0.5, adj=1)
+mtext("PC2", cex=0.75, side=2, line=0.5, at=3.5) #, las=2)
+
+
+
+
+
+# DESIRABILITY
+##############################
 
 # Range size
 hist(dat$Range.size)
@@ -49,23 +78,89 @@ dat$genus_age <- dat$Genus.fossil.age / max(dat$Genus.fossil.age, na.rm=TRUE)
 sum(is.na(dat$Genus.fossil.age))
 hist(dat$genus_age)
 
-###
 
+# 2D
+##############################
 dat2D <- voronoiFilter(dat, s)
-# dat2D_Di <- voronoiFilterDi(dat, s)
-dat3D <- voronoiFilter3D(dat, s)
 
+plot(y ~ x, dat, col="grey", cex=1, xlab="PC1", ylab="PC2")
+points(y ~ x, dat2D, col="blue", pch=20, cex=0.6)
+legend("topleft", pch=c(0, 20), col=c("grey", "blue"), bty="n", legend=c("all species", "widely spread species"), cex=0.6)
+
+
+# 3D
+##############################
+ dat3D <- voronoiFilter3D(dat, s)
+
+library("car")
+library("rgl")
+seg<-cbind(dat3D[,c("x","y","z")], data.frame(xend=rep(0,nrow(dat3D)),yend=rep(0,nrow(dat3D)),zend=rep(0,nrow(dat3D))))
+head(seg)
+  #writeWebGL()
+plot3d(dat$x, dat$y, dat$z, type="s", xlab="PC1", ylab="PC2", zlab="PC3", size=0.5, box=FALSE, axes=F, col.panel = "black",)
+spheres3d(dat3D$x, dat3D$y, dat3D$z,  col="red", radius=0.01)
+axes3d(c("x", "y", "z"), col="white")
+segments3d(x=as.vector(t(seg[,c("x","xend")])),y=as.vector(t(seg[,c("y","yend")])), z=as.vector(t(seg[,c("z","zend")])), col='red', alpha=0.5)
+           bg3d("slategrey") 
+
+
+
+# 2D -weighted
+##############################
+ dat2D_Di <- voronoiFilterDi(dat, s)
+
+plot(y ~ x, dat, col="grey", cex=(dat$abund)*3, xlab="PC1", ylab="PC2")
+points(y ~ x, dat2D_Di, col="blue", pch=20, cex=0.6)
+legend("topleft", pch=c(0, 20), col=c("grey", "blue"), bty="n", legend=c("all species", "widely spread species"), cex=0.6)
+
+
+
+# 3D -weighted
+##############################
+ dat3D_Di <- voronoiFilter3DDi(dat, s)
 
 plot(y ~ x, dat, col="grey", cex=(dat$abund)*3, xlab="PC1", ylab="PC2")
 points(y ~ x, dat2D, col="blue", pch=20, cex=0.6)
-points(y ~ x, dat3D, col="red", pch=3)
-
-dat3D$species
-
-points(y ~ x, dat2D_Di, col="green", pch=5, cex=1.2)
+ points(y ~ x, dat3D_Di, col="red", pch=5, cex=1.2)
+legend("topleft", pch=c(0, 20, 5), col=c("grey", "blue", "red"), bty="n", legend=c("species", "even 2D spread alone", "even 3D spread & d.index"), cex=0.6)
 
 
-legend("topleft", pch=c(0, 20, 3), col=c("grey", "blue", "red"), bty="n", legend=c("species and abundance", "even spread alone", "even spread acct. abundance"), cex=0.6)
+
+dat3D_Di$species
+
+
+
+# do species have a range of tolerances? 
+
+ggplot()+
+geom_histogram(data=dat, aes(x=BRI), bins=15, fill="white", col="grey")+
+geom_point(data=dat3D_Di, aes(x=BRI, y=1) , fill="red", shape=25)+
+#scale_x_log10()+
+ggtitle("bleaching response index of selected species (red)")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# mike old code
+
 
 
 # select traits
@@ -104,6 +199,55 @@ space<-data.frame(x=jitter(pcoa$vectors[,1], amount=0.01), y=jitter(pcoa$vectors
 
 
 
+
+
+
+
+
+
+
+
+
+# trait vectors 
+
+library("ks")
+library("vegan")
+
+
+# princomp
+prin<-princomp((dat[,cats]), cor = TRUE, scores = TRUE)
+pc12<-prin$scores[,1:2]
+ll<-prin$loadings
+#space<-data.frame(x=jitter(prin$scores[,1], amount=0.25), y=jitter(prin$scores[,2], amount=0.25), z=jitter(prin$scores[,3], amount=0.25))
+
+H <- Hpi(x=pc12)      # optimal bandwidth estimation
+est<- kde(x=pc12, H=H, compute.cont=TRUE)    # kernel density estimation
+
+# set contour probabilities for drawing contour levels
+cl<-contourLevels(est, prob=c(0.5, 0.05, 0.001), approx=TRUE)
+
+fit<-envfit(pc12, dat[,cats]) # use envfit for drawing arrows
+fit2<-fit$vectors$arrows*-1 # drawing line segments opposite arrows
+fit2[1,]<-fit2[1,]*3 # leafarea
+fit2[2,]<-fit2[2,]*3 # leaf N
+fit2[3,]<-fit2[3,]*3 # LMA
+fit2[4,]<-fit2[4,]*3 # height
+fit2[5,]<-fit2[5,]*3 # seed mass
+ fit2[6,]<-fit2[6,]*3 # stem density
+ fit2[7,]<-fit2[7,]*3 # stem density
+
+
+par(mar=c(4,4,2,2))
+plot( pc12[,], pch=16, cex=0.25, col="grey", add=FALSE, ylab="", xlab="", cex.axis=0.75, ylim=c(-3, 3.5), xlim=c(-4, 5),las=1) 
+#plot(est, cont=seq(1,100,by=1), display="filled.contour2", add=FALSE, ylab="", xlab="", cex.axis=0.75, ylim=c(-3, 3.5), xlim=c(-4, 5),las=1) 
+#plot(est,abs.cont=cl[1], labels=c(0.5),labcex=0.75, add=TRUE, lwd=0.75, col="grey30")
+#plot(est,abs.cont=cl[2], labels=c(0.95),labcex=0.75, add=TRUE, lwd=0.5, col="grey60")
+#plot(est,abs.cont=cl[3], labels=c(0.99),labcex=0.75, add=TRUE, lwd=0.5, col="grey60")
+#points( pc12[,], pch=16, cex=0.25, col="black") 
+plot(fit, cex=0.90, col=1, labels=list(vectors = c("GR","CW","MCS","SD","CH","SAV","R")))
+segments(0,0, fit2[,1], fit2[,2], col=1, lty=2, lwd=1)
+mtext("PC1", cex=0.75, side=1, line=0.5, adj=1)
+mtext("PC2", cex=0.75, side=2, line=0.5, at=3.5) #, las=2)
 
 
 
@@ -324,14 +468,6 @@ min(c(pairs$D1, pairs$D2))
 
 
 
-
-
-
-# 3D interactive plots
-
-library("car")
-library("rgl")
-
 points$cols<-as.factor(ifelse(points$species %in% spread$species, "red","white"))
 points$labs<-ifelse(points$cols=="red",points$species, "")
 sub<-points[points$cols=="red",]
@@ -345,8 +481,12 @@ axes3d(c("x", "y", "z"), col="white", ntick=3)
 segments3d(x=as.vector(t(seg[,c("x","xend")])),y=as.vector(t(seg[,c("y","yend")])), z=as.vector(t(seg[,c("z","zend")])), col='red', alpha=0.1)
            bg3d("slategrey") 
   text3d(points$x, points$y, points$z, texts=points$labs, cex=0.5,col="red", adj=c(1.1, 1.1))
-           
-           
+
+
+
+
+
+   
 
 
 library("plotly")

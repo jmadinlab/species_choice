@@ -56,6 +56,24 @@ dat$clipperton<-ifelse(dat$species %in% clipperton, 1, 0)
 
 
 
+
+# bleaching susceptibility... 
+bri<-read.csv("data/BRI/output.csv")
+nrow(bri)
+
+
+dat$BRI<-bri$BRI[match(dat$species, bri$species)]
+#head(dat)
+
+#hist(log10(dat$BRI))
+
+
+
+
+
+
+
+
 # export
 write.csv(dat, "data/data.csv")
 

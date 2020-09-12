@@ -1,0 +1,375 @@
+"","species","BRI"
+"1","Acanthastrea",29.23
+"2","Acanthastrea echinata",42.14
+"3","Acanthastrea hemprichii",0
+"4","Acanthastrea hillae",0
+"5","Acanthastrea lordhowensis",0
+"6","Acropora",39.17
+"7","Acropora abrotanoides",20
+"8","Acropora aculeus",17.69
+"9","Acropora acuminata",35.75
+"10","Acropora anthocercis",0
+"11","Acropora arabensis",61.6
+"12","Acropora aspera",40.75
+"13","Acropora austera",23.26
+"14","Acropora carduus",27.69
+"15","Acropora cerealis",48.63
+"16","Acropora cervicornis",31.93
+"17","Acropora clathrata",32.99
+"18","Acropora cytherea",42.48
+"19","Acropora digitifera",31.84
+"20","Acropora divaricata",28.06
+"21","Acropora echinata",71.5
+"22","Acropora elseyi",25.43
+"23","Acropora eurystoma",52.6
+"24","Acropora florida",45.69
+"25","Acropora gemmifera",71.07
+"26","Acropora glauca",24.35
+"27","Acropora grandis",24.23
+"28","Acropora horrida",19.4
+"29","Acropora humilis",51.14
+"30","Acropora hyacinthus",35.71
+"31","Acropora latistella",25.27
+"32","Acropora listeri",18.46
+"33","Acropora longicyathus",25.88
+"34","Acropora loripes",9.38
+"35","Acropora lutkeni",13.73
+"36","Acropora microclados",0
+"37","Acropora microphthalma",7.26
+"38","Acropora millepora",34.19
+"39","Acropora monticulosa",45.23
+"40","Acropora muricata",29.3
+"41","Acropora nasuta",58.94
+"42","Acropora palmata",25.82
+"43","Acropora pharaonis",35.75
+"44","Acropora pulchra",8.4
+"45","Acropora robusta",36.04
+"46","Acropora samoensis",11.54
+"47","Acropora sarmentosa",12.19
+"48","Acropora secale",31.03
+"49","Acropora selago",12.31
+"50","Acropora seriata",2.75
+"51","Acropora solitaryensis",29.88
+"52","Acropora spathulata",10.08
+"53","Acropora subglabra",35.75
+"54","Acropora subulata",29.57
+"55","Acropora tenuis",37.85
+"56","Acropora valenciennesi",32.82
+"57","Acropora valida",16.35
+"58","Acropora willisae",0
+"59","Acropora yongei",15.96
+"60","Agaricia",32.24
+"61","Agaricia agaricites",33.51
+"62","Agaricia fragilis",7.33
+"63","Agaricia grahamae",2.75
+"64","Agaricia humilis",11
+"65","Agaricia lamarcki",25.54
+"66","Agaricia tenuifolia",32.08
+"67","Agaricia undata",2.75
+"68","Alveopora",25.31
+"69","Astrea curta",10.25
+"70","Astreopora",23.38
+"71","Astreopora myriophthalma",2.75
+"72","Australogyra zelli",55.89
+"73","Catalaphyllia jardinei",2.75
+"74","Caulastraea",26.57
+"75","Caulastraea furcata",4.55
+"76","Cladocora arbuscula",2.75
+"77","Coelastrea aspera",14.27
+"78","Coeloseris mayeri",35.96
+"79","Colpophyllia amaranthus",2.75
+"80","Colpophyllia natans",17.97
+"81","Coscinaraea",26.5
+"82","Coscinaraea columna",6.51
+"83","Coscinaraea exesa",8
+"84","Coscinaraea monile",37.13
+"85","Ctenactis",0
+"86","Ctenactis echinata",0
+"87","Cycloseris",37.67
+"88","Cycloseris curvata",17.5
+"89","Cycloseris distorta",1.38
+"90","Cyphastrea",21.75
+"91","Cyphastrea chalcidicum",0
+"92","Cyphastrea decadia",0.79
+"93","Cyphastrea microphthalma",6.54
+"94","Cyphastrea ocellina",5.5
+"95","Cyphastrea serailia",8.64
+"96","Danafungia horrida",0
+"97","Dendrogyra cylindrus",45.38
+"98","Dichocoenia stellaris",2.75
+"99","Dichocoenia stokesii",10.25
+"100","Diploastrea",34.21
+"101","Diploastrea heliopora",19.94
+"102","Diploria",17.33
+"103","Diploria clivosa",17.49
+"104","Diploria labyrinthiformis",12.28
+"105","Diploria strigosa",17.57
+"106","Dipsastraea",33.04
+"107","Dipsastraea danai",37.43
+"108","Dipsastraea favus",32.05
+"109","Dipsastraea laxa",41.5
+"110","Dipsastraea lizardensis",76
+"111","Dipsastraea maritima",6.73
+"112","Dipsastraea matthaii",31.87
+"113","Dipsastraea maxima",16
+"114","Dipsastraea pallida",55.04
+"115","Dipsastraea rotumana",23.04
+"116","Dipsastraea speciosa",33.6
+"117","Dipsastraea truncatus",35.19
+"118","Echinophyllia",11.13
+"119","Echinophyllia aspera",10.56
+"120","Echinophyllia orpheensis",0
+"121","Echinopora",13.76
+"122","Echinopora gemmacea",31.56
+"123","Echinopora horrida",0.79
+"124","Echinopora lamellosa",8.87
+"125","Echinopora mammiformis",19.16
+"126","Echinopora pacificus",28.6
+"127","Euphyllia glabrescens",2.75
+"128","Eusmilia fastigiata",14.13
+"129","Favia fragum",34.21
+"130","Favites",28.41
+"131","Favites abdita",26.03
+"132","Favites chinensis",49.37
+"133","Favites complanata",20.28
+"134","Favites flexuosa",43.34
+"135","Favites halicora",25.66
+"136","Favites magnistellata",24.72
+"137","Favites pentagona",27.07
+"138","Favites rotundata",32.34
+"139","Favites russelli",14.73
+"140","Favites valenciennesi",18.14
+"141","Fungia fungites",15.21
+"142","Galaxea",32.09
+"143","Galaxea acrhelia",29.85
+"144","Galaxea astreata",47.59
+"145","Galaxea fascicularis",25.43
+"146","Galaxea horrescens",28.51
+"147","Gardineroseris",20.09
+"148","Gardineroseris planulata",23.31
+"149","Goniastrea",29.31
+"150","Goniastrea australensis",22.8
+"151","Goniastrea edwardsi",56.91
+"152","Goniastrea favulus",14.95
+"153","Goniastrea pectinata",46.88
+"154","Goniastrea retiformis",56.85
+"155","Goniastrea stelligera",49.18
+"156","Goniopora",27.86
+"157","Goniopora columna",36.83
+"158","Goniopora djiboutiensis",23.02
+"159","Goniopora lobata",19.66
+"160","Goniopora pedunculata",50.44
+"161","Goniopora stokesi",13.75
+"162","Goniopora tenuidens",39.29
+"163","Gyrosmilia",21.45
+"164","Halomitra",0
+"165","Heliofungia actiniformis",0
+"166","Heliopora",24.92
+"167","Heliopora coerulea",9.9
+"168","Herpolitha",42.98
+"169","Herpolitha limax",0
+"170","Hydnophora",21.77
+"171","Hydnophora exesa",30.07
+"172","Hydnophora microconos",10.22
+"173","Hydnophora rigida",25.62
+"174","Isophyllia rigida",2.75
+"175","Isophyllia sinuosa",2.75
+"176","Isopora",34.94
+"177","Isopora brueggemanni",29.58
+"178","Isopora cuneata",18.96
+"179","Isopora palifera",40.85
+"180","Leptastrea",16.83
+"181","Leptastrea pruinosa",7.15
+"182","Leptastrea purpurea",15.73
+"183","Leptastrea transversa",16.27
+"184","Leptoria",32.6
+"185","Leptoria irregularis",66.12
+"186","Leptoria phrygia",46.01
+"187","Leptoseris",21.48
+"188","Leptoseris cucullata",11
+"189","Leptoseris gardineri",71.5
+"190","Leptoseris papyracea",71.5
+"191","Leptoseris yabei",19.26
+"192","Lithophyllon concinna",6.33
+"193","Lobactis scutaria",2.75
+"194","Lobophyllia",39.87
+"195","Lobophyllia corymbosa",42.83
+"196","Lobophyllia flabelliformis",21.54
+"197","Lobophyllia hataii",35.75
+"198","Lobophyllia hemprichii",50.42
+"199","Lobophyllia pachysepta",0
+"200","Lobophyllia robusta",4
+"201","Madracis",10.06
+"202","Madracis auretenra",11
+"203","Madracis decactis",2.66
+"204","Madracis formosa",2.75
+"205","Madracis myriaster",4.64
+"206","Madracis pharensis",2.75
+"207","Madracis senaria",2.75
+"208","Manicina areolata",2.75
+"209","Meandrina danae",2.75
+"210","Meandrina meandrites",16.39
+"211","Merulina",47.07
+"212","Merulina ampliata",58.64
+"213","Merulina scabricula",9.09
+"214","Millepora",36.23
+"215","Millepora alcicornis",33.47
+"216","Millepora complanata",38.5
+"217","Millepora dichotoma",35.75
+"218","Millepora exaesa",2.75
+"219","Millepora intricata",35.75
+"220","Millepora platyphylla",35.75
+"221","Millepora tenera",69.93
+"222","Montastraea cavernosa",14.42
+"223","Montipora",34.81
+"224","Montipora aequituberculata",15.61
+"225","Montipora caliculata",39.76
+"226","Montipora capitata",13.75
+"227","Montipora crassituberculata",15.87
+"228","Montipora danae",72.65
+"229","Montipora digitata",18.52
+"230","Montipora dilatata",38.5
+"231","Montipora flabellata",38.5
+"232","Montipora foliosa",19.42
+"233","Montipora foveolata",29.93
+"234","Montipora grisea",28.62
+"235","Montipora hispida",61.58
+"236","Montipora hoffmeisteri",23.13
+"237","Montipora informis",72.85
+"238","Montipora mollis",52.46
+"239","Montipora monasteriata",31.43
+"240","Montipora patula",13.75
+"241","Montipora peltiformis",45.32
+"242","Montipora spongodes",60.91
+"243","Montipora tuberculosa",29.43
+"244","Montipora undata",43.45
+"245","Montipora venosa",16.38
+"246","Montipora verrucosa",2.75
+"247","Moseleya",4
+"248","Mussa angulosa",11
+"249","Mycedium",10.57
+"250","Mycedium elephantotus",13.85
+"251","Mycetophyllia aliciae",11
+"252","Mycetophyllia danaana",11
+"253","Mycetophyllia ferox",11
+"254","Mycetophyllia lamarckiana",11
+"255","Mycetophyllia reesi",2.75
+"256","Oculina diffusa",11
+"257","Oculina valenciennesi",2.75
+"258","Oculina varicosa",2.75
+"259","Orbicella",20.87
+"260","Orbicella annularis",18.89
+"261","Orbicella faveolata",21.96
+"262","Orbicella franksi",17.37
+"263","Oulophyllia",51.99
+"264","Oulophyllia crispa",22.43
+"265","Oxypora",4.72
+"266","Oxypora lacera",6.94
+"267","Pachyseris",33.2
+"268","Pachyseris gemmae",57.38
+"269","Pachyseris rugosa",21.72
+"270","Pachyseris speciosa",39.28
+"271","Palauastrea ramosa",5.5
+"272","Paraclavarina",17.04
+"273","Paraclavarina triangularis",16.92
+"274","Parascolymia vitensis",0
+"275","Pavona",37.87
+"276","Pavona cactus",31.5
+"277","Pavona clavus",44.56
+"278","Pavona decussata",5.43
+"279","Pavona duerdeni",47.6
+"280","Pavona explanulata",3.41
+"281","Pavona gigantea",36.86
+"282","Pavona maldivensis",3.93
+"283","Pavona minuta",63.25
+"284","Pavona varians",23.85
+"285","Pavona venosa",13.98
+"286","Pectinia",58.94
+"287","Pectinia alcicornis",3.69
+"288","Pectinia lactuca",68.81
+"289","Pectinia paeonia",45.24
+"290","Physogyra",37.55
+"291","Physogyra lichtensteini",71.5
+"292","Platygyra",35.57
+"293","Platygyra acuta",4.63
+"294","Platygyra daedalea",45.36
+"295","Platygyra lamellina",39.59
+"296","Platygyra pini",38.32
+"297","Platygyra ryukyuensis",14.32
+"298","Platygyra sinensis",40.05
+"299","Platygyra verweyi",34.91
+"300","Plerogyra",41.96
+"301","Plerogyra sinuosa",71.5
+"302","Plesiastrea",4.75
+"303","Plesiastrea versipora",0
+"304","Pleuractis paumotensis",0
+"305","Pocillopora",35.37
+"306","Pocillopora capitata",35.15
+"307","Pocillopora damicornis",42.29
+"308","Pocillopora danae",39.84
+"309","Pocillopora elegans",30.97
+"310","Pocillopora eydouxi",21.85
+"311","Pocillopora inflata",41.25
+"312","Pocillopora meandrina",32.77
+"313","Pocillopora verrucosa",25.82
+"314","Podabacia",2.73
+"315","Podabacia crustacea",5.41
+"316","Porites",30.5
+"317","Porites annae",5.57
+"318","Porites aranetai",35.75
+"319","Porites astreoides",16.01
+"320","Porites attenuata",35.75
+"321","Porites branneri",2.75
+"322","Porites colonensis",2.75
+"323","Porites compressa",33.69
+"324","Porites cylindrica",28.95
+"325","Porites divaricata",2.75
+"326","Porites evermanni",5.5
+"327","Porites furcata",30.22
+"328","Porites harrisoni",11
+"329","Porites heronensis",23.21
+"330","Porites horizontalata",35.75
+"331","Porites lichen",15.79
+"332","Porites lobata",35.79
+"333","Porites lutea",24.58
+"334","Porites mayeri",11.69
+"335","Porites nigrescens",41.33
+"336","Porites panamensis",27.6
+"337","Porites porites",19.82
+"338","Porites rus",7.28
+"339","Porites sillimaniana",35.75
+"340","Porites solida",35.75
+"341","Porites stephensoni",0
+"342","Porites sverdrupi",2.5
+"343","Porites vaughani",24.05
+"344","Psammocora",38
+"345","Psammocora contigua",28.42
+"346","Psammocora digitata",41.42
+"347","Psammocora stellata",11.86
+"348","Psammocora superficialis",5.5
+"349","Pseudosiderastrea tayami",2.75
+"350","Sandalolitha robusta",0.26
+"351","Scapophyllia",40.16
+"352","Scapophyllia cylindrica",16.33
+"353","Scolymia cubensis",11
+"354","Scolymia lacera",2.75
+"355","Seriatopora",51.53
+"356","Seriatopora caliendrum",65.82
+"357","Seriatopora hystrix",61.46
+"358","Siderastrea",18.5
+"359","Siderastrea radians",23.13
+"360","Siderastrea savignyana",2.75
+"361","Siderastrea siderea",19.05
+"362","Solenastrea bournoni",0
+"363","Stephanocoenia intersepta",18.77
+"364","Stylocoeniella",71.5
+"365","Stylophora",43.69
+"366","Stylophora pistillata",56.42
+"367","Symphyllia",5.11
+"368","Symphyllia agaricia",10.12
+"369","Symphyllia radians",12.31
+"370","Symphyllia recta",11.57
+"371","Turbinaria",31.87
+"372","Turbinaria bifrons",71.5
+"373","Turbinaria mesenterina",20.87
+"374","Turbinaria peltata",71.5
