@@ -25,10 +25,11 @@ voronoiFilterDi <- function(dat, s) {
     areas <- unlist(lapply(info, function(x) x$area))
     
     # Incorporating relative abundance (b/w 0 and 1) simply by multiplying with area
-     areas <- areas * subset$Range.size
+    areas <- areas * subset$Range.size
     areas <- areas * subset$abund
     #areas <- areas * subset$BI
     areas <- areas * subset$genus_age
+    areas <- areas * subset$pca_density
     
     # Find smallest value, no longer just the voronoi area
     smallest <- which(areas == min(areas, na.rm=TRUE))

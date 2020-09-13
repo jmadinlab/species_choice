@@ -20,6 +20,7 @@ pcoa <- pcoa(gowdis(dat[,cats]))
 space <- data.frame(x=jitter(pcoa$vectors[,1], amount=0.01), y=jitter(pcoa$vectors[,2], amount=0.01), z=jitter(pcoa$vectors[,3], amount=0.01))
 dat <- cbind(dat, space)
 
+
 s <- 20
 
 # trait vectors 
@@ -67,6 +68,15 @@ dat$genus_age <- dat$Genus.fossil.age / max(dat$Genus.fossil.age, na.rm=TRUE)
 sum(is.na(dat$Genus.fossil.age))
 #hist(dat$genus_age)
 
+# Density in trait space.
+H <- Hpi(x=space[,1:2])      # optimal bandwidth estimation
+est <- kde(x=space[,1:2], H=H, eval.points=space[,1:2], compute.cont=TRUE)    # kernel density estimation
+dat$pca_density <- est$estimate
+dat$pca_density <- 1 - dat$pca_density / max(dat$pca_density, na.rm=TRUE)
+hist(dat$pca_density)
+plot(space[,1:2], cex=est$estimate/5)
+points(est$x)
+
 
 # 2D
 ##############################
@@ -79,7 +89,7 @@ legend("topleft", pch=c(0, 20), col=c("grey", "blue"), bty="n", legend=c("all sp
 
 # 3D
 ##############################
- dat3D <- voronoiFilter3D(dat, s)
+dat3D <- voronoiFilter3D(dat, s)
 
 library("car")
 library("rgl")
@@ -96,17 +106,17 @@ segments3d(x=as.vector(t(seg[,c("x","xend")])),y=as.vector(t(seg[,c("y","yend")]
 
 # 2D -weighted
 ##############################
- dat2D_Di <- voronoiFilterDi(dat, s)
+dat2D_Di <- voronoiFilterDi(dat, s)
 
 plot(y ~ x, dat, col="grey", cex=(dat$abund)*3, xlab="PC1", ylab="PC2")
-points(y ~ x, dat2D_Di, col="blue", pch=20, cex=0.6)
+points(y ~ x, dat2D, col="blue", pch=20, cex=0.6)
+points(y ~ x, dat2D_Di, col="red", pch=3, cex=0.6)
 legend("topleft", pch=c(0, 20), col=c("grey", "blue"), bty="n", legend=c("all species", "widely spread species"), cex=0.6)
-
 
 
 # 3D -weighted
 ##############################
- dat3D_Di <- voronoiFilter3DDi(dat, s)
+dat3D_Di <- voronoiFilter3DDi(dat, s)
 
 plot(y ~ x, dat, col="grey", cex=(dat$abund)*3, xlab="PC1", ylab="PC2")
 points(y ~ x, dat2D, col="blue", pch=20, cex=0.6)
