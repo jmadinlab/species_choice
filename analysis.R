@@ -5,12 +5,12 @@ library("cowplot")
 library("FD")
 library("vegan")
 library("tripack")
-source("data_prep.R")
 library("ks")
 library("car")
 library("rgl")
 
 source("R/functions.R")
+source("R/data_prep.R")
 
 # points
 ##############################
