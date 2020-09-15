@@ -23,6 +23,8 @@ pcoa <- pcoa(gowdis(dat[,cats]))
 space <- data.frame(x=jitter(pcoa$vectors[,1], amount=0.01), y=jitter(pcoa$vectors[,2], amount=0.01), z=jitter(pcoa$vectors[,3], amount=0.01))
 dat <- cbind(dat, space)
 
+write.csv(dat["species"], "output/species.csv", row.names = FALSE)
+
 # Density in trait space
 ##############################
 H12 <- Hpi(x=space[,1:2])      # optimal bandwidth estimation

@@ -11,6 +11,8 @@ In doing so, we hope to capture high levels of genetic and phylogenetic diversit
 
 ## Analysis
 
+Here are the species we consider: [species.csv](output/species.csv)
+
 ### Step 1: Trait space
 
 We used trait data from [this paper](https://www.pnas.org/content/115/12/3084.short), which includes numerical (1-5) trait values for all species. The data is available [here](https://research.jcu.edu.au/researchdata/default/detail/2d343a3dc21a6a25831f3fbaa508efa7/). The traits are selected to represent the functional importance of corals. They are:
@@ -33,8 +35,6 @@ The trait vectors indicate the areas of trait space that bring high trait values
 
 <p align="center">
 <img src="figs/vectors.png" alt="drawing" width="400"/> </p>
-<br/>
-
 
 ### Step 2: Even spread in trait space
 
