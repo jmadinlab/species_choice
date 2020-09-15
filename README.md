@@ -11,7 +11,7 @@ In doing so, we hope to capture high levels of genetic and phylogenetic diversit
 
 ## Analysis
 
-Here are the species we consider: [species.csv](output/species.csv)
+Here are the 394 species we consider: [species.csv](output/species.csv)
 
 ### Step 1: Trait space
 
