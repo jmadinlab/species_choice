@@ -52,7 +52,7 @@ To generate species (points) with maximum spread in trait space we used [voronoi
 By iteratively removing the points occupying the smallest cells we are left with *n* points with maximum spread. When we apply this function to trait space using **20 species**, it looks like this:
 
 <p align="center">
-<img src="figs/figure1.png" alt="drawing" width="400"/>
+<img src="figs/figure1.png" alt="drawing" width="500"/>
 </p>
 <br/>
 
@@ -61,7 +61,7 @@ By iteratively removing the points occupying the smallest cells we are left with
 The above species are selected over three PC axes, but display only on axes 1 and 2. The third principal component aligns strongly with colony size. Here is the select in three dimensions:
 
 <p align="center">
-<img src="figs/figure2.png" alt="drawing" width="400"/> </p>
+<img src="figs/figure2.png" alt="drawing" width="500"/> </p>
 <p align="center">
 
 Explore the 3D plot [here](https://mikemcwilliam.github.io/webGL/index.html).
@@ -79,7 +79,7 @@ The final step is to weight species selection by demonstrated qualities that are
 The voronoi cell areas (from Step 2) are simply multiplied by each of these qualities. So, a species's cell area remains the same if it is common, large ranges and old-aged. When we do this, the voronoi function favours species with even spread in trait space and higher qualities deemed important.
 
 <p align="center">
-<img src="figs/figure3.png" alt="drawing" width="400"/> </p>
+<img src="figs/figure3.png" alt="drawing" width="500"/> </p>
 <br/>
 
 > Which gives the following 20 species names: HIDDEN
@@ -87,7 +87,7 @@ The voronoi cell areas (from Step 2) are simply multiplied by each of these qual
 We are also exploring *density* in PC space, which weighs species from clusters of species in trait space more (or less) heavily (scaled between 0 and 1). This needs discussion, but presumably species cluster evoluntionary in certain regions of trait space for a reason.
 
 <p align="center">
-<img src="figs/figure4.png" alt="drawing" width="400"/> </p>
+<img src="figs/figure4.png" alt="drawing" width="500"/> </p>
 <br/>
 
 > Which gives the following 20 species names: HIDDEN
