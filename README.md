@@ -8,9 +8,9 @@ So, the anlytical basis hedges our bet by:
 2. Weighing certains species more-so based on regional abundance, geographic range size, and extinction survival.
 3. Capturing high genetic and phylogenetic diversity, and therefore a range of sensitivities to future stressors. This can be tested later.
 
-### Analysis
+## Analysis
 
-##### Step 1: Trait space
+### Step 1: Trait space
 
 We used trait data from [this paper](https://www.pnas.org/content/115/12/3084.short), which includes numerical (1-5) trait values for all species. The data is available [here](https://research.jcu.edu.au/researchdata/default/detail/2d343a3dc21a6a25831f3fbaa508efa7/). The traits are selected to represent the functional importance of corals. They are:
 
@@ -35,7 +35,7 @@ The trait vectors indicate the areas of trait space that bring high trait values
 <br/>
 
 
-##### Step 2: Even spread in trait space
+### Step 2: Even spread in trait space
 
 To generate species (points) with maximum spread in trait space we used [voronoi mosaics](https://en.wikipedia.org/wiki/Voronoi_diagram), which evenly partition the space between neighbouring points, and uses partitions to construct cells for each point:
 
@@ -63,7 +63,7 @@ Explore the 3D plot [here](https://mikemcwilliam.github.io/webGL/index.html).
 
 At this point we have a list of 20 species that are most evenly spread in trait space, and so capture a broad range of trade-offs and thereby a higher chance of forming a functioning coral assemablge. 
 
-##### Step 3: Weigh by qualities
+### Step 3: Weigh by qualities
 
 The final step is to weight species selection by demonstrated qualities that are expected to help them persist. We still need to discuss how to do this, but for this demonstration we used the following criteria from the coral traits database:
 
@@ -87,7 +87,7 @@ We are also exploring *density* in PC space, which weighs species from clusters 
 
 > Which gives the following 20 species names: HIDDEN
 
-##### Step 4: Do species represent potential winners, losers or both?
+### Step 4: Do species represent potential winners, losers or both?
 
 We had a quick look at this question using bleaching sensitivity index using data from [this paper](https://onlinelibrary.wiley.com/doi/abs/10.1111/gcb.13276). The selected species (red points) have a large range of bleaching sensitivities compared to the total distribution (histogram), but they do not include the most sensitive species:
 
@@ -95,7 +95,7 @@ We had a quick look at this question using bleaching sensitivity index using dat
 <img src="figs/BRI.png" alt="drawing" width="400"/> </p>
 <br/>
 
-### Still to do
+## Still to do
 
 - Gather species-level abundance data for GBR species to weigh species selection
 - Decide on how to generate index of 'desirability' to weigh selection
