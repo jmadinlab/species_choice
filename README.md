@@ -1,8 +1,3 @@
----
-output:
-  pdf_document: default
-  html_document: default
----
 # Species choice analysis
 
 This analysis is about hedging our bet of which species will successfuly form a functioning and persistent coral reef in the future. The aim is to construct an objective analytical framework for selecting of *n* species to focus on for restoration or other forms of preservation. There are two key components of the framework. The first is selecting a broad range of life histories using trait space as our template. This step is important because there are physiological and demographic trade-offs among species. Species good at one life history strategy (e.g., growing fast) tend to be poor at others (e.g., surviving storms or reproducing). The key second component is prioritising species with demonstrated qualities that are expected to help them persist in uncertain future environments. For instance, species with higher abundances and larger geographic range sizes tend to recovery faster from disturbances, and also have more genetic diversity that facilitates evolvution to novel conditions via selection, because drift is less pervasive. Additionally, species that are evolutionary older may also be expected to deal with change better; although, older species have also been shown to be more prone to extinction in analyses of marine fauna in Phanerozoic fossil records.
