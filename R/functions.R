@@ -1,22 +1,22 @@
 # Functions
-library(tripack)
 
-
-voronoiFilter <- function(dat, s) {
+# Original, area only
+voronoiFilter2D <- function(dat, s) {
   subset <- dat
   dropped <- vector()
   for (i in 1:(nrow(dat)-s)) {
     v <- voronoi.mosaic(x=subset[,'x'], y=subset[,'y'], duplicate='error')
     info <- cells(v)
     areas <- unlist(lapply(info, function(x) x$area))
-    smallest <- which(areas == min(areas, na.rm=TRUE))
+    smallest <- which(areas == min(areas, na.rm=TRUE))[1]
     dropped <- c(dropped, which(paste(dat[,'x'], dat[,'y'], sep='_') == paste(subset[smallest,'x'], subset[smallest,'y'], sep='_')))
     subset <- subset[-smallest,]
   }
   return(dat[-dropped,])
 }
 
-voronoiFilterDi <- function(dat, s) {
+# 2D and building in otehr factors.
+voronoiFilter2DDi <- function(dat, s) {
   subset <- dat
   dropped <- vector()
   for (i in 1:(nrow(dat)-s)) {
@@ -29,10 +29,10 @@ voronoiFilterDi <- function(dat, s) {
     areas <- areas * subset$abund
     #areas <- areas * subset$BI
     areas <- areas * subset$genus_age
-    areas <- areas * subset$pca_density
+    areas <- areas * subset$density
     
     # Find smallest value, no longer just the voronoi area
-    smallest <- which(areas == min(areas, na.rm=TRUE))
+    smallest <- which(areas == min(areas, na.rm=TRUE))[1]
     dropped <- c(dropped, which(paste(dat[,'x'], dat[,'y'], sep='_') == paste(subset[smallest,'x'], subset[smallest,'y'], sep='_')))
     subset <- subset[-smallest,]
   }
@@ -41,7 +41,7 @@ voronoiFilterDi <- function(dat, s) {
 
 
 
-
+# 3D 
 
 voronoiFilter3D <- function(dat, s) {
   subset <- dat
@@ -61,13 +61,7 @@ voronoiFilter3D <- function(dat, s) {
     
     areas <- apply(cbind(areas1, areas2, areas3), 1, min, na.rm=TRUE)
     
-    # Incorporating relative abundance (b/w 0 and 1) simply by multiplying with area
-    #areas <- areas * subset$Range.size
-    #areas <- areas * subset$abund
-    #areas <- areas * subset$BI
-    #areas <- areas * subset$genus_age
-    
-    smallest <- which(areas == min(areas, na.rm=TRUE))
+    smallest <- which(areas == min(areas, na.rm=TRUE))[1]
     dropped <- c(dropped, which(paste(dat[,'x'], dat[,'y'], dat[,'z'], sep='_') == paste(subset[smallest,'x'], subset[smallest,'y'], subset[smallest,'z'], sep='_')))
     subset <- subset[-smallest,]
   }
@@ -75,6 +69,7 @@ voronoiFilter3D <- function(dat, s) {
 }
 
 
+# 3D with factors
 
 voronoiFilter3DDi <- function(dat, s) {
   subset <- dat
@@ -99,8 +94,9 @@ voronoiFilter3DDi <- function(dat, s) {
     areas <- areas * subset$abund
     #areas <- areas * subset$BI
     areas <- areas * subset$genus_age
+    areas <- areas * subset$density
     
-    smallest <- which(areas == min(areas, na.rm=TRUE))
+    smallest <- which(areas == min(areas, na.rm=TRUE))[1]
     dropped <- c(dropped, which(paste(dat[,'x'], dat[,'y'], dat[,'z'], sep='_') == paste(subset[smallest,'x'], subset[smallest,'y'], subset[smallest,'z'], sep='_')))
     subset <- subset[-smallest,]
   }

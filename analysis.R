@@ -1,13 +1,16 @@
-
+# Species choice
 
 library("ggplot2")
 library("cowplot")
+library("FD")
+library("vegan")
+library("tripack")
 source("data_prep.R")
-
-# Anyalsis
+library("ks")
+library("car")
+library("rgl")
 
 source("R/functions.R")
-library("FD")
 
 # points
 ##############################
@@ -20,12 +23,23 @@ pcoa <- pcoa(gowdis(dat[,cats]))
 space <- data.frame(x=jitter(pcoa$vectors[,1], amount=0.01), y=jitter(pcoa$vectors[,2], amount=0.01), z=jitter(pcoa$vectors[,3], amount=0.01))
 dat <- cbind(dat, space)
 
+# Density in trait space
+##############################
+H12 <- Hpi(x=space[,1:2])      # optimal bandwidth estimation
+H13 <- Hpi(x=space[,c(1, 3)])      # optimal bandwidth estimation
+H23 <- Hpi(x=space[,2:3])      # optimal bandwidth estimation
+est12 <- kde(x=space[,1:2], H=H12, eval.points=space[,1:2], compute.cont=TRUE)    # kernel density estimation
+est13 <- kde(x=space[,c(1, 3)], H=H13, eval.points=space[,c(1, 3)], compute.cont=TRUE)
+est23 <- kde(x=space[,2:3], H=H23, eval.points=space[,2:3], compute.cont=TRUE)
 
-s <- 20
+dat$density <- apply(cbind(est12$estimate, est13$estimate, est23$estimate), 1, mean)
+dat$density <- dat$density / max(dat$density, na.rm=TRUE)
+
+hist(dat$density)
+plot(space[,1:2], cex=dat$density*10)
 
 # trait vectors 
 ##############################
-library("vegan")
 prin<-princomp((dat[,cats]), cor = TRUE, scores = TRUE)
 pc12<-prin$scores[,1:2]
 #ll<-prin$loadings
@@ -38,14 +52,10 @@ segments(0,0, fit2[,1], fit2[,2], col=1, lty=2, lwd=1)
 mtext("PC1", cex=0.75, side=1, line=0.5, adj=1)
 mtext("PC2", cex=0.75, side=2, line=0.5, at=3.5) 
 
-
-
-
 # DESIRABILITY
 ##############################
 
 # Range size
-#hist(dat$Range.size)
 dat$Range.size <- dat$Range.size / max(dat$Range.size)
 
 # Abundance
@@ -68,31 +78,18 @@ dat$genus_age <- dat$Genus.fossil.age / max(dat$Genus.fossil.age, na.rm=TRUE)
 sum(is.na(dat$Genus.fossil.age))
 #hist(dat$genus_age)
 
-# Density in trait space.
-H <- Hpi(x=space[,1:2])      # optimal bandwidth estimation
-est <- kde(x=space[,1:2], H=H, eval.points=space[,1:2], compute.cont=TRUE)    # kernel density estimation
-dat$pca_density <- est$estimate
-dat$pca_density <- 1 - dat$pca_density / max(dat$pca_density, na.rm=TRUE)
-hist(dat$pca_density)
-plot(space[,1:2], cex=est$estimate/5)
-points(est$x)
-
-
-# 2D
-##############################
-dat2D <- voronoiFilter(dat, s)
-
-plot(y ~ x, dat, col="grey", cex=1, xlab="PC1", ylab="PC2")
-points(y ~ x, dat2D, col="blue", pch=20, cex=0.6)
-legend("topleft", pch=c(0, 20), col=c("grey", "blue"), bty="n", legend=c("all species", "widely spread species"), cex=0.6)
-
-
 # 3D
 ##############################
+s <- 20
 dat3D <- voronoiFilter3D(dat, s)
 
-library("car")
-library("rgl")
+png("figs/figure1.png", width = 5, height = 5.5, units = 'in', res = 300)
+plot(y ~ x, dat, col="grey", cex=1, xlab="PC1", ylab="PC2")
+points(y ~ x, dat3D, col="blue", pch=20, cex=0.6)
+legend("topleft", pch=c(0, 20), col=c("grey", "blue"), bty="n", legend=c("all species", "widely spread species"), cex=0.6)
+dev.off()
+
+
 seg<-cbind(dat3D[,c("x","y","z")], data.frame(xend=rep(0,nrow(dat3D)),yend=rep(0,nrow(dat3D)),zend=rep(0,nrow(dat3D))))
 head(seg)
   #writeWebGL()
@@ -100,32 +97,45 @@ plot3d(dat$x, dat$y, dat$z, type="s", xlab="PC1", ylab="PC2", zlab="PC3", size=0
 spheres3d(dat3D$x, dat3D$y, dat3D$z,  col="red", radius=0.01)
 axes3d(c("x", "y", "z"), col="white")
 segments3d(x=as.vector(t(seg[,c("x","xend")])),y=as.vector(t(seg[,c("y","yend")])), z=as.vector(t(seg[,c("z","zend")])), col='red', alpha=0.5)
-           bg3d("slategrey") 
-
-
-
-# 2D -weighted
-##############################
-dat2D_Di <- voronoiFilterDi(dat, s)
-
-plot(y ~ x, dat, col="grey", cex=(dat$abund)*3, xlab="PC1", ylab="PC2")
-points(y ~ x, dat2D, col="blue", pch=20, cex=0.6)
-points(y ~ x, dat2D_Di, col="red", pch=3, cex=0.6)
-legend("topleft", pch=c(0, 20), col=c("grey", "blue"), bty="n", legend=c("all species", "widely spread species"), cex=0.6)
-
+           bg3d("slategrey")
 
 # 3D -weighted
 ##############################
-dat3D_Di <- voronoiFilter3DDi(dat, s)
+dat3Dd <- voronoiFilter3DDi(dat, s)
 
-plot(y ~ x, dat, col="grey", cex=(dat$abund)*3, xlab="PC1", ylab="PC2")
-points(y ~ x, dat2D, col="blue", pch=20, cex=0.6)
- points(y ~ x, dat3D_Di, col="red", pch=5, cex=1.2)
-legend("topleft", pch=c(0, 20, 5), col=c("grey", "blue", "red"), bty="n", legend=c("species", "even 2D spread alone", "even 3D spread & d.index"), cex=0.6)
+png("figs/figure3.png", width = 5, height = 5.5, units = 'in', res = 300)
+
+plot(y ~ x, dat, col="grey", cex=1, xlab="PC1", ylab="PC2")
+points(y ~ x, dat3D, col="blue", pch=20, cex=0.6)
+ points(y ~ x, dat3Dd, col="red", pch=5, cex=1.2)
+legend("topleft", pch=c(0, 20, 5), col=c("grey", "blue", "red"), bty="n", legend=c("species", "even spread alone", "even spread & quality"), cex=0.6)
+
+dev.off()
 
 
+seg<-cbind(dat3D[,c("x","y","z")], data.frame(xend=rep(0,nrow(dat3D_Di)),yend=rep(0,nrow(dat3D_Di)),zend=rep(0,nrow(dat3D_Di))))
+head(seg)
+#writeWebGL()
+plot3d(dat$x, dat$y, dat$z, type="s", xlab="PC1", ylab="PC2", zlab="PC3", size=0.5, box=FALSE, axes=F, col.panel = "black",)
+spheres3d(dat3D_Di$x, dat3D_Di$y, dat3D_Di$z,  col="red", radius=0.01)
+axes3d(c("x", "y", "z"), col="white")
+segments3d(x=as.vector(t(seg[,c("x","xend")])),y=as.vector(t(seg[,c("y","yend")])), z=as.vector(t(seg[,c("z","zend")])), col='red', alpha=0.5)
+bg3d("slategrey")
 
-dat3D_Di$species
+# 3D -weighted
+##############################
+dat3Ddd <- voronoiFilter3DDi(dat, s)
+
+png("figs/figure4.png", width = 5, height = 5.5, units = 'in', res = 300)
+
+plot(y ~ x, dat, col="grey", cex=1, xlab="PC1", ylab="PC2")
+points(y ~ x, dat3D, col="blue", pch=20, cex=0.6)
+points(y ~ x, dat3Dd, col="red", pch=5, cex=1.2)
+points(y ~ x, dat3Ddd, col="green", pch=3, cex=1.5)
+legend("topleft", pch=c(0, 20, 5), col=c("grey", "blue", "red", "green"), bty="n", legend=c("species", "even spread alone", "even spread & quality", "even spread, quality & density"), cex=0.6)
+
+dev.off()
+
 
 
 
@@ -209,8 +219,6 @@ space<-data.frame(x=jitter(pcoa$vectors[,1], amount=0.01), y=jitter(pcoa$vectors
 
 # trait vectors 
 
-library("ks")
-library("vegan")
 
 
 # princomp
