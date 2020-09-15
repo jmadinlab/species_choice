@@ -1,3 +1,8 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 # Species choice analysis
 
 This analysis is about hedging our bet of which species will successfuly form a functioning and persistent coral reef in the future. The aim is to construct an objective analytical framework for selecting of *n* species to focus on for restoration or other forms of preservation. There are two key components of the framework. The first is selecting a broad range of life histories using trait space as our template. This step is important because there are physiological and demographic trade-offs among species. Species good at one life history strategy (e.g., growing fast) tend to be poor at others (e.g., surviving storms or reproducing). The key second component is prioritising species with demonstrated qualities that are expected to help them persist in uncertain future environments. For instance, species with higher abundances and larger geographic range sizes tend to recovery faster from disturbances, and also have more genetic diversity that facilitates evolvution to novel conditions via selection, because drift is less pervasive. Additionally, species that are evolutionary older may also be expected to deal with change better; although, older species have also been shown to be more prone to extinction in analyses of marine fauna in Phanerozoic fossil records.
@@ -25,7 +30,7 @@ We used trait data from [this paper](https://www.pnas.org/content/115/12/3084.sh
 Figure 3 of the original paper shows that a PCoA (principal coordinates analysis) of these traits separates out the major morphological groups, and that the GBR has different occupancy to the Caribbean due to the lack of branching corals. Each point is a species and the contours show dense clusters:
 
 <p align="center">
-<img src="figs/pnas.png" alt="drawing" width="300"/> </p>
+<img src="figs/pnas.png" alt="drawing" width="400"/> </p>
 <br/>
 
 The trait vectors indicate the areas of trait space that bring high trait values. The axes reflect trade-offs, e.g. between growth and corallite size on axis 1, which captures a range of demographic and physiological variation, and height and skeletal density/surface area on axis 2:
@@ -40,7 +45,7 @@ The trait vectors indicate the areas of trait space that bring high trait values
 To generate species (points) with maximum spread in trait space we used [voronoi mosaics](https://en.wikipedia.org/wiki/Voronoi_diagram), which evenly partition the space between neighbouring points, and uses partitions to construct cells for each point:
 
 <p align="center">
-<img src="figs/voronoi.png" alt="drawing" width="300"/> 
+<img src="figs/voronoi.png" alt="drawing" width="400"/> 
 </p>
 <br/>
 
