@@ -2,14 +2,14 @@
 
 # Coral Traits Database means  - www.coraltraits.org
 #source("data/traitdatabase/ctb_prep.R")
-ctb<-read.csv("data/traitdatabase/output.csv")
+ctb<-read.csv("data/traitdatabase/output.csv", as.is=TRUE)
 ctb<-ctb[ctb$Zooxanthellate=="zooxanthellate",] # zooxanthellate only
 ctb<-ctb[!is.na(ctb$Abundance.GBR),] # gbr only
 nrow(ctb)
 
 
 # trait biogeography - McWilliam et al. 2018 PNAS
-dat<-read.csv("data/pnas2018/traitbiogeography.csv")
+dat<-read.csv("data/pnas2018/traitbiogeography.csv", as.is=TRUE)
 dat$species<-gsub("Coscinarea", "Coscinaraea",dat$species)
 dat$species<-gsub("Dipsastrea", "Dipsastraea",dat$species)
 dat$species<-gsub("erythrea","erythraea",dat$species)
@@ -67,16 +67,38 @@ dat$BRI<-bri$BRI[match(dat$species, bri$species)]
 #head(dat)
 #hist(log10(dat$BRI))
 
+# restorability 
+dat$restore <- 0
+dat$restore[dat$Growth.form.typical %in% c("branching_open", "massive", "encrusting", "branching_closed", "tables_or_plates", "encrusting_long_uprights")] <- 1
+dat$restore[dat$Growth.form.typical %in% c("digitate", "corymbose", "laminar")] <- 0.5
+dat$restore[dat$Growth.form.typical %in% c("columnar", "hispidose", "submassive")] <- 0.1
 
 # Families
-tax<-read.csv("data/taxonomy.csv")
+fam <- read.csv("data/species-5.csv", as.is=TRUE)[c("master_species", "family_molecules", "family_morphology")]
+names(fam) <- c("species", "family_molecules", "family_morphology")
+dat <- merge(dat, fam, all.x=TRUE)
+unique(dat$family_morphology)
+
+# dat$BRI <- dat$BRI/100
+# mod <- glm(BRI ~ Growth.form.typical + family_molecules, dat, family=binomial)
+# drop1(mod, test="Chisq")
+# hist(dat$BRI)
+
+# tax<-read.csv("data/taxonomy.csv")
 #head(tax)
 
+# miz <- read.csv("data/mizerek/338_2018_1702_MOESM1_ESM.csv", as.is=TRUE)
+# suc <- miz$BI * miz$Number.of.colonies
+# fai <- miz$Number.of.colonies - suc
+# suc <- round(suc)
+# fai <- round(fai)
+# 
+# mod <- glm(cbind(suc, fai) ~ Growth.form + Coral.Family, miz, family=binomial)
+# drop1(mod, test="Chisq")
 
 
-
-
-
+# unique(miz$Coral.Family)
+# unique(dat$Coral.Family)
 
 
 # export

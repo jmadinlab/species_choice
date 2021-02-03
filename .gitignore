@@ -5,3 +5,5 @@
 .DS_Store
 *.html
 .Rapp.history
+
+doc/paper/

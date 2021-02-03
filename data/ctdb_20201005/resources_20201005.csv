@@ -1,0 +1,3 @@
+resource_id,primary_secondary,author,year,title,resource_type,resource_ISBN,resource_journal,resource_volume_pages,resource_notes
+38,primary,"Veron, J. E. N.",1986,Corals of Australia and the Indo-Pacific,book,"","University of Hawaii Press, Honolulu","",""
+282,secondary,"Díaz, M., Madin, J.",2010,Macroecological relationships between coral species’ traits and disease potential,paper,10.1007/s00338-010-0668-4,Coral Reefs,"30, 73-84",""

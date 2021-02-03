@@ -1,18 +1,67 @@
 # Functions
 
 # Original, area only
-voronoiFilter2D <- function(dat, s) {
+dd2D <- function(dat, s, vars, voronoi=TRUE, trait=TRUE, oppo=FALSE) {
   subset <- dat
   dropped <- vector()
   for (i in 1:(nrow(dat)-s)) {
-    v <- voronoi.mosaic(x=subset[,'x'], y=subset[,'y'], duplicate='error')
-    info <- cells(v)
-    areas <- unlist(lapply(info, function(x) x$area))
+    
+    if (trait) {
+      if (voronoi) {
+        v <- voronoi.mosaic(x=subset[,'x'], y=subset[,'y'], duplicate='error')
+        info <- cells(v)
+        areas <- unlist(lapply(info, function(x) x$area))
+        areas[is.na(areas)] <- mean(areas, na.rm=TRUE)
+      } else {
+        areas <- apply(nndist(subset$x, subset$y, k=1:3), 1, mean)
+      }
+    } else {
+      areas <- rep(1, length(subset$x))
+    }
+    
+    if ("range" %in% vars) {
+      if (oppo) {
+        areas <- areas * (1 - subset$range)
+      } else {
+        areas <- areas * subset$range
+      }
+    }
+    if ("abund" %in% vars) {
+      if (oppo) {
+        areas <- areas * (1 - subset$abund)
+      } else {
+        areas <- areas * subset$abund
+      }
+    }
+    if ("age" %in% vars) {
+      if (oppo) {
+        areas <- areas * (1 - subset$age)
+      } else {
+        areas <- areas * subset$age
+      }
+    }
+    if ("bleach" %in% vars) {
+      if (oppo) {
+        areas <- areas * (1 - subset$bleach)
+      } else {
+        areas <- areas * (subset$bleach)
+      }
+    }
+    if ("restore" %in% vars) {
+      areas <- areas * (subset$restore)
+    }
+    if ("density" %in% vars) {
+      areas <- areas * subset$density
+    }
+    
     smallest <- which(areas == min(areas, na.rm=TRUE))[1]
     dropped <- c(dropped, which(paste(dat[,'x'], dat[,'y'], sep='_') == paste(subset[smallest,'x'], subset[smallest,'y'], sep='_')))
     subset <- subset[-smallest,]
+    areas <- areas[-smallest]
   }
-  return(dat[-dropped,])
+  temp2 <- dat[-dropped,]
+  temp2$value <- areas
+  return(temp2)
 }
 
 # 2D and building in other factors.
@@ -42,37 +91,37 @@ voronoiFilter2D.w.d <- function(dat, s) {
 
 
 # 3D 
-
-voronoiFilter3D <- function(dat, s) {
-  subset <- dat
-  dropped <- vector()
-  for (i in 1:(nrow(dat)-s)) {
-    v1 <- voronoi.mosaic(x=subset[,'x'], y=subset[,'y'], duplicate='error')
-    info1 <- cells(v1)
-    areas1 <- unlist(lapply(info1, function(x) x$area))
-
-    v2 <- voronoi.mosaic(x=subset[,'x'], y=subset[,'z'], duplicate='error')
-    info2 <- cells(v2)
-    areas2 <- unlist(lapply(info2, function(x) x$area))
-    
-    v3 <- voronoi.mosaic(x=subset[,'y'], y=subset[,'z'], duplicate='error')
-    info3 <- cells(v3)
-    areas3 <- unlist(lapply(info3, function(x) x$area))
-    
-    areas <- apply(cbind(areas1, areas2, areas3), 1, min, na.rm=TRUE)
-    
-    smallest <- which(areas == min(areas, na.rm=TRUE))[1]
-    dropped <- c(dropped, which(paste(dat[,'x'], dat[,'y'], dat[,'z'], sep='_') == paste(subset[smallest,'x'], subset[smallest,'y'], subset[smallest,'z'], sep='_')))
-    subset <- subset[-smallest,]
-  }
-  return(dat[-dropped,])
-}
-
+# 
+# voronoiFilter3D <- function(dat, s) {
+#   subset <- dat
+#   dropped <- vector()
+#   for (i in 1:(nrow(dat)-s)) {
+#     v1 <- voronoi.mosaic(x=subset[,'x'], y=subset[,'y'], duplicate='error')
+#     info1 <- cells(v1)
+#     areas1 <- unlist(lapply(info1, function(x) x$area))
+# 
+#     v2 <- voronoi.mosaic(x=subset[,'x'], y=subset[,'z'], duplicate='error')
+#     info2 <- cells(v2)
+#     areas2 <- unlist(lapply(info2, function(x) x$area))
+#     
+#     v3 <- voronoi.mosaic(x=subset[,'y'], y=subset[,'z'], duplicate='error')
+#     info3 <- cells(v3)
+#     areas3 <- unlist(lapply(info3, function(x) x$area))
+#     
+#     areas <- apply(cbind(areas1, areas2, areas3), 1, min, na.rm=TRUE)
+#     
+#     smallest <- which(areas == min(areas, na.rm=TRUE))[1]
+#     dropped <- c(dropped, which(paste(dat[,'x'], dat[,'y'], dat[,'z'], sep='_') == paste(subset[smallest,'x'], subset[smallest,'y'], subset[smallest,'z'], sep='_')))
+#     subset <- subset[-smallest,]
+#   }
+#   return(dat[-dropped,])
+# }
+# 
 
 
 # 3D weighted
-voronoiFilter3D.w <- function(dat, s) {
-  subset <- dat
+voronoiFilter3D <- function(dat, s, vars="") {
+  subset <- dat2
   dropped <- vector()
   for (i in 1:(nrow(dat)-s)) {
     v1 <- voronoi.mosaic(x=subset[,'x'], y=subset[,'y'], duplicate='error')
@@ -89,11 +138,21 @@ voronoiFilter3D.w <- function(dat, s) {
     
     areas <- apply(cbind(areas1, areas2, areas3), 1, min, na.rm=TRUE)
     
-    # Incorporating relative abundance (b/w 0 and 1) simply by multiplying with area
-    areas <- areas * subset$Range.size
-    areas <- areas * subset$abund
-    #areas <- areas * subset$BI
-    areas <- areas * subset$genus_age
+    if ("range" %in% vars) {
+      areas <- areas * subset$range
+    }
+    if ("abund" %in% vars) {
+      areas <- areas * subset$abund
+    }
+    if ("age" %in% vars) {
+      areas <- areas * subset$age
+    }
+    if ("bi" %in% vars) {
+      areas <- areas * subset$bi
+    }
+    if ("density" %in% vars) {
+      areas <- areas * subset$density
+    }
     
     smallest <- which(areas == min(areas, na.rm=TRUE))[1]
     dropped <- c(dropped, which(paste(dat[,'x'], dat[,'y'], dat[,'z'], sep='_') == paste(subset[smallest,'x'], subset[smallest,'y'], subset[smallest,'z'], sep='_')))
@@ -102,87 +161,41 @@ voronoiFilter3D.w <- function(dat, s) {
   return(dat[-dropped,])
 }
 
-
-
-# 3D weighted with density
-
-voronoiFilter3D.w.d <- function(dat, s) {
-  subset <- dat
-  dropped <- vector()
-  for (i in 1:(nrow(dat)-s)) {
-    v1 <- voronoi.mosaic(x=subset[,'x'], y=subset[,'y'], duplicate='error')
-    info1 <- cells(v1)
-    areas1 <- unlist(lapply(info1, function(x) x$area))
-
-    v2 <- voronoi.mosaic(x=subset[,'x'], y=subset[,'z'], duplicate='error')
-    info2 <- cells(v2)
-    areas2 <- unlist(lapply(info2, function(x) x$area))
-    
-    v3 <- voronoi.mosaic(x=subset[,'y'], y=subset[,'z'], duplicate='error')
-    info3 <- cells(v3)
-    areas3 <- unlist(lapply(info3, function(x) x$area))
-    
-    areas <- apply(cbind(areas1, areas2, areas3), 1, min, na.rm=TRUE)
-    
-    # Incorporating relative abundance (b/w 0 and 1) simply by multiplying with area
-    areas <- areas * subset$Range.size
-    areas <- areas * subset$abund
-    #areas <- areas * subset$BI
-    areas <- areas * subset$genus_age
-    areas <- areas * subset$density
-    
-    smallest <- which(areas == min(areas, na.rm=TRUE))[1]
-    dropped <- c(dropped, which(paste(dat[,'x'], dat[,'y'], dat[,'z'], sep='_') == paste(subset[smallest,'x'], subset[smallest,'y'], subset[smallest,'z'], sep='_')))
-    subset <- subset[-smallest,]
-  }
-  return(dat[-dropped,])
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# 
+# 
+# # 3D weighted with density
+# 
+# voronoiFilter3D.w.d <- function(dat, s) {
+#   subset <- dat
+#   dropped <- vector()
+#   for (i in 1:(nrow(dat)-s)) {
+#     v1 <- voronoi.mosaic(x=subset[,'x'], y=subset[,'y'], duplicate='error')
+#     info1 <- cells(v1)
+#     areas1 <- unlist(lapply(info1, function(x) x$area))
+# 
+#     v2 <- voronoi.mosaic(x=subset[,'x'], y=subset[,'z'], duplicate='error')
+#     info2 <- cells(v2)
+#     areas2 <- unlist(lapply(info2, function(x) x$area))
+#     
+#     v3 <- voronoi.mosaic(x=subset[,'y'], y=subset[,'z'], duplicate='error')
+#     info3 <- cells(v3)
+#     areas3 <- unlist(lapply(info3, function(x) x$area))
+#     
+#     areas <- apply(cbind(areas1, areas2, areas3), 1, min, na.rm=TRUE)
+#     
+#     # Incorporating relative abundance (b/w 0 and 1) simply by multiplying with area
+#     areas <- areas * subset$range
+#     areas <- areas * subset$abund
+#     #areas <- areas * subset$BI
+#     areas <- areas * subset$age
+#     areas <- areas * 1/subset$trait_dens
+#     
+#     smallest <- which(areas == min(areas, na.rm=TRUE))[1]
+#     dropped <- c(dropped, which(paste(dat[,'x'], dat[,'y'], dat[,'z'], sep='_') == paste(subset[smallest,'x'], subset[smallest,'y'], subset[smallest,'z'], sep='_')))
+#     subset <- subset[-smallest,]
+#   }
+#   return(dat[-dropped,])
+# }
+# 
 
 
