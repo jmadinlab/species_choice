@@ -7,7 +7,6 @@ ctb<-ctb[ctb$Zooxanthellate=="zooxanthellate",] # zooxanthellate only
 ctb<-ctb[!is.na(ctb$Abundance.GBR),] # gbr only
 nrow(ctb)
 
-
 # trait biogeography - McWilliam et al. 2018 PNAS
 dat<-read.csv("data/pnas2018/traitbiogeography.csv", as.is=TRUE)
 dat$species<-gsub("Coscinarea", "Coscinaraea",dat$species)
@@ -63,15 +62,44 @@ dat$clipperton<-ifelse(dat$species %in% clipperton, 1, 0)
 # bleaching susceptibility... 
 bri<-read.csv("data/BRI/bleaching_response_index.csv")[,c(1,2)]
 names(bri)<-c("species", "BRI")
-dat$BRI<-bri$BRI[match(dat$species, bri$species)]
+dat$BRI_genus <- bri$BRI[match(dat$genus, bri$species)]
+dat$BRI <- bri$BRI[match(dat$species, bri$species)]
+dat$BRI[is.na(dat$BRI)] <- dat$BRI_genus[is.na(dat$BRI)]
+
 #head(dat)
 #hist(log10(dat$BRI))
 
-# restorability 
+# LAtitude
+
+lat <- read.csv("data/data_20210211.csv", as.is=TRUE)[c("specie_name", "trait_name", "value")]
+lat1 <- lat[lat$trait_name=="Northern-most range edge", c("specie_name", "value")]
+names(lat1) <- c("species", "north")
+lat2 <- lat[lat$trait_name=="Southern-most range edge", c("specie_name", "value")]
+names(lat2) <- c("species", "south")
+
+lat <- merge(lat1, lat2)
+lat$lat_range <- lat$north - lat$south
+
+dat <- merge(dat, lat, all.x=TRUE)
+
+# restorability from PLoS paper
 dat$restore <- 0
-dat$restore[dat$Growth.form.typical %in% c("branching_open", "massive", "encrusting", "branching_closed", "tables_or_plates", "encrusting_long_uprights")] <- 1
-dat$restore[dat$Growth.form.typical %in% c("digitate", "corymbose", "laminar")] <- 0.5
-dat$restore[dat$Growth.form.typical %in% c("columnar", "hispidose", "submassive")] <- 0.1
+dat$restore[dat$Growth.form.typical %in% c("branching_open", "branching_closed")] <- 6
+dat$restore[dat$Growth.form.typical %in% c("massive", "submassive")] <- 5
+dat$restore[dat$Growth.form.typical %in% c("laminar")] <- 4
+dat$restore[dat$Growth.form.typical %in% c("encrusting", "encrusting_long_uprights")] <- 3
+dat$restore[dat$Growth.form.typical %in% c("digitate", "corymbose", "tables_or_plates")] <- 2
+dat$restore[dat$Growth.form.typical %in% c("columnar", "hispidose")] <- 1
+dat$restore <- (dat$restore) / 6
+
+# dat$restore[dat$Growth.form.typical %in% c("branching_open", "massive", "encrusting", "branching_closed", "tables_or_plates", "encrusting_long_uprights")] <- 1
+# dat$restore[dat$Growth.form.typical %in% c("digitate", "corymbose", "laminar")] <- 0.5
+# dat$restore[dat$Growth.form.typical %in% c("columnar", "hispidose", "submassive")] <- 0.1
+
+# unique(dat$genus)
+# dat$restore2 <- 1
+# dat$restore2[dat$genus %in% c("Acropora")] <- 30
+
 
 # Families
 fam <- read.csv("data/species-5.csv", as.is=TRUE)[c("master_species", "family_molecules", "family_morphology")]
@@ -79,26 +107,26 @@ names(fam) <- c("species", "family_molecules", "family_morphology")
 dat <- merge(dat, fam, all.x=TRUE)
 unique(dat$family_morphology)
 
-# dat$BRI <- dat$BRI/100
-# mod <- glm(BRI ~ Growth.form.typical + family_molecules, dat, family=binomial)
-# drop1(mod, test="Chisq")
-# hist(dat$BRI)
 
-# tax<-read.csv("data/taxonomy.csv")
-#head(tax)
+# Normalise
+dat$range <- dat$Range.size / max(dat$Range.size)
+dat$abund[dat$Abundance.GBR=="common"] <- 1
+dat$abund[dat$Abundance.GBR=="uncommon"] <- 0.5
+dat$abund[dat$Abundance.GBR=="rare"] <- 0.1
+dat$bleach <- 1 - (dat$BRI / 100)
 
-# miz <- read.csv("data/mizerek/338_2018_1702_MOESM1_ESM.csv", as.is=TRUE)
-# suc <- miz$BI * miz$Number.of.colonies
-# fai <- miz$Number.of.colonies - suc
-# suc <- round(suc)
-# fai <- round(fai)
-# 
-# mod <- glm(cbind(suc, fai) ~ Growth.form + Coral.Family, miz, family=binomial)
-# drop1(mod, test="Chisq")
+dat$lat_range <- dat$lat_range / max(dat$lat_range)
+# dat$lat_poleward <- apply(dat[c("north", "south")], 1, function(x) max(abs(x)))
+dat$lat_poleward <- abs(dat$south) / max(abs(dat$south))
 
+# Anonymous species
 
-# unique(miz$Coral.Family)
-# unique(dat$Coral.Family)
+dat <- dat[c("species", "range", "lat_poleward", "abund", "bleach", "restore", "cat_growthrate", "cat_corallitesize", "cat_colonydiameter" , "cat_skeletaldensity", "cat_colonyheight","cat_SA_vol", "cat_spacesize", "clipperton")]
+dat <- na.omit(dat)
+dim(dat)
+dat$species_n <- paste0("Species ", 1:nrow(dat))
+
+dat[c("species", "clipperton")]
 
 
 # export

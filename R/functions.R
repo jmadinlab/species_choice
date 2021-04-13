@@ -1,22 +1,33 @@
 # Functions
 
 # Original, area only
-dd2D <- function(dat, s, vars, voronoi=TRUE, trait=TRUE, oppo=FALSE) {
+dd2D <- function(dat, s, vars, voronoi=FALSE, trait=TRUE, oppo=FALSE, se=FALSE) {
+
+  if (se) {
+    dat$PC1r <- dat$PC1 + rnorm(length(dat$PC1), 0, sd(dat$PC1) / sqrt(length(dat$PC1)))
+    dat$PC2r <- dat$PC2 + rnorm(length(dat$PC2), 0, sd(dat$PC2) / sqrt(length(dat$PC2)))
+  } else {
+    dat$PC1r <- dat$PC1
+    dat$PC2r <- dat$PC2
+  }
+  
   subset <- dat
   dropped <- vector()
   for (i in 1:(nrow(dat)-s)) {
     
     if (trait) {
       if (voronoi) {
-        v <- voronoi.mosaic(x=subset[,'x'], y=subset[,'y'], duplicate='error')
+        v <- voronoi.mosaic(x=subset[,'PC1r'], y=subset[,'PC2r'], duplicate='error')
         info <- cells(v)
         areas <- unlist(lapply(info, function(x) x$area))
         areas[is.na(areas)] <- mean(areas, na.rm=TRUE)
       } else {
-        areas <- apply(nndist(subset$x, subset$y, k=1:3), 1, mean)
+        # areas <- apply(nndist(subset$xr, subset$yr, k=1:3), 1, mean)
+        areas <- nndist(subset$PC1r, subset$PC2r, k=1)
+        areas <- areas / max(areas)
       }
     } else {
-      areas <- rep(1, length(subset$x))
+      areas <- rep(1, length(subset$PC2r))
     }
     
     if ("range" %in% vars) {
@@ -24,6 +35,13 @@ dd2D <- function(dat, s, vars, voronoi=TRUE, trait=TRUE, oppo=FALSE) {
         areas <- areas * (1 - subset$range)
       } else {
         areas <- areas * subset$range
+      }
+    }
+    if ("lat_poleward" %in% vars) {
+      if (oppo) {
+        areas <- areas * (1 - subset$lat_poleward)
+      } else {
+        areas <- areas * subset$lat_poleward
       }
     }
     if ("abund" %in% vars) {
@@ -55,7 +73,7 @@ dd2D <- function(dat, s, vars, voronoi=TRUE, trait=TRUE, oppo=FALSE) {
     }
     
     smallest <- which(areas == min(areas, na.rm=TRUE))[1]
-    dropped <- c(dropped, which(paste(dat[,'x'], dat[,'y'], sep='_') == paste(subset[smallest,'x'], subset[smallest,'y'], sep='_')))
+    dropped <- c(dropped, which(paste(dat[,'PC1r'], dat[,'PC2r'], sep='_') == paste(subset[smallest,'PC1r'], subset[smallest,'PC2r'], sep='_')))
     subset <- subset[-smallest,]
     areas <- areas[-smallest]
   }
